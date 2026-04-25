@@ -1,0 +1,293 @@
+/* =========================================================
+   Components
+   ========================================================= */
+
+/* -------- Button -------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 32px;
+  min-height: 44px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 4px;
+  font-family: var(--font-en);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-md) var(--ease-out),
+    color var(--dur-md) var(--ease-out),
+    border-color var(--dur-md) var(--ease-out),
+    transform var(--dur-md) var(--ease-out);
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+.btn--primary {
+  background: var(--color-text);
+  color: var(--color-accent-contrast);
+  border-color: transparent;
+}
+
+.btn--primary:hover {
+  background: var(--color-accent);
+  color: #FFFFFF;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text);
+}
+
+.btn--ghost:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn__arrow {
+  display: inline-block;
+  transition: transform var(--dur-md) var(--ease-out);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.btn:hover .btn__arrow {
+  transform: translateX(4px);
+}
+
+/* -------- Card -------- */
+
+.card {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color var(--dur-md) var(--ease-out),
+    transform var(--dur-md) var(--ease-out),
+    background-color var(--dur-md) var(--ease-out);
+}
+
+a.card { cursor: pointer; }
+
+.card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.card__num {
+  font-family: var(--font-en);
+  font-size: 14px;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-accent);
+  font-weight: 400;
+}
+
+.card__title--en {
+  font-family: var(--font-en);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-display);
+}
+
+.card__title--jp {
+  font-family: var(--font-jp);
+  font-size: 16px;
+  color: var(--color-text-sub);
+  letter-spacing: var(--tracking-jp);
+  line-height: 1.6;
+}
+
+.card__desc {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--color-text-sub);
+}
+
+/* -------- Work item -------- */
+
+.work-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.work-item:hover {
+  opacity: 1;
+}
+
+.work-item__thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, var(--color-bg-alt) 0%, var(--color-border) 100%);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transition: transform var(--dur-md) var(--ease-out);
+}
+
+.work-item:hover .work-item__thumb {
+  transform: scale(1.02);
+}
+
+.work-item__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-item__title--en {
+  font-family: var(--font-en);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.3;
+  margin-top: 4px;
+}
+
+.work-item__title--jp {
+  font-size: 14px;
+  color: var(--color-text-sub);
+  line-height: 1.6;
+}
+
+.work-item__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  font-family: var(--font-en);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* -------- Update item (news) -------- */
+
+.update-item {
+  display: grid;
+  grid-template-columns: 140px 120px 1fr;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-border);
+  align-items: baseline;
+  transition: border-color var(--dur-md) var(--ease-out);
+}
+
+.update-item:hover {
+  opacity: 1;
+}
+
+.update-item:hover .update-item__title {
+  color: var(--color-accent);
+}
+
+.update-item__date {
+  font-family: var(--font-en);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text-sub);
+}
+
+.update-item__category {
+  font-family: var(--font-en);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  width: fit-content;
+  justify-self: start;
+}
+
+.update-item__title {
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  transition: color var(--dur-sm) var(--ease-out);
+}
+
+/* -------- Hero -------- */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 160px var(--container-px) 140px;
+  position: relative;
+}
+
+.hero__display {
+  font-family: var(--font-en);
+  font-size: clamp(48px, 9vw, 128px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-top: 32px;
+}
+
+.hero__lead {
+  font-family: var(--font-jp);
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.9;
+  max-width: 640px;
+  margin-top: 32px;
+  color: var(--color-text-sub);
+}
+
+.hero__meta {
+  position: absolute;
+  bottom: 48px;
+  right: var(--container-px);
+  font-family: var(--font-en);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-sub);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+}
+
+/* -------- Marquee -------- */
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-en);
+  font-size: clamp(40px, 8vw, 120px);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  padding: 24px 0;
+}
+
+.marquee__track {
+  display: inline-block;
+  animation: marquee-scroll 30s linear infinite;
+  padding-right: 48px;
+}
+
+.marquee__track.is-paused {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

@@ -1,0 +1,691 @@
+/* =========================================================
+   Pages & Missing utilities
+   (HTML-driven classes not covered by base components)
+   ========================================================= */
+
+/* -------- Page body marker (no visual) -------- */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page > main {
+  flex: 1;
+}
+
+/* -------- Header / Footer wrappers -------- */
+.header__logo-link {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.header__logo-link:hover {
+  opacity: 1;
+}
+
+.footer__logo {
+  height: 28px;
+  width: auto;
+  filter: var(--footer-logo-filter, invert(1));
+}
+
+[data-theme="dark"] {
+  --footer-logo-filter: none;
+}
+
+/* Active nav state */
+.header__nav a[aria-current="page"] {
+  color: var(--color-accent);
+}
+.header__nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* -------- Footer: real grid on .footer (no .footer__inner in HTML) -------- */
+.footer {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-block) 48px;
+  padding: var(--space-section) var(--container-px) 40px;
+}
+
+.footer__bottom {
+  grid-column: 1 / -1;
+  margin: var(--space-block) 0 0;
+}
+
+/* -------- Hero sub (smaller hero for non-home pages) -------- */
+.hero--sub {
+  min-height: 60vh;
+  padding-top: 120px;
+}
+
+/* -------- Grids for cards/works/updates -------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin: var(--space-block) 0;
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  margin: var(--space-block) 0;
+}
+
+.update-list {
+  list-style: none;
+  margin: var(--space-block) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Tags: agent used <li> directly inside .work-item__tags, style them */
+.work-item__tags {
+  list-style: none;
+}
+
+.work-item__tags li {
+  border: 1px solid var(--color-border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--color-text-sub);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  font-family: var(--font-en);
+  text-transform: uppercase;
+}
+
+/* -------- Business page block -------- */
+.business-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 960px;
+}
+
+.business-block ol,
+.business-block ul {
+  padding-left: 20px;
+  line-height: 1.9;
+  color: var(--color-text-sub);
+  font-size: var(--fs-body);
+}
+
+.business-block .card__num {
+  font-size: clamp(40px, 6vw, 64px);
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+/* -------- Business Detail page: lighter headings -------- */
+.page--business-detail .section__title.h1 {
+  font-size: clamp(28px, 4.2vw, 52px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.page--business-detail .business-block h3.h3 {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 500;
+}
+.page--business-detail .business-block .card__num {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+}
+.page--business-detail .card .card__title--en.h3 {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 500;
+}
+
+.business-block h3 {
+  margin-top: 24px;
+}
+
+/* -------- About: Profile list (dl) -------- */
+.profile-list {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px 32px;
+  max-width: 880px;
+  margin: var(--space-block) 0;
+}
+
+.profile-list dt {
+  font-family: var(--font-en);
+  text-transform: uppercase;
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text-sub);
+  padding: 16px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.profile-list dd {
+  padding: 16px 0;
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-body);
+  line-height: 1.8;
+}
+
+/* -------- About: Partner logo grid -------- */
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: var(--space-block) 0;
+}
+
+.logo-grid__item {
+  aspect-ratio: 3 / 1;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-sub);
+  font-family: var(--font-en);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transition: border-color var(--dur-md) var(--ease-out);
+}
+
+.logo-grid__item:hover {
+  border-color: var(--color-accent);
+}
+
+/* -------- Recruit: Interview -------- */
+.interview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  margin: var(--space-block) 0;
+}
+
+.interview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.interview__photo {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, var(--color-bg-alt) 0%, var(--color-border) 100%);
+  border-radius: 8px;
+}
+
+.interview h3 {
+  font-family: var(--font-jp);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 500;
+  letter-spacing: var(--tracking-jp);
+  line-height: 1.5;
+}
+
+.interview p {
+  font-size: var(--fs-body);
+  line-height: 1.9;
+  color: var(--color-text-sub);
+}
+
+/* -------- Recruit: Benefits list -------- */
+.benefits-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 32px;
+  list-style: none;
+  margin: var(--space-block) 0;
+}
+
+.benefits-list li {
+  padding: 16px 0;
+  border-top: 1px solid var(--color-border);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+}
+
+/* -------- Recruit: Job cards dl -------- */
+.card dl {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px 16px;
+  margin-top: 12px;
+}
+
+.card dl dt {
+  font-family: var(--font-en);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-sub);
+  padding-top: 2px;
+}
+
+.card dl dd {
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+/* -------- Contact page -------- */
+.contact {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 64px;
+  margin: var(--space-block) 0;
+  align-items: start;
+}
+
+.contact__form-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact__direct {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 32px;
+  background: var(--color-bg-alt);
+}
+
+.contact__direct .section__title {
+  margin-bottom: 24px;
+}
+
+.contact__list {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 14px 20px;
+}
+
+.contact__list dt {
+  font-family: var(--font-en);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-sub);
+  padding-top: 4px;
+}
+
+.contact__list dd {
+  font-size: var(--fs-small);
+  line-height: 1.7;
+}
+
+/* -------- Form fields -------- */
+.form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form__field label {
+  font-family: var(--font-en);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-text-sub);
+}
+
+.form__field label span {
+  color: var(--color-accent);
+  margin-left: 2px;
+}
+
+.form__field input,
+.form__field select,
+.form__field textarea {
+  font-family: var(--font-jp);
+  font-size: var(--fs-body);
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  letter-spacing: var(--tracking-jp);
+  transition: border-color var(--dur-md) var(--ease-out), background-color var(--dur-md) var(--ease-out);
+  width: 100%;
+}
+
+.form__field textarea {
+  resize: vertical;
+  min-height: 160px;
+  line-height: 1.8;
+}
+
+.form__field input:focus,
+.form__field select:focus,
+.form__field textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.form__field input::placeholder,
+.form__field textarea::placeholder {
+  color: var(--color-text-muted, var(--color-text-sub));
+  opacity: 0.6;
+}
+
+.form__field--submit {
+  margin-top: 16px;
+}
+
+.form__field--submit .btn {
+  align-self: flex-start;
+}
+
+/* -------- Contact: Map iframe -------- */
+.map {
+  margin-top: var(--space-block);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  line-height: 0;
+}
+
+.map iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+  filter: var(--map-filter, none);
+}
+
+[data-theme="dark"] {
+  --map-filter: invert(0.9) hue-rotate(180deg);
+}
+
+/* -------- Sub-page hero tweak: display size slightly smaller -------- */
+.hero--sub .hero__display {
+  font-size: clamp(56px, 9vw, 140px);
+}
+
+/* -------- Responsive for these new elements -------- */
+
+@media (max-width: 959.98px) {
+  .footer {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  .card-grid,
+  .work-grid,
+  .interview-grid,
+  .logo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .benefits-list {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-list {
+    grid-template-columns: 120px 1fr;
+  }
+}
+
+@media (max-width: 743.98px) {
+  .footer {
+    grid-template-columns: 1fr;
+    padding: var(--space-block) var(--container-px) 32px;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .card-grid,
+  .work-grid,
+  .interview-grid,
+  .logo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-list {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .profile-list dt {
+    padding-bottom: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .profile-list dd {
+    border-top: none;
+    padding-top: 0;
+    padding-bottom: 16px;
+  }
+
+  .contact__list {
+    grid-template-columns: 1fr;
+  }
+
+  .contact__direct {
+    padding: 24px;
+  }
+
+  .business-block ol,
+  .business-block ul {
+    padding-left: 18px;
+  }
+
+  .card dl {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .card dl dt {
+    padding-top: 12px;
+  }
+
+  .hero--sub {
+    min-height: 50vh;
+    padding-top: 100px;
+  }
+}
+
+/* -------- CEO signature + portrait (About: 04 / CEO Message) -------- */
+.ceo-sign {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin-top: 72px;
+  flex-wrap: wrap;
+}
+.ceo-sign__text {
+  margin: 0;
+  flex: 0 1 auto;
+}
+.ceo-sign__portrait {
+  margin: 0;
+  flex: 0 0 auto;
+  width: 228px; /* ≒6cm @ ~96dpi */
+}
+.ceo-sign__portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 25%;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+@media (max-width: 640px) {
+  .ceo-sign {
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .ceo-sign__portrait {
+    width: 160px;
+  }
+}
+
+/* =========================================================
+   Mobile refinements (≤743.98px)
+   ========================================================= */
+@media (max-width: 743.98px) {
+  /* Hero: reduce excessive top/bottom padding on small screens */
+  .hero {
+    padding: 112px var(--container-px) 72px;
+    min-height: auto;
+  }
+  .hero--sub {
+    padding: 96px var(--container-px) 56px;
+    min-height: auto;
+  }
+
+  /* Prevent oversized display text that overflows on phones */
+  .hero__display,
+  .hero--sub .hero__display {
+    font-size: clamp(30px, 9vw, 64px);
+    line-height: 1.2;
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+  .hero__lead {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* Section titles: keep readable and fit within viewport */
+  .section__title.h1 {
+    font-size: clamp(30px, 7vw, 48px);
+    line-height: 1.25;
+  }
+  .section__title.display {
+    font-size: clamp(40px, 11vw, 72px);
+    line-height: 1.1;
+  }
+  .page--business-detail .section__title.h1 {
+    font-size: clamp(24px, 6vw, 36px);
+  }
+  .section__lead {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* Marquee — keep ticker but don't dwarf the screen */
+  .marquee {
+    font-size: clamp(32px, 9vw, 56px);
+    padding: 20px 0;
+  }
+
+  /* Stacked CTA button pair: keep breathing room */
+  .section p .btn + .btn,
+  .section p .btn + nbsp + .btn {
+    margin-top: 12px;
+  }
+  /* Ensure the non-breaking space between btn pair collapses cleanly */
+  .section p > .btn {
+    margin-top: 0;
+  }
+  .section p > .btn ~ .btn {
+    margin-top: 12px;
+  }
+
+  /* Business block on mobile: tighter padding, smaller numbers */
+  .business-block {
+    padding-top: 8px;
+  }
+  .business-block .card__num {
+    font-size: clamp(32px, 8vw, 44px);
+    margin-bottom: 8px;
+  }
+  .business-block h3.h3 {
+    font-size: 16px;
+    margin-top: 24px;
+  }
+  .business-block ol,
+  .business-block ul {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  /* CEO signature + portrait: comfortable on phones */
+  .ceo-sign {
+    gap: 20px !important;
+    margin-top: 48px !important;
+  }
+  .ceo-sign__portrait {
+    width: 44vw !important;
+    max-width: 200px !important;
+    min-width: 140px !important;
+  }
+
+  /* Profile list readability */
+  .profile-list dt {
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .profile-list dd {
+    margin-bottom: 12px;
+  }
+
+  /* Card tweaks */
+  .card-grid {
+    gap: 16px;
+  }
+  .card {
+    padding: 20px !important;
+  }
+  .card__title--en.h3,
+  .card__title-en {
+    font-size: 18px;
+  }
+  .card__desc {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  /* Eyebrow label on mobile */
+  .eyebrow {
+    font-size: 11px;
+  }
+
+  /* Prevent horizontal overflow on any wide element */
+  body {
+    overflow-x: hidden;
+  }
+  img, svg, video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Very small phones (≤380px) */
+@media (max-width: 380px) {
+  .hero__display,
+  .hero--sub .hero__display {
+    font-size: clamp(26px, 8.5vw, 44px);
+  }
+  .section__title.h1 {
+    font-size: clamp(26px, 7.5vw, 36px);
+  }
+  .marquee {
+    font-size: 30px;
+  }
+}

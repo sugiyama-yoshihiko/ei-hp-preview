@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | EI&CO Inc.</title>
+<meta name="description" content="EI&COへのお問い合わせ。AI導入、DX相談、事業承継。実装のプロフェッショナルが、直接お答えします。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="assets/css/main.css?v=20260424-8">
+</head>
+<body class="page page--contact">
+
+<a class="sr-only" href="#main">本文へスキップ</a>
+
+<header class="header">
+  <a class="header__logo-link" href="index.html" aria-label="EI&CO ホーム">
+    <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&CO" height="24">
+    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg" alt="EI&CO" height="24">
+  </a>
+  <nav class="header__nav" aria-label="Primary">
+    <a href="about.html">About</a>
+    <a href="business.html">Business</a>
+    <a href="works.html">Works</a>
+    <a href="update.html">Update</a>
+    <a href="recruit.html">Recruit</a>
+    <a href="contact.html" aria-current="page">Contact</a>
+  </nav>
+  <button class="header__menu-btn" aria-label="メニューを開く" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="header__menu-overlay" aria-hidden="true">
+  <nav aria-label="Mobile">
+    <a href="about.html">About</a>
+    <a href="business.html">Business</a>
+    <a href="works.html">Works</a>
+    <a href="update.html">Update</a>
+    <a href="recruit.html">Recruit</a>
+    <a href="contact.html" aria-current="page">Contact</a>
+  </nav>
+</div>
+
+<main id="main">
+
+  <section class="hero hero--sub" role="region" aria-label="Contact Hero">
+    <div class="container">
+      <p class="eyebrow reveal">Contact</p>
+      <h1 class="hero__display display reveal reveal--delay-1">CONTACT</h1>
+      <p class="hero__lead lead reveal reveal--delay-2">その課題に、実装を。AIの導入、DX相談、事業承継。実装のプロフェッショナルが、直接お答えします。</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="contact-form-title">
+    <div class="container">
+      <div class="contact">
+
+        <!-- Left: Form -->
+        <div class="contact__form-wrap">
+          <h2 id="contact-form-title" class="section__title h2 reveal">INQUIRY FORM</h2>
+          <p class="reveal">下記フォームよりお送りください。担当者より2営業日以内にご連絡いたします。</p>
+
+          <form class="contact__form reveal" action="#" method="post">
+            <div class="form__field">
+              <label for="name">お名前 <span aria-hidden="true">*</span></label>
+              <input id="name" name="name" type="text" required placeholder="例：井内 晃">
+            </div>
+
+            <div class="form__field">
+              <label for="company">会社名</label>
+              <input id="company" name="company" type="text" placeholder="例：株式会社 Example">
+            </div>
+
+            <div class="form__field">
+              <label for="email">メールアドレス <span aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" required placeholder="you@example.com">
+            </div>
+
+            <div class="form__field">
+              <label for="subject">件名 <span aria-hidden="true">*</span></label>
+              <select id="subject" name="subject" required>
+                <option value="">選択してください</option>
+                <option value="ai">AI導入</option>
+                <option value="dx">DX相談</option>
+                <option value="ma">事業承継</option>
+                <option value="recruit">採用</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+
+            <div class="form__field">
+              <label for="message">お問い合わせ内容 <span aria-hidden="true">*</span></label>
+              <textarea id="message" name="message" rows="8" required placeholder="ご相談内容を具体的にお書きください。"></textarea>
+            </div>
+
+            <div class="form__field form__field--submit">
+              <button class="btn btn--primary" type="submit">
+                送信する <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Direct contact -->
+        <aside class="contact__direct">
+          <h2 class="section__title h2 reveal">DIRECT CONTACT</h2>
+
+          <dl class="contact__list reveal">
+            <dt>Email</dt>
+            <dd><a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a></dd>
+
+            <dt>Tel</dt>
+            <dd><a href="tel:03-0000-0000">03-XXXX-XXXX</a></dd>
+
+            <dt>住所</dt>
+            <dd>
+              〒101-0044<br>
+              東京都千代田区鍛冶町1丁目10番6号<br>
+              BIZ SMART 神田
+            </dd>
+
+            <dt>営業時間</dt>
+            <dd>平日 10:00-18:00</dd>
+          </dl>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Access -->
+  <section class="section section--alt" aria-labelledby="contact-access-title">
+    <div class="container">
+      <p class="section__eyebrow eyebrow reveal">Access</p>
+      <h2 id="contact-access-title" class="section__title h1 reveal">ACCESS</h2>
+      <p class="section__lead lead reveal">〒101-0044 東京都千代田区鍛冶町1丁目10番6号 BIZ SMART 神田</p>
+
+      <div class="map reveal">
+        <!-- Google Maps 埋め込みURLのプレースホルダー。本番では iframe src を差し替える。 -->
+        <iframe
+          title="EI&CO Inc. 所在地の地図"
+          src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E9%8D%9B%E5%86%B6%E7%94%BA1%E4%B8%81%E7%9B%AE10%E7%95%AA6%E5%8F%B7&output=embed"
+          width="100%"
+          height="420"
+          style="border:0;"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__brand">
+    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg" alt="EI&CO Inc." height="32">
+    <p class="small">Structural Advantage with ORENDA WORLD &amp; NET Inc.</p>
+    <address class="small">
+      〒101-0044<br>
+      東京都千代田区鍛冶町1丁目10番6号<br>
+      BIZ SMART 神田
+    </address>
+  </div>
+  <div class="footer__col">
+    <h3 class="eyebrow">Sitemap</h3>
+    <ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="business.html">Business</a></li>
+      <li><a href="works.html">Works</a></li>
+      <li><a href="update.html">Update</a></li>
+      <li><a href="recruit.html">Recruit</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer__col">
+    <h3 class="eyebrow">Contact</h3>
+    <ul>
+      <li><a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a></li>
+      <li><a href="contact.html">Contact Form</a></li>
+    </ul>
+  </div>
+  <div class="footer__col">
+    <h3 class="eyebrow">Policy</h3>
+    <ul>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Access Map</a></li>
+    </ul>
+  </div>
+  <div class="footer__bottom">
+    <p class="small">&copy; <span id="current-year">2026</span> EI&CO Inc. All rights reserved.</p>
+  </div>
+</footer>
+
+<div id="cursor" aria-hidden="true"></div>
+<script src="assets/js/main.js" defer></script>
+<script src="assets/js/theme-panel.js" defer></script>
+
+</body>
+</html>

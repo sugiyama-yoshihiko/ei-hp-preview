@@ -1,0 +1,72 @@
+/* =========================================================
+   Design Tokens
+   ========================================================= */
+
+:root {
+  /* Colors (Light) */
+  --color-bg: #FDF5F8;
+  --color-bg-alt: #37B8BD;
+  --color-surface: #FFFFFF;
+  --color-text: #0A0A0A;
+  --color-text-sub: #4A4A52;
+  --color-text-muted: #9A9AA0;
+  --color-border: #E8E8EA;
+  --color-border-strong: #0A0A0A;
+  --color-accent: #E868A1;
+  --color-accent-hover: #D94F8E;
+  --color-accent-contrast: #FFFFFF;
+
+  /* Fonts */
+  --font-en: Avenir, 'Helvetica Neue', 'Inter', sans-serif;
+  --font-jp: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', sans-serif;
+
+  /* Sizes */
+  --fs-display: clamp(64px, 13vw, 200px);
+  --fs-h1: clamp(44px, 7vw, 96px);
+  --fs-h2: clamp(32px, 4.5vw, 56px);
+  --fs-h3: clamp(22px, 2.5vw, 32px);
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-tiny: 12px;
+
+  /* Space */
+  --space-section: clamp(120px, 16vw, 220px);
+  --space-block: clamp(40px, 6vw, 80px);
+  --space-lg: 48px;
+  --space-md: 32px;
+  --space-sm: 16px;
+  --container-max: 1440px;
+  --container-px: clamp(24px, 5vw, 80px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(.66, .04, .15, .95);
+  --dur-sm: 200ms;
+  --dur-md: 400ms;
+  --dur-lg: 800ms;
+
+  /* Tracking */
+  --tracking-jp: 0.04em;
+  --tracking-label: 0.14em;
+  --tracking-display: -0.03em;
+}
+
+/* Palette variants */
+[data-palette="mono"] {
+  --color-accent: #0A0A0A;
+  --color-accent-hover: #3522C7;
+}
+
+/* Dark Theme — unified with light palette per design requirement */
+[data-theme="dark"] {
+  --color-bg: #FDF5F8;
+  --color-bg-alt: #37B8BD;
+  --color-surface: #FFFFFF;
+  --color-text: #0A0A0A;
+  --color-text-sub: #4A4A52;
+  --color-text-muted: #9A9AA0;
+  --color-border: #E8E8EA;
+  --color-border-strong: #0A0A0A;
+  --color-accent: #E868A1;
+  --color-accent-hover: #D94F8E;
+  --color-accent-contrast: #FFFFFF;
+}

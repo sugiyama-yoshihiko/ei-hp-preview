@@ -1,0 +1,173 @@
+/* =========================================================
+   Base: Reset + Elements + Utilities
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-jp);
+  background: var(--color-bg);
+  color: var(--color-text);
+  letter-spacing: var(--tracking-jp);
+  line-height: 1.7;
+  font-size: var(--fs-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--dur-md) var(--ease-out),
+    color var(--dur-md) var(--ease-out);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-en);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity var(--dur-sm) var(--ease-out), color var(--dur-sm) var(--ease-out);
+}
+
+a:hover {
+  opacity: 0.6;
+}
+
+/* Media */
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lists */
+ul, ol {
+  list-style: none;
+}
+
+/* Forms */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+/* -------- Utilities -------- */
+
+.container {
+  max-width: var(--container-max);
+  padding: 0 var(--container-px);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  font-family: var(--font-en);
+  color: var(--color-text-sub);
+  font-weight: 400;
+}
+
+.display {
+  font-family: var(--font-en);
+  font-size: var(--fs-display);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.98;
+}
+
+.h1 {
+  font-family: var(--font-en);
+  font-size: var(--fs-h1);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.15;
+}
+
+.h2 {
+  font-family: var(--font-en);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.15;
+}
+
+.h3 {
+  font-family: var(--font-en);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.3;
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 1.9;
+}
+
+.small {
+  font-size: var(--fs-small);
+  color: var(--color-text-sub);
+}
+
+.text-sub {
+  color: var(--color-text-sub);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Prevent mid-phrase wrapping for Japanese hero lines */
+.nowrap {
+  display: inline-block;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
