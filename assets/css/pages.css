@@ -64,6 +64,15 @@
   align-items: center;
 }
 
+/* Match content block height to home hero so flex centering anchors eyebrow
+   at the same Y as the home hero across pages. */
+.hero--sub > .container {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 /* -------- Grids for cards/works/updates -------- */
 .card-grid {
   display: grid;
