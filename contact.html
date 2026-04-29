@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;700;900&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20260429-3">
+<link rel="stylesheet" href="assets/css/main.css?v=20260429-4">
 </head>
 <body class="page page--contact">
 
@@ -197,6 +197,27 @@
 <div id="cursor" aria-hidden="true"></div>
 <script src="assets/js/main.js" defer></script>
 <script src="assets/js/theme-panel.js" defer></script>
+<script>
+  // Prefill form from query params (e.g. ?subject=recruit&position=AI%20Engineer)
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const subject = params.get("subject");
+    const position = params.get("position");
+    if (subject) {
+      const sel = document.getElementById("subject");
+      if (sel) {
+        const opt = Array.from(sel.options).find(o => o.value === subject);
+        if (opt) sel.value = subject;
+      }
+    }
+    if (position) {
+      const msg = document.getElementById("message");
+      if (msg) {
+        msg.value = `下記ポジションへの応募を希望いたします。\n\n■ 応募ポジション：${position}\n\n■ 自己紹介・志望動機：\n（ここにご記入ください）\n\n■ 関連する経験・スキル：\n（ここにご記入ください）\n\n■ 添付したいポートフォリオ／GitHub／LinkedIn等のURL：\n（ある場合はご記入ください）`;
+      }
+    }
+  })();
+</script>
 
 </body>
 </html>
