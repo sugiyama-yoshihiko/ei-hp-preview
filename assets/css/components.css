@@ -176,6 +176,14 @@ a.card { cursor: pointer; }
   margin-top: 4px;
 }
 
+.work-item__tags li {
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  list-style: none;
+}
+
 /* -------- Update item (news) -------- */
 
 .update-item {
@@ -200,7 +208,8 @@ a.card { cursor: pointer; }
   font-family: var(--font-en);
   font-size: var(--fs-small);
   letter-spacing: var(--tracking-label);
-  color: var(--color-text-sub);
+  color: var(--color-accent);
+  font-weight: 500;
 }
 
 .update-item__category {

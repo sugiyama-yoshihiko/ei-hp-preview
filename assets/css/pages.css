@@ -105,6 +105,8 @@
   flex-direction: column;
   gap: 16px;
   max-width: 960px;
+  border-left: 2px solid var(--color-accent);
+  padding-left: clamp(20px, 3vw, 40px);
 }
 
 .business-block ol,
