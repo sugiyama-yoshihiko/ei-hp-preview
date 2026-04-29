@@ -199,7 +199,7 @@
 
   // すべてモノクロ系の配色バリエーション
   const PALETTES = {
-    mono:     { accent: "#1E3A8A", hover: "#2E4FA6", bg: "#FAFAF7", bgAlt: "#F0EFEA", border: "#E4E3DE", text: "#1A1A1A", textSub: "#4A4A52", label: "1 Mono Classic" },
+    mono:     { accent: "#1A1A1A", hover: "#1A3A8F", bg: "#FAFAF7", bgAlt: "#F0EFEA", border: "#E4E3DE", text: "#1A1A1A", textSub: "#4A4A52", label: "1 Mono Classic" },
     monoCool: { accent: "#0F1419", hover: "#3B4A5A", bg: "#F4F6F8", bgAlt: "#E5EAEF", border: "#D6DCE3", text: "#0F1419", textSub: "#3A4754", label: "2 Mono Cool" },
     monoWarm: { accent: "#1F1A14", hover: "#5A4A36", bg: "#F7F2EA", bgAlt: "#EDE5D6", border: "#E0D5C2", text: "#1F1A14", textSub: "#5A5246", label: "3 Mono Warm" }
   };
