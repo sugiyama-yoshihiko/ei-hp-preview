@@ -133,11 +133,39 @@ a.card { cursor: pointer; }
 .work-item__thumb {
   width: 100%;
   aspect-ratio: 4 / 3;
-  background: linear-gradient(135deg, var(--color-bg-alt) 0%, var(--color-border) 100%);
+  background:
+    radial-gradient(circle at 80% 10%, rgba(255,255,255,.6) 0%, transparent 40%),
+    linear-gradient(135deg, var(--color-bg-alt) 0%, var(--color-border) 100%);
   border-radius: 8px;
   overflow: hidden;
   position: relative;
   transition: transform var(--dur-md) var(--ease-out);
+}
+
+.work-item__thumb::before {
+  content: attr(data-label);
+  position: absolute;
+  inset: auto auto 16px 20px;
+  font-family: var(--font-en);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  color: var(--color-accent);
+  line-height: 1;
+  text-transform: uppercase;
+  mix-blend-mode: multiply;
+  opacity: .85;
+}
+
+.work-item__thumb::after {
+  content: attr(data-num);
+  position: absolute;
+  inset: 16px 20px auto auto;
+  font-family: var(--font-en);
+  font-size: var(--fs-tiny);
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text-sub);
+  text-transform: uppercase;
 }
 
 .work-item:hover .work-item__thumb {
