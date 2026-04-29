@@ -78,6 +78,10 @@
     min-height: 90vh;
   }
 
+  .page--recruit .hero--sub .container {
+    transform: none;
+  }
+
   .hero__lead {
     font-size: 16px;
     margin-top: 24px;

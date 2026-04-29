@@ -60,6 +60,12 @@
 .hero--sub {
   min-height: 100vh;
   padding-top: 160px;
+  display: flex;
+  align-items: center;
+}
+
+.page--recruit .hero--sub .container {
+  transform: translateX(-16px);
 }
 
 /* -------- Grids for cards/works/updates -------- */
