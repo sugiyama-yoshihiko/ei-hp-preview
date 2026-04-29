@@ -58,8 +58,8 @@
 
 /* -------- Hero sub (smaller hero for non-home pages) -------- */
 .hero--sub {
-  min-height: 60vh;
-  padding-top: 120px;
+  min-height: 100vh;
+  padding-top: 160px;
 }
 
 /* -------- Grids for cards/works/updates -------- */
@@ -521,8 +521,8 @@
   }
 
   .hero--sub {
-    min-height: 50vh;
-    padding-top: 100px;
+    min-height: 100vh;
+    padding-top: 140px;
   }
 }
 
