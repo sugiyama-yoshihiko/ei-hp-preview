@@ -176,7 +176,7 @@ a.card { cursor: pointer; }
 .work-item__thumb[data-label="Advisory"]     { background: radial-gradient(circle at 75% 15%, rgba(30,58,138,.10) 0%, transparent 55%), linear-gradient(135deg, #F2EFEA 0%, #E0DCD2 100%); }
 .work-item__thumb[data-label="System"]       { background: radial-gradient(circle at 75% 15%, rgba(30,58,138,.12) 0%, transparent 55%), linear-gradient(135deg, #ECEEF2 0%, #D6DAE2 100%); }
 .work-item__thumb[data-label="Alliance"]     { background: radial-gradient(circle at 75% 15%, rgba(30,58,138,.10) 0%, transparent 55%), linear-gradient(135deg, #F0EFEA 0%, #DDDBD1 100%); }
-.work-item__thumb[data-label="Media"]        { background: radial-gradient(circle at 75% 15%, rgba(30,58,138,.10) 0%, transparent 55%), linear-gradient(135deg, #F4F1EB 0%, #E2DCD0 100%); }
+.work-item__thumb[data-label="Media"]        { background: radial-gradient(circle at 75% 15%, rgba(30,58,138,.12) 0%, transparent 55%), linear-gradient(135deg, #EEF1F6 0%, #D8DEE8 100%); }
 
 .work-item__thumb::before {
   content: attr(data-label);
