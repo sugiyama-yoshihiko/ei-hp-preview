@@ -5,6 +5,23 @@
 (function () {
   "use strict";
 
+  /* ---------- Dev-only gate ----------
+     The theme panel is an authoring tool, not a visitor-facing feature.
+     It only mounts when one of the following is true:
+       1. URL has `?dev=1` (also persisted to localStorage for subsequent visits)
+       2. localStorage has `ei-dev=1`
+     To disable on a browser: visit any page with `?dev=0`.
+  */
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const devParam = params.get("dev");
+    if (devParam === "1") localStorage.setItem("ei-dev", "1");
+    if (devParam === "0") localStorage.removeItem("ei-dev");
+    if (localStorage.getItem("ei-dev") !== "1") return;
+  } catch (e) {
+    return; // If storage access fails, treat as visitor and bail.
+  }
+
   const STORAGE_MODE = "ei-theme-mode";
   const STORAGE_ACCENT = "ei-theme-accent";
   const STORAGE_COLLAPSED = "ei-theme-collapsed";

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ei-and.co.jp/sitemap.xml
