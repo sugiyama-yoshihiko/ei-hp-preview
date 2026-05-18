@@ -3,17 +3,17 @@
    ========================================================= */
 
 :root {
-  /* Colors (Light) */
-  --color-bg: #FDF5F8;
-  --color-bg-alt: #37B8BD;
+  /* Colors — Palette 1 (Mono Classic + Navy accent) */
+  --color-bg: #FAFAF7;
+  --color-bg-alt: #F0EFEA;
   --color-surface: #FFFFFF;
-  --color-text: #0A0A0A;
+  --color-text: #1A1A1A;
   --color-text-sub: #4A4A52;
   --color-text-muted: #9A9AA0;
-  --color-border: #E8E8EA;
-  --color-border-strong: #0A0A0A;
-  --color-accent: #E868A1;
-  --color-accent-hover: #D94F8E;
+  --color-border: #E4E3DE;
+  --color-border-strong: #1A1A1A;
+  --color-accent: #1E3A8A;
+  --color-accent-hover: #2E4FA6;
   --color-accent-contrast: #FFFFFF;
 
   /* Fonts */
@@ -56,17 +56,17 @@
   --color-accent-hover: #3522C7;
 }
 
-/* Dark Theme — unified with light palette per design requirement */
+/* Dark Theme — unified with Palette 1 (no separate dark mode in current spec) */
 [data-theme="dark"] {
-  --color-bg: #FDF5F8;
-  --color-bg-alt: #37B8BD;
+  --color-bg: #FAFAF7;
+  --color-bg-alt: #F0EFEA;
   --color-surface: #FFFFFF;
-  --color-text: #0A0A0A;
+  --color-text: #1A1A1A;
   --color-text-sub: #4A4A52;
   --color-text-muted: #9A9AA0;
-  --color-border: #E8E8EA;
-  --color-border-strong: #0A0A0A;
-  --color-accent: #E868A1;
-  --color-accent-hover: #D94F8E;
+  --color-border: #E4E3DE;
+  --color-border-strong: #1A1A1A;
+  --color-accent: #1E3A8A;
+  --color-accent-hover: #2E4FA6;
   --color-accent-contrast: #FFFFFF;
 }
