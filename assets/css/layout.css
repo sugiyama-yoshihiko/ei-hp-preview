@@ -228,7 +228,7 @@
 .footer__brand {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 .footer__col h3 {
