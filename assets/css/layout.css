@@ -230,6 +230,11 @@
   color: #FFFFFF;
 }
 
+/* Force any footer logo (regardless of original fill) to render pure white */
+.footer__logo {
+  filter: brightness(0) invert(1);
+}
+
 .footer a:hover {
   color: rgba(255, 255, 255, 0.7);
 }
