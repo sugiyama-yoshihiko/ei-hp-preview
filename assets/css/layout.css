@@ -219,6 +219,23 @@
 
 /* -------- Footer -------- */
 
+/* Light strip above the navy footer that hosts brand logo + address */
+.footer-brand-strip {
+  background: var(--color-bg-alt);
+  padding: var(--space-block) var(--container-px);
+  color: var(--color-text);
+}
+
+.footer-brand-strip .footer__brand {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.footer-brand-strip address,
+.footer-brand-strip .small {
+  color: var(--color-text-sub);
+}
+
 .footer {
   padding: var(--space-section) var(--container-px);
   background: var(--color-accent);
