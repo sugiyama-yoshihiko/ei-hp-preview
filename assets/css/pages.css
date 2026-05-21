@@ -46,7 +46,7 @@
 /* -------- Footer: real grid on .footer (no .footer__inner in HTML) -------- */
 .footer {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-block) 48px;
   padding: var(--space-section) var(--container-px) 40px;
 }
