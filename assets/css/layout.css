@@ -273,7 +273,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: var(--fs-tiny);
-  color: rgba(255, 255, 255, 0.7);
+  color: #FFFFFF;
   font-family: var(--font-en);
   letter-spacing: var(--tracking-label);
 }
