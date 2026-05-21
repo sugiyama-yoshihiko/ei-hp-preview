@@ -28,11 +28,6 @@
 .footer__logo {
   height: 28px;
   width: auto;
-  filter: var(--footer-logo-filter, invert(1));
-}
-
-[data-theme="dark"] {
-  --footer-logo-filter: none;
 }
 
 /* Active nav state */
