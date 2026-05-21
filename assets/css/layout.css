@@ -234,8 +234,10 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-.footer address {
-  color: rgba(255, 255, 255, 0.85);
+.footer address,
+.footer .small,
+.footer__bottom .small {
+  color: #FFFFFF;
 }
 
 .footer__brand {
