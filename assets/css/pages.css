@@ -50,7 +50,8 @@
 
 .footer__brand {
   grid-column: 1 / -1;
-  margin-bottom: var(--space-block);
+  order: 1;
+  margin-top: var(--space-block);
 }
 
 .footer__col {
@@ -61,6 +62,7 @@
 
 .footer__bottom {
   grid-column: 1 / -1;
+  order: 2;
   margin: var(--space-block) 0 0;
   justify-content: center;
 }
