@@ -48,6 +48,11 @@
   text-align: center;
 }
 
+.footer__brand {
+  grid-column: 1 / -1;
+  margin-bottom: var(--space-block);
+}
+
 .footer__col {
   display: flex;
   flex-direction: column;
