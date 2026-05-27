@@ -242,7 +242,7 @@
 
 .footer__brand {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   text-align: center;
   gap: 24px;
