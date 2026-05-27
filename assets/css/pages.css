@@ -41,14 +41,23 @@
 /* -------- Footer: real grid on .footer (no .footer__inner in HTML) -------- */
 .footer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--space-block) 48px;
+  grid-template-columns: repeat(3, minmax(140px, 200px));
+  justify-content: center;
+  gap: var(--space-block) clamp(48px, 8vw, 120px);
   padding: var(--space-section) var(--container-px) 40px;
+  text-align: center;
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .footer__bottom {
   grid-column: 1 / -1;
   margin: var(--space-block) 0 0;
+  justify-content: center;
 }
 
 /* -------- Hero sub (smaller hero for non-home pages) -------- */
