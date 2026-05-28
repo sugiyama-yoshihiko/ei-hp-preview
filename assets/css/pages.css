@@ -69,16 +69,15 @@
 
 /* -------- Hero sub (smaller hero for non-home pages) -------- */
 .hero--sub {
-  min-height: 100vh;
-  padding: 160px var(--container-px) 140px;
+  min-height: 70vh;
+  padding: 160px var(--container-px) 80px;
   display: flex;
   align-items: center;
 }
 
-/* Match content block height to home hero so flex centering anchors eyebrow
-   at the same Y as the home hero across pages. */
+/* Anchor content near the top of the hero so the gap between hero text and the
+   first section below is consistent across pages with/without a lead line. */
 .hero--sub > .container {
-  min-height: 420px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
