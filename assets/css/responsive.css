@@ -83,6 +83,14 @@
     margin-top: 24px;
   }
 
+  /* Allow forced-nowrap spans inside hero lead to wrap on mobile so long sentences don't get clipped */
+  .hero__lead .nowrap {
+    display: inline;
+    white-space: normal;
+    word-break: auto-phrase;
+    overflow-wrap: anywhere;
+  }
+
   .btn {
     padding: 14px 24px;
     width: 100%;
