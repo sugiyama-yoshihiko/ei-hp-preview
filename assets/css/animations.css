@@ -6,10 +6,10 @@
 
 .reveal {
   opacity: 0;
-  transform: perspective(1200px) translateY(170px);
+  transform: perspective(1200px) translateY(40px);
   transition:
-    opacity var(--dur-lg) var(--ease-out),
-    transform var(--dur-lg) var(--ease-out);
+    opacity var(--dur-md) var(--ease-out),
+    transform var(--dur-md) var(--ease-out);
   will-change: transform, opacity;
 }
 

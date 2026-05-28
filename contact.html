@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;700;900&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20260430-53">
+<link rel="stylesheet" href="assets/css/main.css?v=20260430-54">
 </head>
 <body class="page page--contact">
 
@@ -33,7 +33,7 @@
 <header class="header">
   <a class="header__logo-link" href="index.html" aria-label="EI&Co. ホーム">
     <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&Co." height="24">
-    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-53" alt="EI&Co." height="24">
+    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-54" alt="EI&Co." height="24">
   </a>
   <nav class="header__nav" aria-label="Primary">
     <a href="about.html">About</a>
@@ -82,7 +82,7 @@
             <p>お問い合わせありがとうございます。<br>担当者より5営業日以内にご連絡いたします。</p>
           </div>
 
-          <form id="contact-form" class="contact__form reveal" action="https://formspree.io/f/mqenyzea" method="POST">
+          <form id="contact-form" class="contact__form reveal" action="https://formspree.io/f/mqenyzea" method="POST" autocomplete="off">
             <input type="hidden" name="_subject" value="EI&Co. サイトお問い合わせ">
             <input type="hidden" name="_language" value="ja">
 
@@ -177,7 +177,7 @@
 
 <footer class="footer">
   <div class="footer__brand">
-    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-53" alt="EI engineering & Co." height="32">
+    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-54" alt="EI engineering & Co." height="32">
     <address class="small">
       〒107-0061<br>
       東京都港区北青山一丁目3番6号<br>
@@ -283,6 +283,30 @@
           submitBtn.disabled = false;
           submitBtn.innerHTML = submitBtn.dataset.originalText;
         }
+      }
+    });
+  })();
+
+  // Reset the form / submit button / thanks panel on every page-show event.
+  // Fires for normal loads AND when the page is restored from the browser's bfcache
+  // (e.g. after Back/Forward navigation). Without this, a previously-submitted state
+  // could persist and the submit button could appear stuck on "送信中…" / "送信済み".
+  (function () {
+    window.addEventListener("pageshow", function () {
+      const form = document.getElementById("contact-form");
+      const thanks = document.getElementById("contact-thanks");
+      const lead = document.getElementById("contact-lead");
+      const title = document.getElementById("contact-form-title");
+      if (!form) return;
+      form.hidden = false;
+      form.reset();
+      if (thanks) thanks.hidden = true;
+      if (lead) lead.hidden = false;
+      if (title) title.hidden = false;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '送信する <span class="btn__arrow" aria-hidden="true">&rarr;</span>';
       }
     });
   })();

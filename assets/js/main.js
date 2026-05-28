@@ -34,7 +34,7 @@
           }
         });
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.01 }
+      { rootMargin: "0px 0px 25% 0px", threshold: 0 }
     );
     revealEls.forEach((el) => io.observe(el));
   } else {
