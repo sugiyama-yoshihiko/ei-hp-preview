@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;700;900&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20260430-49">
+<link rel="stylesheet" href="assets/css/main.css?v=20260430-50">
 </head>
 <body class="page page--contact">
 
@@ -31,7 +31,7 @@
 <header class="header">
   <a class="header__logo-link" href="index.html" aria-label="EI&Co. ホーム">
     <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&Co." height="24">
-    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-49" alt="EI&Co." height="24">
+    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-50" alt="EI&Co." height="24">
   </a>
   <nav class="header__nav" aria-label="Primary">
     <a href="about.html">About</a>
@@ -75,7 +75,12 @@
           <h2 id="contact-form-title" class="section__title h2 reveal">INQUIRY FORM</h2>
           <p class="reveal">下記フォームよりお送りください。担当者より5営業日以内にご連絡いたします。</p>
 
-          <form class="contact__form reveal" action="https://formspree.io/f/mqenyzea" method="POST">
+          <div id="contact-thanks" class="contact__thanks reveal" hidden>
+            <h3 class="h3">送信が完了しました</h3>
+            <p>お問い合わせありがとうございます。担当者より5営業日以内にご連絡いたします。</p>
+          </div>
+
+          <form id="contact-form" class="contact__form reveal" action="https://formspree.io/f/mqenyzea" method="POST">
             <input type="hidden" name="_subject" value="EI&Co. サイトお問い合わせ">
             <input type="hidden" name="_language" value="ja">
 
@@ -170,7 +175,7 @@
 
 <footer class="footer">
   <div class="footer__brand">
-    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-49" alt="EI engineering & Co." height="32">
+    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-50" alt="EI engineering & Co." height="32">
     <address class="small">
       〒107-0061<br>
       東京都港区北青山一丁目3番6号<br>
@@ -228,6 +233,51 @@
         msg.value = `下記ポジションへの応募を希望いたします。\n\n■ 応募ポジション：${position}\n\n■ 自己紹介・志望動機：\n（ここにご記入ください）\n\n■ 関連する経験・スキル：\n（ここにご記入ください）\n\n■ 添付したいポートフォリオ／GitHub／LinkedIn等のURL：\n（ある場合はご記入ください）`;
       }
     }
+  })();
+
+  // Ajax submit — keeps user on this page; replaces Formspree's default thank-you screen
+  (function () {
+    const form = document.getElementById("contact-form");
+    const thanks = document.getElementById("contact-thanks");
+    if (!form || !thanks) return;
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset.originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "送信中…";
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+
+        if (response.ok) {
+          form.hidden = true;
+          thanks.hidden = false;
+          thanks.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          const data = await response.json().catch(() => ({}));
+          const msg = (data.errors && data.errors.map(x => x.message).join("\n")) || "送信に失敗しました。時間をおいて再度お試しください。";
+          alert(msg);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = submitBtn.dataset.originalText;
+          }
+        }
+      } catch (err) {
+        alert("通信エラーが発生しました。時間をおいて再度お試しください。");
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = submitBtn.dataset.originalText;
+        }
+      }
+    });
   })();
 </script>
 

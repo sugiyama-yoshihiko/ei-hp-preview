@@ -333,6 +333,22 @@
   gap: 20px;
 }
 
+.contact__thanks {
+  border-left: 2px solid var(--color-accent);
+  padding: 24px 28px;
+  background: var(--color-bg-alt);
+}
+
+.contact__thanks h3 {
+  margin: 0 0 12px 0;
+  color: var(--color-accent);
+}
+
+.contact__thanks p {
+  margin: 0;
+  color: var(--color-text-sub);
+}
+
 .contact__direct {
   border: 1px solid var(--color-border);
   border-radius: 8px;
