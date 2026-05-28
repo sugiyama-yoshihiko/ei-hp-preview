@@ -334,19 +334,37 @@
 }
 
 .contact__thanks {
-  border-left: 2px solid var(--color-accent);
-  padding: 24px 28px;
-  background: var(--color-bg-alt);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding: 80px 32px;
+  min-height: 320px;
+  background: rgba(120, 120, 130, 0.08);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 4px;
+  font-family: var(--font-jp);
 }
 
 .contact__thanks h3 {
-  margin: 0 0 12px 0;
-  color: var(--color-accent);
+  margin: 0;
+  font-family: var(--font-jp);
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
 }
 
 .contact__thanks p {
   margin: 0;
+  font-family: var(--font-jp);
+  font-size: 15px;
+  line-height: 1.9;
   color: var(--color-text-sub);
+  max-width: 520px;
 }
 
 .contact__direct {
