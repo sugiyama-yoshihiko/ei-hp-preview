@@ -17,6 +17,12 @@ html {
   overflow-x: clip;
 }
 
+/* Force the native [hidden] attribute to win over component styles
+   like `display: flex`. Otherwise toggling `hidden` via JS does nothing. */
+[hidden] {
+  display: none !important;
+}
+
 body {
   font-family: var(--font-jp);
   background: var(--color-bg);
