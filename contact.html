@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;700;900&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20260430-56">
+<link rel="stylesheet" href="assets/css/main.css?v=20260430-57">
 </head>
 <body class="page page--contact">
 
@@ -33,7 +33,7 @@
 <header class="header">
   <a class="header__logo-link" href="index.html" aria-label="EI&Co. ホーム">
     <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&Co." height="24">
-    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-56" alt="EI&Co." height="24">
+    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-57" alt="EI&Co." height="24">
   </a>
   <nav class="header__nav" aria-label="Primary">
     <a href="about.html">About</a>
@@ -177,7 +177,7 @@
 
 <footer class="footer">
   <div class="footer__brand">
-    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-56" alt="EI engineering & Co." height="32">
+    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-57" alt="EI engineering & Co." height="32">
     <address class="small">
       〒107-0061<br>
       東京都港区北青山一丁目3番6号<br>
@@ -246,11 +246,8 @@
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
       const submitBtn = form.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.dataset.originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = "送信中…";
-      }
+      // Keep the label as "送信する"; only disable to prevent double-submit while in flight.
+      if (submitBtn) submitBtn.disabled = true;
 
       try {
         const response = await fetch(form.action, {
@@ -272,17 +269,11 @@
           const data = await response.json().catch(() => ({}));
           const msg = (data.errors && data.errors.map(x => x.message).join("\n")) || "送信に失敗しました。時間をおいて再度お試しください。";
           alert(msg);
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = submitBtn.dataset.originalText;
-          }
+          if (submitBtn) submitBtn.disabled = false;
         }
       } catch (err) {
         alert("通信エラーが発生しました。時間をおいて再度お試しください。");
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = submitBtn.dataset.originalText;
-        }
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
   })();
@@ -304,10 +295,7 @@
       if (lead) lead.hidden = false;
       if (title) title.hidden = false;
       const submitBtn = form.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '送信する <span class="btn__arrow" aria-hidden="true">&rarr;</span>';
-      }
+      if (submitBtn) submitBtn.disabled = false;
     });
   })();
 </script>
