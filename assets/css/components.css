@@ -390,7 +390,12 @@ a.card { cursor: pointer; }
   align-items: center;
   gap: 0;
   animation: marquee-scroll 30s linear infinite;
+  animation-play-state: paused; /* JS will start it once cloning + measurement is done */
   will-change: transform;
+}
+
+.marquee__track.is-ready {
+  animation-play-state: running;
 }
 
 .marquee__group {
