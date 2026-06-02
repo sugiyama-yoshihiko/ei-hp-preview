@@ -129,9 +129,10 @@
       while (marqueeTrack.scrollWidth < viewport * 2 && safety-- > 0) {
         marqueeTrack.appendChild(marqueeFirstGroup.cloneNode(true));
       }
-      // Adjust animation duration so scroll speed stays roughly constant across widths
-      const speedPxPerSec = 80;
-      const duration = Math.max(20, marqueeTrack.scrollWidth / 2 / speedPxPerSec);
+      // Adjust animation duration so scroll speed stays roughly constant across widths.
+      // 40px/sec ≈ original PC-perceived speed (was 30s for ~1500px half-width track).
+      const speedPxPerSec = 40;
+      const duration = Math.max(30, marqueeTrack.scrollWidth / 2 / speedPxPerSec);
       marqueeTrack.style.animationDuration = duration + "s";
       // Honor reduced-motion: slower but still moving so users perceive the keywords
       if (prefersReducedMotion) {
