@@ -45,17 +45,22 @@
   const menuBtn = document.querySelector(".header__menu-btn");
   const menuOverlay = document.querySelector(".header__menu-overlay");
   if (menuBtn && menuOverlay) {
+    const header = document.querySelector(".header");
     const closeMenu = () => {
       menuBtn.classList.remove("is-open");
       menuOverlay.classList.remove("is-open");
       menuBtn.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
+      if (header) header.classList.remove("is-menu-open");
     };
     const openMenu = () => {
       menuBtn.classList.add("is-open");
       menuOverlay.classList.add("is-open");
       menuBtn.setAttribute("aria-expanded", "true");
       document.body.style.overflow = "hidden";
+      // Lift the header above the overlay's stacking context so the close button
+      // (which lives inside the header) is tappable while the overlay is up.
+      if (header) header.classList.add("is-menu-open");
     };
     menuBtn.addEventListener("click", () => {
       if (menuBtn.classList.contains("is-open")) closeMenu();
@@ -147,15 +152,13 @@
       marqueeTrack.style.animation = `marquee-scroll ${finalDuration}s linear infinite`;
     };
 
-    // Run immediately so animation starts ASAP, then re-run after fonts settle for
-    // an accurate width. Belt-and-suspenders: also re-run after window.load and
-    // after a 1.5s safety timeout. Multiple calls are idempotent.
+    // Run once initially so the marquee animates immediately, then once more after
+    // fonts settle so the final scrollWidth is accurate. Only TWO calls total to
+    // avoid visible duration-shift glitches mid-animation.
     ensureFilled();
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(ensureFilled);
     }
-    window.addEventListener("load", ensureFilled);
-    setTimeout(ensureFilled, 1500);
 
     let resizeTimer;
     window.addEventListener("resize", () => {
