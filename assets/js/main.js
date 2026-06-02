@@ -69,6 +69,10 @@
     menuOverlay.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", closeMenu);
     });
+    // Dedicated close button inside the overlay (sits at z-index 110 above
+    // the overlay background, immune to header stacking-context issues).
+    const closeBtn = menuOverlay.querySelector(".header__menu-close");
+    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });

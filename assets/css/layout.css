@@ -144,6 +144,46 @@
   transform: translateX(-50%) rotate(-45deg);
 }
 
+/* Dedicated close button — lives INSIDE the overlay so no stacking-context
+   issues can hide it behind the overlay. The header's hamburger still toggles
+   open, but closing is owned by this button. */
+.header__menu-close {
+  position: absolute;
+  top: 16px;
+  right: var(--container-px);
+  width: 44px;
+  height: 44px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.header__menu-overlay.is-open .header__menu-close {
+  display: flex;
+}
+
+.header__menu-close span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 1px;
+  background: var(--color-text);
+  transform-origin: center;
+}
+
+.header__menu-close span:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.header__menu-close span:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
 /* Mobile menu overlay */
 .header__menu-overlay {
   position: fixed;
