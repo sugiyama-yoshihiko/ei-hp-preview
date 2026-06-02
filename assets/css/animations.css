@@ -83,11 +83,10 @@
     display: none;
   }
 
-  /* Marquee intentionally keeps a slow scroll even under reduced-motion so users
-     still perceive the brand keywords (JS adjusts duration). Override the wildcard
-     above with a longer non-zero duration. */
+  /* Marquee under reduced-motion: JS handles the slower duration explicitly.
+     Just opt this single element out of the wildcard `animation-duration: 0.01ms`
+     so the JS-set inline animation takes effect. */
   .marquee__track {
-    animation-duration: 90s !important;
-    animation-iteration-count: infinite !important;
+    animation-duration: revert !important;
   }
 }

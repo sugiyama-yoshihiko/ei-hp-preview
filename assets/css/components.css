@@ -389,13 +389,11 @@ a.card { cursor: pointer; }
   display: inline-flex;
   align-items: center;
   gap: 0;
-  animation: marquee-scroll 30s linear infinite;
-  animation-play-state: paused; /* JS will start it once cloning + measurement is done */
+  /* NO animation here on purpose. JS sets the `animation` shorthand once the
+     content is cloned and the final width is measured. Defining the animation
+     in CSS first causes a one-frame fast-scroll glitch on Safari/iOS because
+     the animation timeline starts before JS overrides the duration. */
   will-change: transform;
-}
-
-.marquee__track.is-ready {
-  animation-play-state: running;
 }
 
 .marquee__group {

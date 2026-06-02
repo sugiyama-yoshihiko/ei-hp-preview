@@ -129,6 +129,12 @@
     const ensureFilled = () => {
       // Reset to one group so we always recompute from a known baseline
       while (marqueeTrack.children.length > 1) marqueeTrack.removeChild(marqueeTrack.lastChild);
+      // Stop any running animation so re-setting it starts a fresh t=0
+      marqueeTrack.style.animation = "none";
+      // Force a reflow so the browser commits the `animation: none` before we re-apply
+      // eslint-disable-next-line no-unused-expressions
+      marqueeTrack.offsetWidth;
+
       const viewport = window.innerWidth;
       // Clone until total content is at least 2× viewport (needed for seamless -50% translate loop)
       let safety = 20;
@@ -137,8 +143,8 @@
       }
       // animation moves the track by -50% of its width in `duration` seconds → speed = halfWidth / duration
       const duration = Math.max(20, marqueeTrack.scrollWidth / 2 / SPEED_PX_PER_SEC);
-      marqueeTrack.style.animationDuration = (prefersReducedMotion ? duration * 3 : duration) + "s";
-      marqueeTrack.classList.add("is-ready"); // unpause only after duration is correctly set
+      const finalDuration = prefersReducedMotion ? duration * 3 : duration;
+      marqueeTrack.style.animation = `marquee-scroll ${finalDuration}s linear infinite`;
     };
 
     // Wait for fonts to settle so scrollWidth measurement is accurate.
