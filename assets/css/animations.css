@@ -83,10 +83,11 @@
     display: none;
   }
 
-  /* Marquee under reduced-motion: JS handles the slower duration explicitly.
-     Just opt this single element out of the wildcard `animation-duration: 0.01ms`
-     so the JS-set inline animation takes effect. */
+  /* Marquee must keep animating even under reduced-motion (intentional brand element).
+     Override BOTH wildcard !important rules above so the JS-set animation shorthand
+     is allowed to run. */
   .marquee__track {
-    animation-duration: revert !important;
+    animation-duration: 90s !important;
+    animation-iteration-count: infinite !important;
   }
 }

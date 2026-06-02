@@ -147,18 +147,15 @@
       marqueeTrack.style.animation = `marquee-scroll ${finalDuration}s linear infinite`;
     };
 
-    // Wait for fonts to settle so scrollWidth measurement is accurate.
-    // Without this, the very first measurement happens before web fonts swap in
-    // and the track is narrower than its final size, leading to a brief fast scroll.
-    const startWhenReady = () => {
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(ensureFilled);
-      } else {
-        ensureFilled();
-      }
-    };
-    if (document.readyState === "complete") startWhenReady();
-    else window.addEventListener("load", startWhenReady);
+    // Run immediately so animation starts ASAP, then re-run after fonts settle for
+    // an accurate width. Belt-and-suspenders: also re-run after window.load and
+    // after a 1.5s safety timeout. Multiple calls are idempotent.
+    ensureFilled();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(ensureFilled);
+    }
+    window.addEventListener("load", ensureFilled);
+    setTimeout(ensureFilled, 1500);
 
     let resizeTimer;
     window.addEventListener("resize", () => {
