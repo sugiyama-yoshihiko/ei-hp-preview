@@ -81,6 +81,8 @@
   .hero__lead {
     font-size: 16px;
     margin-top: 24px;
+    /* Prevent orphan punctuation (e.g. a lonely "。" on its own line). */
+    text-wrap: pretty;
   }
 
   /* Allow forced-nowrap spans inside hero lead to wrap on mobile so long sentences don't get clipped */
@@ -89,6 +91,11 @@
     white-space: normal;
     word-break: auto-phrase;
     overflow-wrap: anywhere;
+  }
+
+  /* Keep the trailing verb-ending + period together as one unbreakable unit */
+  .hero__lead .nowrap-end {
+    white-space: nowrap;
   }
 
   .btn {

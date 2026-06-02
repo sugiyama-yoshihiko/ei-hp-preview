@@ -88,15 +88,23 @@
   transform: scaleX(1);
 }
 
-/* Mobile menu button */
+/* Mobile menu button.
+   Uses position: fixed so it sits ABOVE the menu overlay (which is also fixed
+   at z-index 105). Inside the header's stacking context it would otherwise be
+   trapped behind the overlay, making the button untappable when open. */
 .header__menu-btn {
   display: none;
   width: 44px;
   height: 44px;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 110;
+  position: fixed;
+  top: 16px;
+  right: var(--container-px);
+  z-index: 200;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .header__menu-btn span {

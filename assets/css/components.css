@@ -386,8 +386,16 @@ a.card { cursor: pointer; }
 }
 
 .marquee__track {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
   animation: marquee-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+.marquee__group {
+  display: inline-flex;
+  flex-shrink: 0;
   padding-right: 48px;
 }
 

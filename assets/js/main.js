@@ -114,4 +114,36 @@
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
   }
+
+  /* ---------- 7. Marquee: clone content until track ≥ 2× viewport, then animate.
+        Ensures seamless looping on every screen size and works even when the
+        OS has `prefers-reduced-motion` (we keep a slow movement so users still
+        see the brand keywords roll by). ---------- */
+  const marqueeTrack = document.querySelector(".marquee__track");
+  const marqueeFirstGroup = marqueeTrack && marqueeTrack.querySelector(".marquee__group");
+  if (marqueeTrack && marqueeFirstGroup) {
+    const ensureFilled = () => {
+      const viewport = window.innerWidth;
+      // Clone until total content is at least 2× viewport (needed for seamless -50% translate loop)
+      let safety = 20;
+      while (marqueeTrack.scrollWidth < viewport * 2 && safety-- > 0) {
+        marqueeTrack.appendChild(marqueeFirstGroup.cloneNode(true));
+      }
+      // Adjust animation duration so scroll speed stays roughly constant across widths
+      const speedPxPerSec = 80;
+      const duration = Math.max(20, marqueeTrack.scrollWidth / 2 / speedPxPerSec);
+      marqueeTrack.style.animationDuration = duration + "s";
+      // Honor reduced-motion: slower but still moving so users perceive the keywords
+      if (prefersReducedMotion) {
+        marqueeTrack.style.animationDuration = duration * 3 + "s";
+        marqueeTrack.style.animationPlayState = "running";
+      }
+    };
+    ensureFilled();
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(ensureFilled, 200);
+    });
+  }
 })();

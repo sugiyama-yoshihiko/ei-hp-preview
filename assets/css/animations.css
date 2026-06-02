@@ -83,7 +83,11 @@
     display: none;
   }
 
+  /* Marquee intentionally keeps a slow scroll even under reduced-motion so users
+     still perceive the brand keywords (JS adjusts duration). Override the wildcard
+     above with a longer non-zero duration. */
   .marquee__track {
-    animation: none;
+    animation-duration: 90s !important;
+    animation-iteration-count: infinite !important;
   }
 }
