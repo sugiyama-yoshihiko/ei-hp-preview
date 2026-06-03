@@ -306,6 +306,17 @@ a.card { cursor: pointer; }
   position: relative;
 }
 
+/* Home page hero h1 — Japanese copy ("技術を投資する会社"). Override the default
+   display style (Inter 500) so the JP characters render in Noto Sans JP Light
+   for a more refined, less assertive presence. */
+.page--home .hero__display {
+  font-family: var(--font-jp);
+  font-weight: 300;
+  font-size: clamp(40px, 8.5vw, 112px);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
 .hero__display {
   font-family: var(--font-en);
   font-size: clamp(48px, 9vw, 128px);
