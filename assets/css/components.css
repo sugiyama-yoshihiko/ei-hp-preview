@@ -318,10 +318,9 @@ a.card { cursor: pointer; }
 }
 
 /* Accent highlight on key nouns inside the home hero h1.
-   Uses the brand navy and a slightly heavier weight for emphasis. */
+   Color only — keep the same Light (300) weight as surrounding text. */
 .page--home .hero__display .hero__accent {
   color: var(--color-accent);
-  font-weight: 500;
 }
 
 .hero__display {
