@@ -400,16 +400,22 @@ a.card { cursor: pointer; }
   letter-spacing: var(--tracking-display);
   text-transform: uppercase;
   padding: 24px 0;
+  /* Isolate from the rest of the page so paints in/around the marquee don't
+     trigger a relayout of siblings (helps iOS Safari smoothness). */
+  contain: layout paint style;
+  /* Force own stacking context so the GPU layer below stays promoted. */
+  isolation: isolate;
 }
 
 .marquee__track {
   display: inline-flex;
   align-items: center;
   gap: 0;
-  /* NO animation here on purpose. JS sets the `animation` shorthand once the
-     content is cloned and the final width is measured. Defining the animation
-     in CSS first causes a one-frame fast-scroll glitch on Safari/iOS because
-     the animation timeline starts before JS overrides the duration. */
+  /* Force the track onto its own GPU compositor layer. Compositor animations
+     run independently of the main thread, so scrolling cannot throttle them. */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   will-change: transform;
 }
 
@@ -419,11 +425,10 @@ a.card { cursor: pointer; }
   padding-right: 48px;
 }
 
-.marquee__track.is-paused {
-  animation-play-state: paused;
-}
-
+/* Animation moves exactly ONE group width to the left. JS sets the CSS variable
+   --marquee-shift to the measured group width and --marquee-duration to the
+   per-cycle duration; the keyframe references them via calc(). */
 @keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(calc(-1 * var(--marquee-shift, 50%)), 0, 0); }
 }

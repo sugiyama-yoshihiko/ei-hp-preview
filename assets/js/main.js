@@ -134,18 +134,15 @@
     // Constant pixel-per-second scroll speed (matches original PC feel).
     const SPEED_PX_PER_SEC = prefersReducedMotion ? 18 : 55;
 
-    // We drive the marquee with requestAnimationFrame instead of a CSS animation.
-    // Why: iOS Safari (and some other mobile browsers) deprioritize / throttle CSS
-    // animations during scroll to save battery, which causes the visible
-    // stuttering when the user is mid-scroll. rAF keeps the motion locked to the
-    // main loop and renders smoothly regardless of scroll state.
+    // Drive the marquee with a pure CSS animation. CSS keyframes that animate
+    // only `transform` are eligible to run on the compositor thread, completely
+    // independent of the main thread / scroll handler. This avoids the stutter
+    // we saw with rAF when the OS throttled JS during scroll.
+    //
+    // JS only does measurement: it sets CSS variables for shift distance and
+    // duration, then never touches the element again until resize.
 
-    let position = 0;     // current translateX in px (negative = scrolled left)
-    let groupWidth = 0;   // width of ONE content group; we wrap when |position| >= groupWidth
-    let lastTime = 0;
-    let rafId = null;
-
-    const fillTrack = () => {
+    const setupAnimation = () => {
       // Reset to one group so we recompute from a known baseline
       while (marqueeTrack.children.length > 1) marqueeTrack.removeChild(marqueeTrack.lastChild);
       const viewport = window.innerWidth;
@@ -154,39 +151,23 @@
       while (marqueeTrack.scrollWidth < viewport * 2 && safety-- > 0) {
         marqueeTrack.appendChild(marqueeFirstGroup.cloneNode(true));
       }
-      groupWidth = marqueeFirstGroup.getBoundingClientRect().width;
-    };
-
-    const tick = (now) => {
-      if (!lastTime) lastTime = now;
-      const dt = now - lastTime;
-      lastTime = now;
-      // Cap dt at 100ms — if the tab was backgrounded for seconds, don't jump
-      const effectiveDt = Math.min(dt, 100);
-      position -= (SPEED_PX_PER_SEC * effectiveDt) / 1000;
-      if (groupWidth > 0 && position <= -groupWidth) {
-        position += groupWidth; // wrap seamlessly
-      }
-      marqueeTrack.style.transform = "translate3d(" + position + "px, 0, 0)";
-      rafId = requestAnimationFrame(tick);
-    };
-
-    const start = () => {
-      if (rafId) return;
-      lastTime = 0;
-      rafId = requestAnimationFrame(tick);
-    };
-
-    const init = () => {
-      fillTrack();
-      start();
+      const groupWidth = marqueeFirstGroup.getBoundingClientRect().width;
+      if (groupWidth <= 0) return;
+      const duration = groupWidth / SPEED_PX_PER_SEC; // seconds per cycle
+      // Clear any previous animation so duration changes take effect cleanly
+      marqueeTrack.style.animation = "none";
+      // Force reflow so the browser commits the reset
+      // eslint-disable-next-line no-unused-expressions
+      marqueeTrack.offsetWidth;
+      marqueeTrack.style.setProperty("--marquee-shift", groupWidth + "px");
+      marqueeTrack.style.animation = "marquee-scroll " + duration + "s linear infinite";
     };
 
     let didInit = false;
     const initOnce = () => {
       if (didInit) return;
       didInit = true;
-      init();
+      setupAnimation();
     };
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(initOnce);
@@ -202,18 +183,9 @@
       resizeTimer = setTimeout(() => {
         if (Math.abs(window.innerWidth - lastWidth) > 80) {
           lastWidth = window.innerWidth;
-          fillTrack(); // keep position; just adjust clones + groupWidth
+          setupAnimation();
         }
       }, 500);
-    });
-
-    // Pause when tab is hidden so we don't accumulate "stale" time
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-      } else if (didInit) {
-        start();
-      }
     });
   }
 })();
