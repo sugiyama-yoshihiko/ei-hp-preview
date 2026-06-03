@@ -156,18 +156,34 @@
       marqueeTrack.style.animation = `marquee-scroll ${finalDuration}s linear infinite`;
     };
 
-    // Run once initially so the marquee animates immediately, then once more after
-    // fonts settle so the final scrollWidth is accurate. Only TWO calls total to
-    // avoid visible duration-shift glitches mid-animation.
-    ensureFilled();
+    // Only run ensureFilled ONCE — after fonts have loaded so the scrollWidth
+    // measurement is final. Calling it more than once causes visible "rewind"
+    // glitches because each call resets clones + restarts the animation with a
+    // different duration. A 2s timeout fallback handles the rare case where
+    // document.fonts.ready never resolves (older browsers / blocked fonts).
+    let didInit = false;
+    const initOnce = () => {
+      if (didInit) return;
+      didInit = true;
+      ensureFilled();
+    };
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(ensureFilled);
+      document.fonts.ready.then(initOnce);
     }
+    setTimeout(initOnce, 2000);
 
+    // Only re-run on resize if viewport width changes meaningfully (>80px),
+    // to avoid restarts from iOS Safari's URL bar collapse / address-bar resize.
     let resizeTimer;
+    let lastWidth = window.innerWidth;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(ensureFilled, 200);
+      resizeTimer = setTimeout(() => {
+        if (Math.abs(window.innerWidth - lastWidth) > 80) {
+          lastWidth = window.innerWidth;
+          ensureFilled();
+        }
+      }, 500);
     });
   }
 })();
