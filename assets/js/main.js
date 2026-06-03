@@ -131,49 +131,70 @@
   const marqueeTrack = document.querySelector(".marquee__track");
   const marqueeFirstGroup = marqueeTrack && marqueeTrack.querySelector(".marquee__group");
   if (marqueeTrack && marqueeFirstGroup) {
-    // Constant pixel-per-second scroll speed.
-    // 55px/sec matches the original PC feel (30s for a ~3300px-wide 3-copy track).
-    const SPEED_PX_PER_SEC = 55;
+    // Constant pixel-per-second scroll speed (matches original PC feel).
+    const SPEED_PX_PER_SEC = prefersReducedMotion ? 18 : 55;
 
-    const ensureFilled = () => {
-      // Reset to one group so we always recompute from a known baseline
+    // We drive the marquee with requestAnimationFrame instead of a CSS animation.
+    // Why: iOS Safari (and some other mobile browsers) deprioritize / throttle CSS
+    // animations during scroll to save battery, which causes the visible
+    // stuttering when the user is mid-scroll. rAF keeps the motion locked to the
+    // main loop and renders smoothly regardless of scroll state.
+
+    let position = 0;     // current translateX in px (negative = scrolled left)
+    let groupWidth = 0;   // width of ONE content group; we wrap when |position| >= groupWidth
+    let lastTime = 0;
+    let rafId = null;
+
+    const fillTrack = () => {
+      // Reset to one group so we recompute from a known baseline
       while (marqueeTrack.children.length > 1) marqueeTrack.removeChild(marqueeTrack.lastChild);
-      // Stop any running animation so re-setting it starts a fresh t=0
-      marqueeTrack.style.animation = "none";
-      // Force a reflow so the browser commits the `animation: none` before we re-apply
-      // eslint-disable-next-line no-unused-expressions
-      marqueeTrack.offsetWidth;
-
       const viewport = window.innerWidth;
-      // Clone until total content is at least 2× viewport (needed for seamless -50% translate loop)
+      // Clone until total content is at least 2× viewport so we can wrap seamlessly
       let safety = 20;
       while (marqueeTrack.scrollWidth < viewport * 2 && safety-- > 0) {
         marqueeTrack.appendChild(marqueeFirstGroup.cloneNode(true));
       }
-      // animation moves the track by -50% of its width in `duration` seconds → speed = halfWidth / duration
-      const duration = Math.max(20, marqueeTrack.scrollWidth / 2 / SPEED_PX_PER_SEC);
-      const finalDuration = prefersReducedMotion ? duration * 3 : duration;
-      marqueeTrack.style.animation = `marquee-scroll ${finalDuration}s linear infinite`;
+      groupWidth = marqueeFirstGroup.getBoundingClientRect().width;
     };
 
-    // Only run ensureFilled ONCE — after fonts have loaded so the scrollWidth
-    // measurement is final. Calling it more than once causes visible "rewind"
-    // glitches because each call resets clones + restarts the animation with a
-    // different duration. A 2s timeout fallback handles the rare case where
-    // document.fonts.ready never resolves (older browsers / blocked fonts).
+    const tick = (now) => {
+      if (!lastTime) lastTime = now;
+      const dt = now - lastTime;
+      lastTime = now;
+      // Cap dt at 100ms — if the tab was backgrounded for seconds, don't jump
+      const effectiveDt = Math.min(dt, 100);
+      position -= (SPEED_PX_PER_SEC * effectiveDt) / 1000;
+      if (groupWidth > 0 && position <= -groupWidth) {
+        position += groupWidth; // wrap seamlessly
+      }
+      marqueeTrack.style.transform = "translate3d(" + position + "px, 0, 0)";
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (rafId) return;
+      lastTime = 0;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const init = () => {
+      fillTrack();
+      start();
+    };
+
     let didInit = false;
     const initOnce = () => {
       if (didInit) return;
       didInit = true;
-      ensureFilled();
+      init();
     };
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(initOnce);
     }
     setTimeout(initOnce, 2000);
 
-    // Only re-run on resize if viewport width changes meaningfully (>80px),
-    // to avoid restarts from iOS Safari's URL bar collapse / address-bar resize.
+    // Re-measure on meaningful resize only (>80px) to avoid jitter from iOS
+    // address-bar collapse triggering resize for a few pixels.
     let resizeTimer;
     let lastWidth = window.innerWidth;
     window.addEventListener("resize", () => {
@@ -181,9 +202,18 @@
       resizeTimer = setTimeout(() => {
         if (Math.abs(window.innerWidth - lastWidth) > 80) {
           lastWidth = window.innerWidth;
-          ensureFilled();
+          fillTrack(); // keep position; just adjust clones + groupWidth
         }
       }, 500);
+    });
+
+    // Pause when tab is hidden so we don't accumulate "stale" time
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      } else if (didInit) {
+        start();
+      }
     });
   }
 })();
