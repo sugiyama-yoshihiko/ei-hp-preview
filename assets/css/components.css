@@ -317,6 +317,13 @@ a.card { cursor: pointer; }
   line-height: 1.2;
 }
 
+/* Accent highlight on key nouns inside the home hero h1.
+   Uses the brand navy and a slightly heavier weight for emphasis. */
+.page--home .hero__display .hero__accent {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
 .hero__display {
   font-family: var(--font-en);
   font-size: clamp(48px, 9vw, 128px);
