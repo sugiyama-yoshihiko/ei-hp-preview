@@ -335,7 +335,9 @@ a.card { cursor: pointer; }
   font-size: 14px;
   letter-spacing: 0.06em;
   text-transform: none;
-  font-weight: 500;
+  /* Kanji look optically heavier than Latin at the same weight, so drop to 400
+     to visually match buttons like "ABOUT US →". */
+  font-weight: 400;
 }
 
 .hero__display {
