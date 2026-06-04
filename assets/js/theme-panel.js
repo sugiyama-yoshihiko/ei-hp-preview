@@ -207,23 +207,58 @@
 })();
 
 /* =========================================================
-   Palette toggle — Monochrome variants (1: Classic / 2: Cool / 3: Warm)
-   Keyboard: "1" / "2" / "3" — floating pill bottom-left
+   Palette switcher — 4 bold variants accented with black to anchor the design.
+     1. Vivid Orange   #E85D2A
+     2. Forest Green   #3A5F3A
+     3. Sakura Pink    #E8A6B8
+     4. Wine Bold      #4B2139
+
+   Public-facing: visible to all visitors as a floating pill bottom-left.
+   Click cycles 1 → 2 → 3 → 4 → 1. Keyboard 1/2/3/4 also switches.
    ========================================================= */
 (function () {
   const STORAGE = "ei-palette";
   const root = document.documentElement;
 
-  // すべてモノクロ系の配色バリエーション
+  // Each palette ships its own bg / bg-alt / border / text-sub so the entire
+  // page changes mood (not just the accent). Black is used as the body text
+  // color in every variant to "anchor" the design per the brief.
   const PALETTES = {
-    mono:     { accent: "#1E3A8A", hover: "#2E4FA6", bg: "#FAFAF7", bgAlt: "#F0EFEA", border: "#E4E3DE", text: "#1A1A1A", textSub: "#4A4A52", label: "1 Mono Classic" },
-    monoCool: { accent: "#0F1419", hover: "#3B4A5A", bg: "#F4F6F8", bgAlt: "#E5EAEF", border: "#D6DCE3", text: "#0F1419", textSub: "#3A4754", label: "2 Mono Cool" },
-    monoWarm: { accent: "#1F1A14", hover: "#5A4A36", bg: "#F7F2EA", bgAlt: "#EDE5D6", border: "#E0D5C2", text: "#1F1A14", textSub: "#5A5246", label: "3 Mono Warm" }
+    orange: {
+      label: "Vivid Orange",
+      accent: "#E85D2A",  hover: "#C24618",
+      bg:     "#FFF8F3",  bgAlt: "#FBE6D6",
+      border: "#F2D2BD",
+      text:   "#111111",  textSub: "#4A3328"
+    },
+    green: {
+      label: "Forest Green",
+      accent: "#3A5F3A",  hover: "#284428",
+      bg:     "#F4F6F2",  bgAlt: "#E2EAE0",
+      border: "#CFD9CC",
+      text:   "#111111",  textSub: "#3A4A3A"
+    },
+    pink: {
+      label: "Sakura Pink",
+      accent: "#E8A6B8",  hover: "#D08398",
+      bg:     "#FCF6F7",  bgAlt: "#F4E1E6",
+      border: "#E8D0D5",
+      text:   "#111111",  textSub: "#5A4248"
+    },
+    wine: {
+      label: "Wine Bold",
+      accent: "#AF3E47",  hover: "#7E1F2A",
+      bg:     "#FAF4F4",  bgAlt: "#EAD6D8",
+      border: "#D8B8BC",
+      text:   "#111111",  textSub: "#4B2139"
+    }
   };
+
+  const ORDER = ["orange", "green", "pink", "wine"];
 
   let pill = null;
   const apply = (mode) => {
-    const p = PALETTES[mode] || PALETTES.mono;
+    const p = PALETTES[mode] || PALETTES[ORDER[0]];
     root.style.setProperty("--color-accent", p.accent);
     root.style.setProperty("--color-accent-hover", p.hover);
     root.style.setProperty("--color-bg", p.bg);
@@ -233,51 +268,47 @@
     root.style.setProperty("--color-text-sub", p.textSub);
     root.setAttribute("data-palette", mode);
     localStorage.setItem(STORAGE, mode);
-    localStorage.setItem("ei-theme-accent", p.accent);
-    if (pill) pill.textContent = "Palette: " + p.label;
-    console.log("[EI palette] applied:", mode, p);
+    if (pill) pill.textContent = "Palette · " + p.label;
   };
 
   pill = document.createElement("button");
   pill.type = "button";
-  pill.setAttribute("aria-label", "Toggle monochrome palette (1: Classic / 2: Cool / 3: Warm)");
+  pill.setAttribute("aria-label", "Switch color palette");
   pill.style.cssText = [
     "position:fixed",
     "left:16px",
     "bottom:16px",
     "z-index:200",
-    "padding:10px 14px",
+    "padding:10px 16px",
     "border:1px solid rgba(0,0,0,.2)",
     "background:rgba(255,255,255,.85)",
     "backdrop-filter:blur(8px)",
     "-webkit-backdrop-filter:blur(8px)",
     "border-radius:999px",
-    "font:500 12px/1 Inter,Avenir,sans-serif",
-    "letter-spacing:.12em",
+    "font:500 11px/1 Inter,Avenir,sans-serif",
+    "letter-spacing:.14em",
     "text-transform:uppercase",
-    "color:#0A0A0A",
+    "color:#111",
     "cursor:pointer",
     "box-shadow:0 2px 8px rgba(0,0,0,.08)"
   ].join(";");
   document.body.appendChild(pill);
 
-  const ORDER = ["mono", "monoCool", "monoWarm"];
   pill.addEventListener("click", () => {
-    const current = localStorage.getItem(STORAGE) || "mono";
+    const current = localStorage.getItem(STORAGE) || ORDER[0];
     const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
     apply(next);
   });
 
   document.addEventListener("keydown", (e) => {
     if (e.target && ["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
-    if (e.key === "1") apply("mono");
-    if (e.key === "2") apply("monoCool");
-    if (e.key === "3") apply("monoWarm");
+    if (e.key === "1") apply("orange");
+    if (e.key === "2") apply("green");
+    if (e.key === "3") apply("pink");
+    if (e.key === "4") apply("wine");
   });
 
-  // 旧パレット (pink/bronze) を選択中だった場合は mono に正規化
   const stored = localStorage.getItem(STORAGE);
-  const initial = (stored && PALETTES[stored]) ? stored : "mono";
+  const initial = (stored && PALETTES[stored]) ? stored : ORDER[0];
   apply(initial);
-  console.log("[EI palette] keys 1/2/3 to switch. Current:", localStorage.getItem(STORAGE));
 })();

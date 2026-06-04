@@ -3,17 +3,18 @@
    ========================================================= */
 
 :root {
-  /* Colors — Palette 1 (Mono Classic + Navy accent) */
-  --color-bg: #FAFAF7;
-  --color-bg-alt: #F0EFEA;
+  /* Colors — Default palette: Vivid Orange (overridable via theme-panel.js).
+     Body text stays near-black in every palette to "anchor" the design. */
+  --color-bg: #FFF8F3;
+  --color-bg-alt: #FBE6D6;
   --color-surface: #FFFFFF;
-  --color-text: #1A1A1A;
-  --color-text-sub: #4A4A52;
+  --color-text: #111111;
+  --color-text-sub: #4A3328;
   --color-text-muted: #9A9AA0;
-  --color-border: #E4E3DE;
-  --color-border-strong: #1A1A1A;
-  --color-accent: #1E3A8A;
-  --color-accent-hover: #2E4FA6;
+  --color-border: #F2D2BD;
+  --color-border-strong: #111111;
+  --color-accent: #E85D2A;
+  --color-accent-hover: #C24618;
   --color-accent-contrast: #FFFFFF;
 
   /* Fonts */
@@ -56,17 +57,8 @@
   --color-accent-hover: #3522C7;
 }
 
-/* Dark Theme — unified with Palette 1 (no separate dark mode in current spec) */
+/* Dark Theme — unified with active palette (no separate dark mode in spec) */
 [data-theme="dark"] {
-  --color-bg: #FAFAF7;
-  --color-bg-alt: #F0EFEA;
-  --color-surface: #FFFFFF;
-  --color-text: #1A1A1A;
-  --color-text-sub: #4A4A52;
-  --color-text-muted: #9A9AA0;
-  --color-border: #E4E3DE;
-  --color-border-strong: #1A1A1A;
-  --color-accent: #1E3A8A;
-  --color-accent-hover: #2E4FA6;
-  --color-accent-contrast: #FFFFFF;
+  --color-bg: var(--color-bg);
+  --color-bg-alt: var(--color-bg-alt);
 }

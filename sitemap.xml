@@ -40,26 +40,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://ei-and.co.jp/business/system-development.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ei-and.co.jp/business/corporate-advisory.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ei-and.co.jp/business/educational-training.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ei-and.co.jp/business/strategic-alliance.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
 <url>
     <loc>https://ei-and.co.jp/privacy-policy.html</loc>
     <changefreq>yearly</changefreq>
