@@ -35,11 +35,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://ei-and.co.jp/business/capital-investment.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
 <url>
     <loc>https://ei-and.co.jp/privacy-policy.html</loc>
     <changefreq>yearly</changefreq>
