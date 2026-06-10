@@ -297,9 +297,33 @@
 .footer__brand {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+.footer__tagline {
+  font-family: var(--font-jp);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  margin: -4px 0 0 0;
+}
+
+/* Thin accent line beside footer section labels (Sitemap / Contact / Policy) */
+.footer__col h3.eyebrow {
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  text-align: center;
-  gap: 24px;
+  gap: 8px;
+}
+
+.footer__col h3.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
 }
 
 .footer__col h3 {
