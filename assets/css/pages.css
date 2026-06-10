@@ -41,14 +41,15 @@
 /* -------- Footer: editorial asymmetric layout --------
    Left column: brand block (logo + tagline + address).
    Right column: 3-up nav sub-grid (Sitemap / Contact / Policy).
-   Bottom row: Est. 2019 | © copy | Back to top */
+   Bottom row: Est. 2019 | © copy | Back to top.
+   The footer spans the full viewport width (no max-width), and inline padding
+   auto-grows on wide screens so the content stays centered up to container-max. */
 .footer {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
   gap: clamp(48px, 8vw, 120px);
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: var(--space-block) var(--container-px) 32px;
+  padding-block: var(--space-block) 32px;
+  padding-inline: max(var(--container-px), calc((100% - var(--container-max)) / 2));
   text-align: left;
 }
 
