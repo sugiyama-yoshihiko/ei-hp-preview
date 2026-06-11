@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;700;900&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20260430-84">
+<link rel="stylesheet" href="assets/css/main.css?v=20260430-85">
 <style>
   /* Inline override for CEO signature + portrait (highest precedence) */
   .ceo-portrait, figure.ceo-portrait { display: none !important; }
@@ -91,7 +91,7 @@
 <header class="header">
   <a class="header__logo-link" href="./" aria-label="EI&Co. ホーム">
     <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&Co." height="24">
-    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-84" alt="EI&Co." height="24">
+    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-85" alt="EI&Co." height="24">
   </a>
   <nav class="header__nav" aria-label="Primary">
     <a href="about.html" aria-current="page">About</a>
@@ -234,46 +234,40 @@
 </main>
 
 <footer class="footer">
-  <div class="footer__brand">
-    <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-84" alt="EI engineering & Co." height="32">
-    <p class="footer__tagline">技術を投資する会社</p>
-    <address class="small">
-      〒107-0061<br>
-      東京都港区北青山一丁目3番6号<br>
-      SIビル青山 5階
-    </address>
-  </div>
-  <div class="footer__nav">
-  <div class="footer__col">
-    <h3 class="eyebrow">Sitemap</h3>
-    <ul>
-      <li><a href="about.html">About</a></li>
-      <li><a href="business.html">Business</a></li>
-      <li><a href="works.html">Works</a></li>
-      <li><a href="update.html">Update</a></li>
-      <li><a href="recruit.html">Recruit</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </div>
-  <div class="footer__col">
-    <h3 class="eyebrow">Contact</h3>
-    <ul>
-      <li><a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a></li>
-      <li><a href="contact.html">Contact Form</a></li>
-    </ul>
-  </div>
-  <div class="footer__col">
-    <h3 class="eyebrow">Policy</h3>
-    <ul>
-      <li><a href="privacy-policy.html">Privacy Policy</a></li>
-      <li><a href="contact.html#contact-access-title">Access Map</a></li>
-    </ul>
-  </div>
-  </div>
-  <div class="footer__bottom">
-    <p class="footer__bottom-left small">Est. 2019</p>
-    <p class="footer__bottom-center small">&copy; <span id="current-year">2026</span> EI engineering &amp; Co. All rights reserved.</p>
-    <a class="footer__top" href="#main" aria-label="Back to top">Back to top <span aria-hidden="true">&uarr;</span></a>
+  <div class="footer__inner">
+    <div class="footer__statement">
+      <h2 class="footer__statement-jp">技術を投資する会社</h2>
+      <p class="footer__statement-en">EI engineering &amp; Co. &mdash; Est. 2019</p>
+    </div>
+
+    <div class="footer__brand-row">
+      <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-85" alt="EI engineering & Co." height="32">
+      <address class="footer__address small">〒107-0061 東京都港区北青山一丁目3番6号 SIビル青山 5階</address>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer primary">
+      <a href="about.html">About</a>
+      <a href="business.html">Business</a>
+      <a href="works.html">Works</a>
+      <a href="update.html">Update</a>
+      <a href="recruit.html">Recruit</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <nav class="footer__meta" aria-label="Footer secondary">
+      <a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a>
+      <span class="footer__sep" aria-hidden="true">·</span>
+      <a href="contact.html">Contact Form</a>
+      <span class="footer__sep" aria-hidden="true">·</span>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <span class="footer__sep" aria-hidden="true">·</span>
+      <a href="contact.html#contact-access-title">Access Map</a>
+    </nav>
+
+    <div class="footer__bottom">
+      <p class="footer__bottom-center small">&copy; <span id="current-year">2026</span> EI engineering &amp; Co. All rights reserved.</p>
+      <a class="footer__top" href="#main" aria-label="Back to top">Back to top <span aria-hidden="true">&uarr;</span></a>
+    </div>
   </div>
 </footer>
 

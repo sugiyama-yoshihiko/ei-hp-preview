@@ -38,64 +38,124 @@
   transform: scaleX(1);
 }
 
-/* -------- Footer: editorial asymmetric layout --------
-   Left column: brand block (logo + tagline + address).
-   Right column: 3-up nav sub-grid (Sitemap / Contact / Policy).
-   Bottom row: Est. 2019 | © copy | Back to top.
-   The footer spans the full viewport width (no max-width), and inline padding
-   auto-grows on wide screens so the content stays centered up to container-max. */
+/* -------- Footer: Brand Statement + Compact Nav (Option B) --------
+   A large brand statement crowns the footer, followed by a compact
+   single-line nav. Background spans full viewport; content centers
+   inside an inner wrapper. */
 .footer {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
-  gap: clamp(48px, 8vw, 120px);
-  padding-block: var(--space-block) 32px;
+  padding-block: clamp(64px, 9vw, 120px) 32px;
   padding-inline: max(var(--container-px), calc((100% - var(--container-max)) / 2));
-  text-align: left;
 }
 
-.footer__brand {
-  align-items: flex-start;
-  text-align: left;
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 5vw, 64px);
 }
 
-.footer__nav {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 48px;
-  align-items: start;
+/* Big brand statement */
+.footer__statement {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: clamp(28px, 4vw, 40px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.footer__col {
-  align-items: flex-start;
-  text-align: left;
+.footer__statement-jp {
+  font-family: var(--font-jp);
+  font-weight: 300;
+  font-size: clamp(36px, 6vw, 80px);
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin: 0;
 }
 
-.footer__bottom {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 24px;
-  margin-top: clamp(40px, 6vw, 80px);
-  padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  justify-content: stretch;
-}
-
-.footer__bottom-left {
-  justify-self: start;
+.footer__statement-en {
   font-family: var(--font-en);
+  font-size: var(--fs-tiny);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+/* Brand row: logo + inline address */
+.footer__brand-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.footer__address {
+  font-family: var(--font-jp);
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+/* Primary nav — inline horizontal list */
+.footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(20px, 3vw, 40px);
+  align-items: center;
+}
+
+.footer__nav a {
+  font-family: var(--font-en);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: #FFFFFF;
+  transition: opacity var(--dur-sm) var(--ease-out);
+}
+
+.footer__nav a:hover {
+  opacity: 0.65;
+}
+
+/* Secondary meta nav — smaller, with dot separators */
+.footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font-size: var(--fs-tiny);
+}
+
+.footer__meta a {
+  color: rgba(255, 255, 255, 0.75);
+  transition: color var(--dur-sm) var(--ease-out);
+}
+
+.footer__meta a:hover {
+  color: #FFFFFF;
+}
+
+.footer__sep {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Bottom row: copyright + back-to-top */
+.footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(20px, 3vw, 32px);
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .footer__bottom-center {
-  justify-self: center;
-  text-align: center;
+  font-family: var(--font-en);
+  letter-spacing: var(--tracking-label);
 }
 
 .footer__top {
-  justify-self: end;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -114,6 +174,7 @@
 
 .footer__top span {
   transition: transform var(--dur-sm) var(--ease-out);
+  display: inline-block;
 }
 
 .footer__top:hover span {
