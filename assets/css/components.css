@@ -394,7 +394,10 @@ a.card { cursor: pointer; }
 
 .hero__meta {
   position: absolute;
-  bottom: 48px;
+  /* Align horizontally with the bottom edge of the ghost button row.
+     Hero has padding-bottom: 140px, button height ~50px, so this places
+     SCROLL ↓ roughly level with the button's bottom edge. */
+  bottom: 140px;
   right: var(--container-px);
   font-family: var(--font-en);
   font-size: var(--fs-tiny);

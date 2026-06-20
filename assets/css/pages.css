@@ -1038,3 +1038,67 @@
   border-radius: 4px;
   box-shadow: 0 24px 48px -24px rgba(75, 33, 57, 0.22);
 }
+
+/* =========================================================
+   案 B — Cinematic horizontal crop
+   "Horizon line" treatment. Image becomes a subtle wide band
+   that punctuates the section without dominating it.
+   ========================================================= */
+.section-figure--cinematic {
+  margin: clamp(40px, 6vw, 80px) 0 0;
+  aspect-ratio: 4 / 1;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 16px 32px -20px rgba(75, 33, 57, 0.18);
+}
+.section-figure--cinematic img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 60%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* =========================================================
+   案 D — Background overlay
+   Image lives behind text at low opacity. The text owns the
+   visual hierarchy; the image provides atmosphere only.
+   Use a soft radial mask so the center stays readable.
+   ========================================================= */
+.section--with-bg-figure {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.section--with-bg-figure > .container {
+  position: relative;
+  z-index: 1;
+}
+.section__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+  /* Soft vignette so the central text area stays bright and readable */
+  -webkit-mask-image: radial-gradient(ellipse at center,
+    rgba(0,0,0,0.2) 0%,
+    rgba(0,0,0,0.6) 45%,
+    rgba(0,0,0,1) 100%);
+          mask-image: radial-gradient(ellipse at center,
+    rgba(0,0,0,0.2) 0%,
+    rgba(0,0,0,0.6) 45%,
+    rgba(0,0,0,1) 100%);
+}
+/* When .section--alt + bg image, fade the alt-bg slightly so image shows */
+.section--alt.section--with-bg-figure {
+  background-color: var(--color-bg-alt);
+}
+.section--alt.section--with-bg-figure .section__bg {
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+}
