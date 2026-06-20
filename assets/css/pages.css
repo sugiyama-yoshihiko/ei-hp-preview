@@ -849,3 +849,86 @@
     font-size: 30px;
   }
 }
+
+/* =========================================================
+   Hero background image (home) — monolith on the right
+   Image fades into bg color on the left via gradient mask
+   so the h1 / lead text remains highly legible.
+   ========================================================= */
+.hero--with-bg {
+  position: relative;
+  overflow: hidden;
+}
+.hero__bg-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("../images/hero-monolith.jpg");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: cover;
+  /* Fade to bg-color on the left so text stays readable */
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0%,
+    transparent 30%,
+    rgba(0,0,0,0.4) 50%,
+    rgba(0,0,0,1) 75%);
+          mask-image: linear-gradient(to right,
+    transparent 0%,
+    transparent 30%,
+    rgba(0,0,0,0.4) 50%,
+    rgba(0,0,0,1) 75%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.hero--with-bg > .container,
+.hero--with-bg > .hero__meta {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   Business Overview — text/image 2-col grid
+   ========================================================= */
+.business-overview-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+.business-overview-grid__figure {
+  margin: 0;
+}
+.business-overview-grid__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 24px 48px -20px rgba(75, 33, 57, 0.25);
+}
+
+@media (max-width: 959.98px) {
+  .business-overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .business-overview-grid__figure {
+    order: 2;
+  }
+}
+
+@media (max-width: 743.98px) {
+  /* On mobile, fade hero image more aggressively for legibility */
+  .hero__bg-image {
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      transparent 45%,
+      rgba(0,0,0,0.5) 70%,
+      rgba(0,0,0,1) 100%);
+            mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      transparent 45%,
+      rgba(0,0,0,0.5) 70%,
+      rgba(0,0,0,1) 100%);
+    opacity: 0.55;
+  }
+}
