@@ -1023,3 +1023,18 @@
     order: 2;
   }
 }
+
+/* =========================================================
+   Generic in-section figure — full-width image inside a section,
+   used for documentary cuts that punctuate long text blocks.
+   ========================================================= */
+.section-figure {
+  margin: clamp(40px, 6vw, 80px) 0;
+}
+.section-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 24px 48px -24px rgba(75, 33, 57, 0.22);
+}
