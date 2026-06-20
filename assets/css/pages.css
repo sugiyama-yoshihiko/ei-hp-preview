@@ -1056,7 +1056,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 60%;
+  /* Bias toward the top so the key subject (wine-red accent at top of
+     the cairn / top of the pillars) stays in view after cropping. */
+  object-position: center 22%;
   border-radius: 0;
   box-shadow: none;
 }
