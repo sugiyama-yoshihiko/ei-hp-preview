@@ -932,3 +932,94 @@
     opacity: 0.55;
   }
 }
+
+/* =========================================================
+   Case Study cards with images (business.html)
+   ========================================================= */
+.card-grid--with-images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3vw, 40px);
+}
+.card--with-image {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border-radius: 4px;
+  box-shadow: 0 16px 32px -16px rgba(75, 33, 57, 0.18);
+}
+.card--with-image .card__image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
+.card--with-image .card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 600ms var(--ease-out);
+}
+.card--with-image:hover .card__image img {
+  transform: scale(1.04);
+}
+.card--with-image > h3,
+.card--with-image > p {
+  padding-left: clamp(20px, 2vw, 28px);
+  padding-right: clamp(20px, 2vw, 28px);
+}
+.card--with-image > h3 {
+  margin-top: clamp(20px, 2vw, 28px);
+}
+.card--with-image > p:last-child {
+  padding-bottom: clamp(24px, 2.5vw, 32px);
+}
+
+@media (max-width: 959.98px) {
+  .card-grid--with-images {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 743.98px) {
+  .card-grid--with-images {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   Recruit hero — left/right split layout
+   ========================================================= */
+.hero--split {
+  padding-block: clamp(120px, 14vw, 180px) clamp(80px, 10vw, 120px);
+  min-height: auto;
+}
+.hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+.hero-split__text {
+  /* keep eyebrow + h1 + lead together */
+}
+.hero-split__figure {
+  margin: 0;
+}
+.hero-split__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 32px 64px -28px rgba(75, 33, 57, 0.3);
+}
+
+@media (max-width: 959.98px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+  }
+  .hero-split__figure {
+    order: 2;
+  }
+}
