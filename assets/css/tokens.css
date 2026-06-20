@@ -3,18 +3,18 @@
    ========================================================= */
 
 :root {
-  /* Colors — Default palette: Vivid Orange (overridable via theme-panel.js).
-     Body text stays near-black in every palette to "anchor" the design. */
-  --color-bg: #FFF8F3;
-  --color-bg-alt: #FBE6D6;
+  /* Colors — Wine Bold (locked palette).
+     Body text near-black to anchor the design. */
+  --color-bg: #FAF4F4;
+  --color-bg-alt: #EAD6D8;
   --color-surface: #FFFFFF;
   --color-text: #111111;
-  --color-text-sub: #4A3328;
+  --color-text-sub: #4B2139;
   --color-text-muted: #9A9AA0;
-  --color-border: #F2D2BD;
+  --color-border: #D8B8BC;
   --color-border-strong: #111111;
-  --color-accent: #E85D2A;
-  --color-accent-hover: #C24618;
+  --color-accent: #AF3E47;
+  --color-accent-hover: #7E1F2A;
   --color-accent-contrast: #FFFFFF;
 
   /* Fonts */

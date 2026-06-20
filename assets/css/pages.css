@@ -53,34 +53,6 @@
   gap: clamp(40px, 5vw, 64px);
 }
 
-/* Big brand statement */
-.footer__statement {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-bottom: clamp(28px, 4vw, 40px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.footer__statement-jp {
-  font-family: var(--font-jp);
-  font-weight: 300;
-  font-size: clamp(36px, 6vw, 80px);
-  letter-spacing: 0.04em;
-  line-height: 1.15;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-.footer__statement-en {
-  font-family: var(--font-en);
-  font-size: var(--fs-tiny);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.65);
-  margin: 0;
-}
-
 /* Brand row: logo + inline address */
 .footer__brand-row {
   display: flex;
