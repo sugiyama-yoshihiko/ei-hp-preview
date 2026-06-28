@@ -409,3 +409,68 @@
 .grid--2 { grid-template-columns: repeat(2, 1fr); }
 .grid--3 { grid-template-columns: repeat(3, 1fr); }
 .grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+/* =========================================================
+   Language switcher — top bar above the main header.
+   Three variants: Current (mixed JP/EN), Pure JP, Pure EN.
+   ========================================================= */
+.lang-switch {
+  background: var(--color-bg-alt);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-jp);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  position: relative;
+  z-index: 90;
+}
+.lang-switch__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 8px var(--container-px);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+.lang-switch__label {
+  color: var(--color-text-muted);
+  margin-right: 16px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.lang-switch__item {
+  color: var(--color-text-sub);
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: 2px;
+  transition: color 200ms var(--ease-out), background 200ms var(--ease-out);
+  white-space: nowrap;
+}
+.lang-switch__item:hover {
+  color: var(--color-accent);
+  background: rgba(175, 62, 71, 0.06);
+}
+.lang-switch__item--active {
+  color: var(--color-accent);
+  font-weight: 500;
+  background: rgba(175, 62, 71, 0.08);
+}
+.lang-switch__item--active:hover {
+  /* keep active state visually anchored */
+  color: var(--color-accent);
+}
+
+@media (max-width: 743.98px) {
+  .lang-switch__inner {
+    padding: 6px var(--container-px);
+    gap: 0;
+  }
+  .lang-switch__label {
+    display: none;
+  }
+  .lang-switch__item {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
