@@ -411,66 +411,116 @@
 .grid--4 { grid-template-columns: repeat(4, 1fr); }
 
 /* =========================================================
-   Language switcher — top bar above the main header.
-   Three variants: Current (mixed JP/EN), Pure JP, Pure EN.
+   Language switcher — floating action button (FAB) bottom-right.
+   Click to reveal a small popup menu with 3 variants:
+   Current (mixed) / All-JP / All-EN.
    ========================================================= */
-.lang-switch {
-  background: var(--color-bg-alt);
-  border-bottom: 1px solid var(--color-border);
-  font-family: var(--font-jp);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  position: relative;
-  z-index: 90;
-}
-.lang-switch__inner {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 8px var(--container-px);
+.lang-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 120;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 8px 24px -8px rgba(75, 33, 57, 0.25);
+  cursor: pointer;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  padding: 0;
+  transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
 }
-.lang-switch__label {
-  color: var(--color-text-muted);
-  margin-right: 16px;
-  font-size: 11px;
-  letter-spacing: 0.1em;
+.lang-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -8px rgba(75, 33, 57, 0.35);
+}
+.lang-fab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+.lang-fab__circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.lang-menu {
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  z-index: 119;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 16px 48px -16px rgba(75, 33, 57, 0.3);
+  padding: 8px;
+  min-width: 200px;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+}
+.lang-menu.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.lang-menu__label {
+  display: block;
+  padding: 6px 12px 8px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-family: var(--font-en);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 4px;
 }
-.lang-switch__item {
+.lang-menu__item {
+  display: block;
+  padding: 10px 14px;
   color: var(--color-text-sub);
   text-decoration: none;
-  padding: 4px 12px;
-  border-radius: 2px;
-  transition: color 200ms var(--ease-out), background 200ms var(--ease-out);
-  white-space: nowrap;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: var(--font-jp);
+  letter-spacing: 0.02em;
+  transition: background 150ms var(--ease-out), color 150ms var(--ease-out);
 }
-.lang-switch__item:hover {
+.lang-menu__item:hover {
+  background: var(--color-bg-alt);
   color: var(--color-accent);
-  background: rgba(175, 62, 71, 0.06);
 }
-.lang-switch__item--active {
+.lang-menu__item--active {
   color: var(--color-accent);
   font-weight: 500;
-  background: rgba(175, 62, 71, 0.08);
+  background: rgba(175, 62, 71, 0.06);
 }
-.lang-switch__item--active:hover {
-  /* keep active state visually anchored */
+.lang-menu__item--active::before {
+  content: "● ";
   color: var(--color-accent);
+  margin-right: 2px;
 }
 
 @media (max-width: 743.98px) {
-  .lang-switch__inner {
-    padding: 6px var(--container-px);
-    gap: 0;
+  .lang-fab {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
   }
-  .lang-switch__label {
-    display: none;
+  .lang-fab__circle {
+    width: 18px;
+    height: 18px;
   }
-  .lang-switch__item {
-    padding: 4px 8px;
-    font-size: 11px;
+  .lang-menu {
+    bottom: 76px;
+    right: 16px;
+    min-width: 180px;
   }
 }
