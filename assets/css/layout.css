@@ -524,3 +524,9 @@
     min-width: 180px;
   }
 }
+
+/* 言語切替 FAB は一旦非表示（バリアント 2 保留のため） */
+.lang-fab,
+.lang-menu {
+  display: none !important;
+}
