@@ -329,15 +329,14 @@ a.card { cursor: pointer; }
   position: relative;
 }
 
-/* Home page hero h1 — Japanese copy ("技術を投資する会社"). Override the default
-   display style (Inter 500) so the JP characters render in Noto Sans JP Light
-   for a more refined, less assertive presence. */
+/* Home page hero h1 — Japanese copy ("技術力を投資する会社"). Ryumin Pro Light
+   (Adobe Fonts) for a premium, name-card-aligned presence. */
 .page--home .hero__display {
-  font-family: var(--font-jp);
+  font-family: var(--font-jp-serif);
   font-weight: 300;
   font-size: clamp(40px, 8.5vw, 112px);
   letter-spacing: 0.02em;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 /* Accent highlight on key nouns inside the home hero h1.
