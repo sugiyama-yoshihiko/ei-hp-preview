@@ -863,23 +863,49 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url("../images/hero-monolith.jpg");
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: cover;
-  /* Fade to bg-color on the left so text stays readable */
-  -webkit-mask-image: linear-gradient(to right,
-    transparent 0%,
-    transparent 30%,
-    rgba(0,0,0,0.4) 50%,
-    rgba(0,0,0,1) 75%);
-          mask-image: linear-gradient(to right,
-    transparent 0%,
-    transparent 30%,
-    rgba(0,0,0,0.4) 50%,
-    rgba(0,0,0,1) 75%);
-  opacity: 0.9;
+  overflow: hidden;
   pointer-events: none;
+}
+
+.hero__bg-base,
+.hero__bg-ring {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.hero__bg-base {
+  background-image: url("../images/hero-bg-base.webp");
+}
+
+.hero__bg-ring { will-change: transform; }
+.hero__bg-ring--1 { background-image: url("../images/hero-ring-01.webp"); }
+.hero__bg-ring--2 { background-image: url("../images/hero-ring-02.webp"); }
+.hero__bg-ring--3 { background-image: url("../images/hero-ring-03.webp"); }
+
+/* Slow, independent breathing/drift per ring. Durations are deliberately
+   non-round and offset with negative delays so the rings never sync up —
+   amplitude stays small (±3% scale, a few px) to keep the name-card-level
+   restraint; no rotation, no fast movement. hero__bg-base never animates. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__bg-ring--1 { animation: hero-ring-drift-a 26s ease-in-out infinite; }
+  .hero__bg-ring--2 { animation: hero-ring-drift-b 32s ease-in-out infinite; animation-delay: -6s; }
+  .hero__bg-ring--3 { animation: hero-ring-drift-c 22s ease-in-out infinite; animation-delay: -11s; }
+}
+
+@keyframes hero-ring-drift-a {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50%      { transform: scale(1.03) translate(6px, -8px); }
+}
+@keyframes hero-ring-drift-b {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50%      { transform: scale(0.97) translate(-8px, 6px); }
+}
+@keyframes hero-ring-drift-c {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50%      { transform: scale(1.02) translate(4px, 10px); }
 }
 .hero--with-bg > .container,
 .hero--with-bg > .hero__meta {

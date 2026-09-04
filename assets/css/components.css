@@ -329,11 +329,13 @@ a.card { cursor: pointer; }
   position: relative;
 }
 
-/* Home page hero h1 — Japanese copy ("技術力を投資する会社"). Ryumin Pro Light
-   (Adobe Fonts) for a premium, name-card-aligned presence. */
+/* Home page hero h1 — Japanese copy ("技術力を投資する会社"). Yu Gothic Medium
+   per the 2026-09-04 designer redesign (rings visual). System font — no
+   webfont embedding required. font-weight: 500 selects the Medium face on
+   macOS where the family is exposed as plain "YuGothic". */
 .page--home .hero__display {
-  font-family: var(--font-jp-serif);
-  font-weight: 300;
+  font-family: 'Yu Gothic Medium', '游ゴシック Medium', 'YuGothic', 'Yu Gothic', var(--font-jp);
+  font-weight: 500;
   font-size: clamp(40px, 8.5vw, 112px);
   letter-spacing: 0.02em;
   line-height: 1.25;
@@ -360,6 +362,18 @@ a.card { cursor: pointer; }
   /* Kanji look optically heavier than Latin at the same weight, so drop to 400
      to visually match buttons like "ABOUT US →". */
   font-weight: 400;
+  /* 2026-09-04 designer redesign: plain underlined text link, no box, no arrow. */
+  border: none;
+  padding: 0;
+  min-height: auto;
+  border-radius: 0;
+  gap: 0;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.hero__link .btn:hover {
+  border: none;
 }
 
 .hero__display {

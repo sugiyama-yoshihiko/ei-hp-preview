@@ -20,7 +20,6 @@
   /* Fonts */
   --font-en: Avenir, 'Helvetica Neue', 'Inter', sans-serif;
   --font-jp: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', sans-serif;
-  --font-jp-serif: 'a-otf-ryumin-pr6n', 'Hiragino Mincho Pro', 'Yu Mincho', serif;
 
   /* Sizes */
   --fs-display: clamp(64px, 13vw, 200px);

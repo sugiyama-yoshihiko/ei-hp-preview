@@ -400,12 +400,6 @@
   margin-top: 8px;
 }
 
-/* Home page only — Ryumin serif on section lead lines (試験導入) */
-.page--home .section__lead {
-  font-family: var(--font-jp-serif);
-  font-weight: 300;
-}
-
 /* Grid helpers */
 .grid {
   display: grid;
