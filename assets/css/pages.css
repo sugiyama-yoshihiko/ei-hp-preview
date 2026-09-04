@@ -859,21 +859,26 @@
   position: relative;
   overflow: hidden;
 }
+/* z-index:-1 keeps the artwork out of the hero's stacking context entirely.
+   Do NOT go back to z-index:0 + .container{z-index:1}: any composited layer
+   (will-change, transform, animation) on either side breaks the paint order
+   and the hero text disappears. */
 .hero__bg-image {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
 }
 
+/* Measured from the 1920x1080 comp: artwork drawn 2282px wide at (-126,-127). */
 .hero__bg-base,
 .hero__bg-ring {
   position: absolute;
   inset: 0;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  background-position: 34.9% 46.4%;
+  background-size: 118.8% auto;
 }
 
 .hero__bg-base {
@@ -906,11 +911,6 @@
   0%, 100% { transform: scale(1) translate(0, 0); }
   50%      { transform: scale(1.02) translate(4px, 10px); }
 }
-.hero--with-bg > .container,
-.hero--with-bg > .hero__meta {
-  position: relative;
-  z-index: 1;
-}
 
 /* =========================================================
    Business Overview — text/image 2-col grid
@@ -942,12 +942,11 @@
 }
 
 @media (max-width: 743.98px) {
-  /* Portrait viewports: the ring artwork is landscape, so `cover` blows it up
-     far past the frame. Fit the whole composition instead. */
+  /* Portrait: keep the ring cluster readable instead of magnifying a fragment. */
   .hero__bg-base,
   .hero__bg-ring {
-    background-size: contain;
-    background-position: center 60%;
+    background-size: 200% auto;
+    background-position: center 42%;
   }
 }
 

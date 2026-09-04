@@ -333,18 +333,24 @@ a.card { cursor: pointer; }
    per the 2026-09-04 designer redesign (rings visual). System font — no
    webfont embedding required. font-weight: 500 selects the Medium face on
    macOS where the family is exposed as plain "YuGothic". */
+/* Comp (1920x1080): 72px, 92px line pitch, ink top y=438, left x=559,
+   single colour #4A2039 (= --color-text-sub), no red accent.
+   margin-top pushes the vertically-centred block down to match the comp —
+   do NOT use transform/position:relative here: either would make .container
+   a containing block and trap the absolutely-positioned .hero__link. */
 .page--home .hero__display {
   font-family: 'Yu Gothic Medium', '游ゴシック Medium', 'YuGothic', 'Yu Gothic', var(--font-jp);
   font-weight: 500;
-  font-size: clamp(40px, 8.5vw, 112px);
-  letter-spacing: 0.02em;
-  line-height: 1.25;
+  font-size: clamp(32px, 3.75vw, 72px);
+  letter-spacing: 0.01em;
+  line-height: 1.28;
+  color: var(--color-text-sub);
+  margin-top: 86px;
 }
 
-/* Accent highlight on key nouns inside the home hero h1.
-   Color only — keep the same Light (300) weight as surrounding text. */
+/* The comp renders the whole headline in one colour. */
 .page--home .hero__display .hero__accent {
-  color: var(--color-accent);
+  color: inherit;
 }
 
 /* Wrapper for the ghost-button link under the home hero lead. The link itself
@@ -487,4 +493,71 @@ a.card { cursor: pointer; }
 @keyframes marquee-scroll {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(calc(-1 * var(--marquee-shift, 50%)), 0, 0); }
+}
+
+/* =========================================================
+   Home hero — comp-aligned overrides (2026-09-04)
+   ========================================================= */
+
+/* Comp: 21px, 46px line pitch, 3 lines, ink top y=644, left x=559. */
+.page--home .hero__lead {
+  font-size: clamp(14px, 1.09vw, 21px);
+  line-height: 2.2;
+  max-width: 26ch;
+  margin-top: 24px;
+}
+
+.page--home .hero .eyebrow { display: none; }
+
+/* Comp: text block starts at x=559 of 1920. */
+.page--home .hero--with-bg > .container {
+  margin-left: 22.47%;
+  margin-right: auto;
+}
+
+/* Comp: CTA sits on the right at x=1229, ink top y=738; the rule runs 36px
+   past the text. Colour is --color-accent, not the body colour. */
+.page--home .hero__link {
+  position: absolute;
+  left: 64%;
+  top: 67.96%;
+  margin: 0;
+  z-index: 2;
+}
+.page--home .hero__link .btn {
+  color: var(--color-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding: 0 38px 14px 0;
+  font-size: clamp(13px, 1.04vw, 20px);
+}
+
+/* Comp: SCROLL at x=1717 y=898 with a 57px vertical rule below it. */
+.page--home .hero__meta {
+  position: absolute;
+  top: 83.1%;
+  bottom: auto;
+  right: 6.25%;
+  left: auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+.page--home .hero__meta span {
+  font-size: clamp(11px, 1.04vw, 20px);
+}
+.page--home .hero__meta::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 57px;
+  background: var(--color-text-sub);
+}
+
+@media (max-width: 959.98px) {
+  .page--home .hero__display { margin-top: 0; }
+  .page--home .hero--with-bg > .container { margin-left: auto; margin-right: auto; }
+  .page--home .hero__lead { max-width: none; }
+  .page--home .hero__link { position: static; margin-top: 32px; }
+  .page--home .hero__meta { display: none; }
 }
