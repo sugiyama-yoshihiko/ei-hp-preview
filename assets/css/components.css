@@ -333,19 +333,20 @@ a.card { cursor: pointer; }
    per the 2026-09-04 designer redesign (rings visual). System font — no
    webfont embedding required. font-weight: 500 selects the Medium face on
    macOS where the family is exposed as plain "YuGothic". */
-/* Comp (1920x1080): 72px, 92px line pitch, ink top y=438, left x=559,
-   single colour #4A2039 (= --color-text-sub), no red accent.
-   margin-top pushes the vertically-centred block down to match the comp —
-   do NOT use transform/position:relative here: either would make .container
-   a containing block and trap the absolutely-positioned .hero__link. */
+/* 游ゴシック体 via Adobe Fonts (kit ymv3rur). The OS-bundled family is
+   Medium-only on macOS and absent on iOS/Android, so the webfont is the only
+   way to match the comp everywhere.
+   Values reverse-engineered from the comp and verified in-browser:
+   68px / 0.0441em tracking / 92px line pitch reproduces the comp's ink
+   positions exactly (ink left 559, line1 top 438, line2 top 530). */
 .page--home .hero__display {
-  font-family: 'Yu Gothic Medium', '游ゴシック Medium', 'YuGothic', 'Yu Gothic', var(--font-jp);
-  font-weight: 500;
-  font-size: clamp(32px, 3.75vw, 72px);
-  letter-spacing: 0.01em;
-  line-height: 1.28;
+  font-family: var(--font-jp-gothic);
+  font-weight: 400;
+  font-size: clamp(30px, 3.542vw, 68px);
+  letter-spacing: 0.0441em;
+  line-height: 1.353;
   color: var(--color-text-sub);
-  margin-top: 86px;
+  margin-top: 90px;
 }
 
 /* The comp renders the whole headline in one colour. */
@@ -499,10 +500,13 @@ a.card { cursor: pointer; }
    Home hero — comp-aligned overrides (2026-09-04)
    ========================================================= */
 
-/* Comp: 21px, 46px line pitch, 3 lines, ink top y=644, left x=559. */
+/* Comp: 20.5px / 0.04em / 46px line pitch, 3 lines, ink top y=644. */
 .page--home .hero__lead {
-  font-size: clamp(14px, 1.09vw, 21px);
-  line-height: 2.2;
+  font-family: var(--font-jp-gothic);
+  font-weight: 400;
+  font-size: clamp(14px, 1.0677vw, 20.5px);
+  letter-spacing: 0.04em;
+  line-height: 2.244;
   max-width: 26ch;
   margin-top: 24px;
 }
@@ -511,7 +515,7 @@ a.card { cursor: pointer; }
 
 /* Comp: text block starts at x=559 of 1920. */
 .page--home .hero--with-bg > .container {
-  margin-left: 22.47%;
+  margin-left: 22.527%;
   margin-right: auto;
 }
 
@@ -525,6 +529,8 @@ a.card { cursor: pointer; }
   z-index: 2;
 }
 .page--home .hero__link .btn {
+  font-family: var(--font-jp-gothic);
+  font-weight: 400;
   color: var(--color-accent);
   text-decoration: none;
   border-bottom: 1px solid currentColor;

@@ -20,6 +20,7 @@
   /* Fonts */
   --font-en: Avenir, 'Helvetica Neue', 'Inter', sans-serif;
   --font-jp: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', sans-serif;
+  --font-jp-gothic: "yu-gothic-pr6n", YuGothic, "Yu Gothic Medium", "Yu Gothic", var(--font-jp);
 
   /* Sizes */
   --fs-display: clamp(64px, 13vw, 200px);
