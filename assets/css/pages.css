@@ -925,8 +925,14 @@
 /* Gentle continuous self-rotation per ring (2026-09-08: user requested more
    movement — "緩やかに円が自転している"). Different directions and slow, non-
    round durations so the rings never sync up. Linear timing keeps the spin
-   feeling constant rather than oscillating. hero__bg-base never animates. */
+   feeling constant rather than oscillating.
+   hero__bg-base (2026-09-09: user asked the center wash not sit dead-still)
+   gets an ultra-slow scale breathe only — no rotation, because the layer
+   carries the page ground and rotating it would expose corners under the
+   hero text. Amplitude ±1.5% is nearly imperceptible in isolation but stops
+   the wash from reading as "the only static thing". */
 @media (prefers-reduced-motion: no-preference) {
+  .hero__bg-base   { animation: hero-bg-breathe    48s ease-in-out infinite; }
   .hero__bg-ring--1 { animation: hero-ring-spin-cw  260s linear infinite; }
   .hero__bg-ring--2 { animation: hero-ring-spin-ccw 340s linear infinite; }
   .hero__bg-ring--3 { animation: hero-ring-spin-cw  220s linear infinite; }
@@ -934,6 +940,10 @@
 
 @keyframes hero-ring-spin-cw  { to { transform: rotate( 360deg); } }
 @keyframes hero-ring-spin-ccw { to { transform: rotate(-360deg); } }
+@keyframes hero-bg-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
+}
 
 /* =========================================================
    Business Overview — text/image 2-col grid
