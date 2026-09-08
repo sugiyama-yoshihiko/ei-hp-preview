@@ -932,7 +932,7 @@
    hero text. Amplitude ±1.5% is nearly imperceptible in isolation but stops
    the wash from reading as "the only static thing". */
 @media (prefers-reduced-motion: no-preference) {
-  .hero__bg-base   { animation: hero-bg-breathe    48s ease-in-out infinite; }
+  .hero__bg-base   { animation: hero-bg-breathe    28s ease-in-out infinite; }
   .hero__bg-ring--1 { animation: hero-ring-spin-cw  260s linear infinite; }
   .hero__bg-ring--2 { animation: hero-ring-spin-ccw 340s linear infinite; }
   .hero__bg-ring--3 { animation: hero-ring-spin-cw  220s linear infinite; }
