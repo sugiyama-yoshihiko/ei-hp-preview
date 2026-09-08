@@ -927,9 +927,9 @@
    round durations so the rings never sync up. Linear timing keeps the spin
    feeling constant rather than oscillating. hero__bg-base never animates. */
 @media (prefers-reduced-motion: no-preference) {
-  .hero__bg-ring--1 { animation: hero-ring-spin-cw  90s linear infinite; }
-  .hero__bg-ring--2 { animation: hero-ring-spin-ccw 120s linear infinite; }
-  .hero__bg-ring--3 { animation: hero-ring-spin-cw  75s linear infinite; }
+  .hero__bg-ring--1 { animation: hero-ring-spin-cw  200s linear infinite; }
+  .hero__bg-ring--2 { animation: hero-ring-spin-ccw 260s linear infinite; }
+  .hero__bg-ring--3 { animation: hero-ring-spin-cw  170s linear infinite; }
 }
 
 @keyframes hero-ring-spin-cw  { to { transform: rotate( 360deg); } }
