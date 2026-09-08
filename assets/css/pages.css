@@ -159,6 +159,35 @@
   padding: 160px var(--container-px) 80px;
   display: flex;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Continuity with the home hero: one faint, static ring in the upper right.
+   Deliberately not the full 4-layer composition — repeating it on every page
+   would cost ~540KB per view and burn off the home hero's impact.
+   No animation: the drift is the home page's signature.
+   z-index:-1 is REQUIRED — z-index:0 breaks the paint order and hides the text
+   (this exact bug happened on the home hero). */
+.hero--sub::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../images/hero-ring-02.webp");
+  background-repeat: no-repeat;
+  background-size: 70% auto;
+  background-position: 88% 30%;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (max-width: 743.98px) {
+  .hero--sub::before {
+    background-size: 130% auto;
+    background-position: 90% 20%;
+    opacity: 0.4;
+  }
 }
 
 /* Anchor content near the top of the hero so the gap between hero text and the
@@ -566,9 +595,13 @@
   --map-filter: invert(0.9) hue-rotate(180deg);
 }
 
-/* -------- Sub-page hero tweak: display size slightly smaller -------- */
+/* Sub-page hero. Latin all-caps stays in Avenir (yu-gothic-pr6n is a Japanese
+   face; its Latin glyphs are not built for display sizes). 140px black was
+   nearly twice the home headline (68px JP); pulled back to sit under it. */
 .hero--sub .hero__display {
-  font-size: clamp(56px, 9vw, 140px);
+  font-size: clamp(44px, 5.5vw, 106px);
+  letter-spacing: -0.01em;
+  color: var(--color-text-sub);
 }
 
 /* -------- Responsive for these new elements -------- */
@@ -889,28 +922,18 @@
 .hero__bg-ring--2 { background-image: url("../images/hero-ring-02.webp"); }
 .hero__bg-ring--3 { background-image: url("../images/hero-ring-03.webp"); }
 
-/* Slow, independent breathing/drift per ring. Durations are deliberately
-   non-round and offset with negative delays so the rings never sync up —
-   amplitude stays small (±3% scale, a few px) to keep the name-card-level
-   restraint; no rotation, no fast movement. hero__bg-base never animates. */
+/* Gentle continuous self-rotation per ring (2026-09-08: user requested more
+   movement — "緩やかに円が自転している"). Different directions and slow, non-
+   round durations so the rings never sync up. Linear timing keeps the spin
+   feeling constant rather than oscillating. hero__bg-base never animates. */
 @media (prefers-reduced-motion: no-preference) {
-  .hero__bg-ring--1 { animation: hero-ring-drift-a 26s ease-in-out infinite; }
-  .hero__bg-ring--2 { animation: hero-ring-drift-b 32s ease-in-out infinite; animation-delay: -6s; }
-  .hero__bg-ring--3 { animation: hero-ring-drift-c 22s ease-in-out infinite; animation-delay: -11s; }
+  .hero__bg-ring--1 { animation: hero-ring-spin-cw  90s linear infinite; }
+  .hero__bg-ring--2 { animation: hero-ring-spin-ccw 120s linear infinite; }
+  .hero__bg-ring--3 { animation: hero-ring-spin-cw  75s linear infinite; }
 }
 
-@keyframes hero-ring-drift-a {
-  0%, 100% { transform: scale(1) translate(0, 0); }
-  50%      { transform: scale(1.03) translate(6px, -8px); }
-}
-@keyframes hero-ring-drift-b {
-  0%, 100% { transform: scale(1) translate(0, 0); }
-  50%      { transform: scale(0.97) translate(-8px, 6px); }
-}
-@keyframes hero-ring-drift-c {
-  0%, 100% { transform: scale(1) translate(0, 0); }
-  50%      { transform: scale(1.02) translate(4px, 10px); }
-}
+@keyframes hero-ring-spin-cw  { to { transform: rotate( 360deg); } }
+@keyframes hero-ring-spin-ccw { to { transform: rotate(-360deg); } }
 
 /* =========================================================
    Business Overview — text/image 2-col grid

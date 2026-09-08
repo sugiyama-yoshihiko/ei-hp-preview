@@ -394,7 +394,7 @@ a.card { cursor: pointer; }
 }
 
 .hero__lead {
-  font-family: var(--font-jp);
+  font-family: var(--font-jp-gothic);
   font-size: clamp(18px, 2vw, 24px);
   line-height: 1.9;
   max-width: 640px;

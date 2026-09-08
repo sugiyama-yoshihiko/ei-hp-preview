@@ -4,12 +4,16 @@
 
 /* -------- Header -------- */
 
+/* Comp values are authored on a 1920 canvas (nav 22px italic / 69px gap /
+   40px logo / 50px padding). Fixed px would need a 1393px viewport minimum and
+   collapses at 1280 — the values below hit the comp exactly at 1920 and scale
+   down proportionally. Verified at 1920 / 1440 / 1280 / 1024. */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 24px var(--container-px);
+  padding: clamp(20px, 2.604vw, 50px) var(--container-px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,7 +50,7 @@
 
 .header__logo {
   display: block;
-  height: 24px;
+  height: clamp(24px, 2.083vw, 40px);
   width: auto;
 }
 
@@ -63,7 +67,7 @@
 
 .header__nav {
   display: flex;
-  gap: 32px;
+  gap: clamp(22px, 3.594vw, 69px);
   font-family: var(--font-en);
   font-size: var(--fs-tiny);
   letter-spacing: var(--tracking-label);
@@ -74,6 +78,9 @@
   position: relative;
   padding: 4px 0;
   opacity: 1;
+  font-size: clamp(12px, 1.146vw, 22px);
+  font-style: italic;
+  letter-spacing: 0.023em;
 }
 
 .header__nav a:hover {
@@ -387,6 +394,7 @@
   letter-spacing: var(--tracking-display);
   line-height: 1.15;
   margin-top: 16px;
+  color: var(--color-text-sub);
 }
 
 .section p:has(> .btn) {
@@ -394,6 +402,8 @@
 }
 
 .section__lead {
+  font-family: var(--font-jp-gothic);
+  font-weight: 400;
   font-size: 18px;
   line-height: 1.9;
   color: var(--color-text-sub);
