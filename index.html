@@ -36,7 +36,7 @@
     h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
   })(document);
 </script>
-<link rel="stylesheet" href="assets/css/main.css?v=20260430-118">
+<link rel="stylesheet" href="assets/css/main.css?v=20260430-119">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,7 +44,7 @@
   "name": "EI engineering & Co.",
   "alternateName": "EI&Co.株式会社",
   "url": "https://ei-and.co.jp/",
-  "logo": "https://ei-and.co.jp/assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-118",
+  "logo": "https://ei-and.co.jp/assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-119",
   "description": "先端AI技術とPEファンドの知見を融合し、企業の潜在価値を社会の新たな原動力へと転換する実装者集団。",
   "foundingDate": "2019",
   "address": {
@@ -67,7 +67,7 @@
 <header class="header">
   <a class="header__logo-link" href="./" aria-label="EI&Co. ホーム">
     <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&Co." height="40">
-    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-118" alt="EI&Co." height="40">
+    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-119" alt="EI&Co." height="40">
   </a>
   <nav class="header__nav" aria-label="Primary">
     <a href="about.html">About</a>
@@ -105,6 +105,7 @@
       <div class="hero__bg-ring hero__bg-ring--2"></div>
       <div class="hero__bg-ring hero__bg-ring--3"></div>
     </div>
+    <div class="hero__preview" aria-hidden="true"></div>
     <div class="container">
       <p class="eyebrow reveal">EI engineering & Co. &mdash; Est. 2019</p>
       <h1 class="hero__display display reveal reveal--delay-1"><span class="nowrap"><span class="hero__accent">技術力</span>を</span><br><span class="nowrap"><span class="hero__accent">投資</span>する会社。</span></h1>
@@ -249,7 +250,7 @@
   <div class="footer__inner">
 
     <div class="footer__brand-row">
-      <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-118" alt="EI engineering & Co." height="32">
+      <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-119" alt="EI engineering & Co." height="32">
       <address class="footer__address small">〒107-0061 東京都港区北青山一丁目3番6号 SIビル青山 5階</address>
     </div>
 
@@ -314,6 +315,162 @@
       menu.classList.remove('is-open');
       fab && fab.setAttribute('aria-expanded', 'false');
     }
+  });
+})();
+</script>
+
+<!-- 2026-09-09 Hero ring A/B compare tool + C-variant filter + cursor parallax.
+     A = original wine (layered, animated)
+     C = plum (layered, animated, filter approximation)
+     D / F = static preview images from the design artifact -->
+<style>
+  /* ---- Static preview overlay (D / F only) ---- */
+  .hero__preview {
+    position: absolute; inset: 0; z-index: -1;
+    background-repeat: no-repeat;
+    background-size: 118.8% auto;
+    background-position: 34.9% 46.4%;
+    display: none;
+    pointer-events: none;
+  }
+  body[data-hero-variant="D"] .hero__bg-image,
+  body[data-hero-variant="F"] .hero__bg-image { display: none; }
+  body[data-hero-variant="D"] .hero__preview { display: block; background-image: url("assets/images/hero-preview-D.webp"); }
+  body[data-hero-variant="F"] .hero__preview { display: block; background-image: url("assets/images/hero-preview-F.webp"); }
+  @media (max-width: 743.98px) {
+    .hero__preview { background-size: 200% auto; background-position: center 42%; }
+  }
+
+  /* ---- C variant: plum colour via CSS filter on the layered rings ---- */
+  body[data-hero-variant="C"] .hero__bg-base,
+  body[data-hero-variant="C"] .hero__bg-ring {
+    filter: hue-rotate(-14deg) saturate(0.85) brightness(0.78);
+  }
+
+  /* ---- Cursor parallax: applies to A and C (layered rings). D/F are static images. ----
+     translate: composes with the transform-based rotation/breathing in pages.css. */
+  .hero__bg-base,
+  .hero__bg-ring {
+    translate: var(--hero-px, 0) var(--hero-py, 0);
+    transition: translate 520ms cubic-bezier(.22,.61,.36,1);
+  }
+  .hero__bg-base   { --hero-parallax-x:  9; --hero-parallax-y:   7; }
+  .hero__bg-ring--1 { --hero-parallax-x: 22; --hero-parallax-y:  18; }
+  .hero__bg-ring--2 { --hero-parallax-x: -18; --hero-parallax-y: -14; }
+  .hero__bg-ring--3 { --hero-parallax-x: 14; --hero-parallax-y: -20; }
+
+  /* ---- Switcher UI ---- */
+  .ring-switch {
+    position: fixed; right: 24px; bottom: 24px; z-index: 500;
+    display: flex; gap: 6px;
+    background: #ffffff; padding: 8px;
+    border: 1px solid #D8B8BC; border-radius: 4px;
+    box-shadow: 0 6px 18px -8px rgba(75, 33, 57, 0.28);
+    font-family: 'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+  }
+  .ring-switch__label {
+    align-self: center; color: #8A7079;
+    padding: 0 6px 0 4px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    font-size: 10px;
+  }
+  .ring-switch button {
+    background: #FAF4F4; color: #4A2039;
+    border: 1px solid transparent; border-radius: 2px;
+    padding: 6px 10px; font: inherit;
+    letter-spacing: 0.04em; cursor: pointer; min-width: 32px;
+  }
+  .ring-switch button:hover { border-color: #C97680; }
+  .ring-switch button[aria-pressed="true"] {
+    background: #AF3E47; color: #ffffff;
+  }
+  @media (max-width: 743.98px) {
+    .ring-switch { right: 12px; bottom: 12px; padding: 6px; }
+    .ring-switch__label { display: none; }
+    .ring-switch button { padding: 5px 8px; }
+  }
+</style>
+<div class="ring-switch" role="group" aria-label="Ring colour variant">
+  <span class="ring-switch__label">Rings</span>
+  <button type="button" data-variant="A" aria-pressed="true">A</button>
+  <button type="button" data-variant="C" aria-pressed="false">C</button>
+  <button type="button" data-variant="D" aria-pressed="false">D</button>
+  <button type="button" data-variant="F" aria-pressed="false">F</button>
+</div>
+<script>
+(function () {
+  /* ---- Individual `rotate:` keyframes so `translate:` (parallax) composes.
+     Overrides the transform-based keyframes in pages.css by declaration order. */
+  var kf = document.createElement('style');
+  kf.textContent =
+    '@media (prefers-reduced-motion: no-preference){' +
+      '.hero__bg-ring--1{animation:hero-ring-rot-cw 260s linear infinite;}' +
+      '.hero__bg-ring--2{animation:hero-ring-rot-ccw 340s linear infinite;}' +
+      '.hero__bg-ring--3{animation:hero-ring-rot-cw 220s linear infinite;}' +
+    '}' +
+    '@keyframes hero-ring-rot-cw{to{rotate:360deg;}}' +
+    '@keyframes hero-ring-rot-ccw{to{rotate:-360deg;}}';
+  document.head.appendChild(kf);
+
+  /* ---- Variant switcher ---- */
+  var KEY = 'ei_hp_hero_variant';
+  var stored;
+  try { stored = localStorage.getItem(KEY); } catch (e) {}
+  var current = ['A','C','D','F'].indexOf(stored) >= 0 ? stored : 'A';
+  applyVariant(current);
+
+  document.querySelectorAll('.ring-switch button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyVariant(btn.getAttribute('data-variant'));
+    });
+  });
+
+  function applyVariant(v) {
+    if (v === 'A') {
+      document.body.removeAttribute('data-hero-variant');
+    } else {
+      document.body.setAttribute('data-hero-variant', v);
+    }
+    document.querySelectorAll('.ring-switch button').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-variant') === v ? 'true' : 'false');
+    });
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+    current = v;
+  }
+
+  /* ---- Cursor parallax (only meaningful for A and C — layered rings) ---- */
+  var hero = document.querySelector('.hero--with-bg');
+  var layers = document.querySelectorAll('.hero__bg-base, .hero__bg-ring');
+  if (!hero || !layers.length) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var targetX = 0, targetY = 0, currX = 0, currY = 0, raf = null;
+  function tick() {
+    currX += (targetX - currX) * 0.08;
+    currY += (targetY - currY) * 0.08;
+    layers.forEach(function (r) {
+      var cs = getComputedStyle(r);
+      var sx = parseFloat(cs.getPropertyValue('--hero-parallax-x')) || 20;
+      var sy = parseFloat(cs.getPropertyValue('--hero-parallax-y')) || 20;
+      r.style.setProperty('--hero-px', (currX * sx).toFixed(2) + 'px');
+      r.style.setProperty('--hero-py', (currY * sy).toFixed(2) + 'px');
+    });
+    if (Math.abs(targetX - currX) > 0.001 || Math.abs(targetY - currY) > 0.001) {
+      raf = requestAnimationFrame(tick);
+    } else { raf = null; }
+  }
+  hero.addEventListener('pointermove', function (e) {
+    /* Skip parallax when a static-image variant is active */
+    if (current === 'D' || current === 'F') return;
+    var b = hero.getBoundingClientRect();
+    targetX = ((e.clientX - b.left) / b.width  - 0.5) * 2;
+    targetY = ((e.clientY - b.top)  / b.height - 0.5) * 2;
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
+  hero.addEventListener('pointerleave', function () {
+    targetX = 0; targetY = 0;
+    if (!raf) raf = requestAnimationFrame(tick);
   });
 })();
 </script>
