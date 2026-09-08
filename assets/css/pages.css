@@ -942,7 +942,7 @@
 @keyframes hero-ring-spin-ccw { to { transform: rotate(-360deg); } }
 @keyframes hero-bg-breathe {
   0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.015); }
+  50%      { transform: scale(1.025); }
 }
 
 /* =========================================================
