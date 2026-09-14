@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="no-js no-field">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recruit | EI engineering & Co.</title>
-<!-- ベータ期間中のみ。本番公開時に削除 -->
-<meta name="robots" content="noindex,nofollow">
-<meta name="description" content="EI&Co.の採用情報。AIエンジニア、データサイエンティスト、PM、BizDev、コーポレート。未踏の領域に、最初の旗を立てる。">
+<title>Recruit | EI engineering &amp; Co.</title>
+<meta name="description" content="未踏の領域に、最初の旗を立てる。AIエンジニア、データサイエンティスト、PM、事業開発、コーポレートの募集要項。">
 <link rel="icon" type="image/svg+xml" href="assets/logos/favicon.svg">
 <link rel="icon" type="image/png" sizes="96x96" href="assets/logos/favicon-96x96.png">
 <link rel="shortcut icon" href="assets/logos/favicon.ico">
@@ -14,292 +12,323 @@
 <link rel="canonical" href="https://ei-and.co.jp/recruit.html">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ei-and.co.jp/recruit.html">
-<meta property="og:title" content="Recruit | EI engineering & Co.">
-<meta property="og:description" content="EI&Co.の採用情報。AIエンジニア、データサイエンティスト、PM、BizDev、コーポレート。未踏の領域に、最初の旗を立てる。">
+<meta property="og:title" content="Recruit | EI engineering &amp; Co.">
+<meta property="og:description" content="未踏の領域に、最初の旗を立てる。AIエンジニア、データサイエンティスト、PM、事業開発、コーポレートの募集要項。">
 <meta property="og:image" content="https://ei-and.co.jp/assets/images/og.jpg">
-<meta property="og:site_name" content="EI engineering & Co.">
+<meta property="og:site_name" content="EI engineering &amp; Co.">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Recruit | EI engineering & Co.">
-<meta name="twitter:description" content="EI&Co.の採用情報。AIエンジニア、データサイエンティスト、PM、BizDev、コーポレート。未踏の領域に、最初の旗を立てる。">
+<meta name="twitter:title" content="Recruit | EI engineering &amp; Co.">
+<meta name="twitter:description" content="未踏の領域に、最初の旗を立てる。AIエンジニア、データサイエンティスト、PM、事業開発、コーポレートの募集要項。">
 <meta name="twitter:image" content="https://ei-and.co.jp/assets/images/og.jpg">
+<meta name="theme-color" content="#180D12">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;700&display=swap">
 <script>
+  /* Adobe Fonts (kit ymv3rur) — Yu Gothic Pr6N. JS embed only: the stylesheet
+     URL for this kit answers HTTP 412. */
   (function(d) {
-    var config = {
-      kitId: 'ymv3rur',
-      scriptTimeout: 3000,
-      async: true
-    },
-    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/wf-loading/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+    var config = { kitId: 'ymv3rur', scriptTimeout: 3000, async: true },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
   })(document);
 </script>
-<link rel="stylesheet" href="assets/css/main.css?v=20260430-119">
+<link rel="stylesheet" href="assets/css/ei.css?v=20260914-57">
+<script>
+  /* Marks an arrival that came from an outgoing page transition, before the
+     first paint, so the circle can open with a pure CSS animation. No JS is
+     involved in opening it — a broken script cannot strand the page behind
+     a black disc. */
+  try { if (sessionStorage.getItem('ei_nav') === '1') {
+    document.documentElement.className += ' navin';
+    sessionStorage.removeItem('ei_nav');
+  } } catch (e) {}
+</script>
 </head>
-<body class="page page--recruit">
+<body class="page" data-page="recruit">
 
+<!-- The 縁 motif. Sits above the section grounds and below the copy; see
+     the stacking notes in ei.css before touching z-index here. -->
+<canvas class="field" aria-hidden="true"></canvas>
+
+<!-- The circle that closes on the way out and opens on the way in. -->
+<div class="veil" aria-hidden="true"></div>
 
 <a class="sr-only" href="#main">本文へスキップ</a>
 
-<header class="header">
-  <a class="header__logo-link" href="./" aria-label="EI&Co. ホーム">
-    <img class="header__logo header__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI&Co." height="40">
-    <img class="header__logo header__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-119" alt="EI&Co." height="40">
+<header class="nav" data-world="paper" data-world-ui>
+  <a class="nav__logo" href="./" aria-label="EI&amp;Co. ホーム">
+    <img class="nav__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI engineering &amp; Co." width="160" height="30">
+    <img class="nav__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg" alt="EI engineering &amp; Co." width="160" height="30">
   </a>
-  <nav class="header__nav" aria-label="Primary">
-    <a href="about.html">About</a>
-    <a href="business.html">Business</a>
-    <a href="update.html">Update</a>
-    <a href="works.html">Works</a>
-    <a href="recruit.html" aria-current="page">Recruit</a>
-    <a href="contact.html">Contact</a>
+  <nav class="nav__links" aria-label="Primary">
+      <a href="about.html">About</a>
+      <a href="business.html">Business</a>
+      <a href="works.html">Works</a>
+      <a href="update.html">Update</a>
+      <a href="recruit.html" aria-current="page">Recruit</a>
+      <a href="contact.html">Contact</a>
   </nav>
-  <button class="header__menu-btn" aria-label="メニューを開く" aria-expanded="false">
+  <svg class="dial" viewBox="0 0 26 26" aria-hidden="true">
+    <circle class="dial__track" cx="13" cy="13" r="11"></circle>
+    <circle class="dial__arc" cx="13" cy="13" r="11"></circle>
+  </svg>
+  <button class="nav__burger" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="menu">
     <span></span><span></span><span></span>
   </button>
 </header>
-<div class="header__menu-overlay" aria-hidden="true">
-  <button class="header__menu-close" aria-label="メニューを閉じる" type="button">
-    <span></span><span></span>
-  </button>
-  <nav aria-label="Mobile">
-    <a href="about.html">About</a>
-    <a href="business.html">Business</a>
-    <a href="update.html">Update</a>
-    <a href="works.html">Works</a>
-    <a href="recruit.html" aria-current="page">Recruit</a>
-    <a href="contact.html">Contact</a>
+
+<div class="menu" id="menu" inert>
+  <nav class="menu__list" aria-label="Mobile">
+      <a href="about.html"><i>01</i>About<em>私たちについて</em></a>
+      <a href="business.html"><i>02</i>Business<em>事業</em></a>
+      <a href="works.html"><i>03</i>Works<em>実績</em></a>
+      <a href="update.html"><i>04</i>Update<em>お知らせ</em></a>
+      <a href="recruit.html"><i>05</i>Recruit<em>採用</em></a>
+      <a href="contact.html"><i>06</i>Contact<em>お問い合わせ</em></a>
   </nav>
+  <div class="menu__foot">
+    <a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a>
+    <span>〒107-0061 東京都港区北青山一丁目3番6号 SIビル青山 5階</span>
+    <a href="privacy-policy.html">Privacy Policy</a>
+  </div>
 </div>
+
+<aside class="railbar" data-world="paper" data-world-ui aria-hidden="true">
+  <span class="railbar__label">Intro</span>
+  <div class="railbar__ticks"></div>
+</aside>
 
 <main id="main">
 
-  <section class="hero hero--sub hero--split" role="region" aria-label="Recruit Hero">
-    <div class="container hero-split">
-      <div class="hero-split__text">
-        <p class="eyebrow reveal">Recruit</p>
-        <h1 class="hero__display display reveal reveal--delay-1">JOIN THE IMPLEMENTERS</h1>
-        <p class="hero__lead lead reveal reveal--delay-2">未踏の領域に、最初の旗を立てる</p>
-      </div>
-      <figure class="hero-split__figure reveal reveal--delay-1">
-        <img src="assets/images/recruit-hero.jpg" alt="自然光が差し込む静かなオフィス — オーク材のデスクとワインレッドの椅子、オリーブの鉢植え" loading="eager" decoding="async" width="2752" height="1536">
-      </figure>
+  <section class="sec hero hero--sub" data-world="deep" data-mark="Intro">
+    <div class="wrap">
+      <p class="hero__kicker" data-rise>Recruit</p>
+      <h1 class="hero__head" data-split>JOIN THE IMPLEMENTERS</h1>
+      <p class="hero__sub" data-rise style="--d:120ms">未踏の領域に、最初の旗を立てる。</p>
     </div>
   </section>
+  <section class="sec" data-world="paper" data-mark="Culture">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <p class="label" data-rise>Culture</p>
+          <h2 class="hx" data-split>Culture, Spoken in Implementation</h2>
+        </div>
+        <div>
+          <p class="say say--lg" data-split>肩書きではなく、<br>実装で語る組織。</p>
+          <div class="body" data-rise style="--d:120ms">
+            <p>私たちが探しているのは、コードを書くだけの人ではなく、テクノロジーで企業を動かす人です。技術と経営の境界に立ち、自らの判断で資本と実装を接続できる「実装者」を、ポジションを問わず歓迎します。</p>
+          </div>
+        </div>
+      </div>
 
-  <!-- Culture -->
-  <section class="section" aria-labelledby="recruit-culture-title">
-    <div class="container">
-      <p class="section__eyebrow eyebrow reveal">Culture</p>
-      <h2 id="recruit-culture-title" class="section__title h1 reveal">OUR CULTURE</h2>
-      <p class="section__lead lead reveal">肩書きではなく、実装で語る組織</p>
-      <p class="reveal reveal--delay-1">私たちが探しているのは、コードを書くだけの人ではなく、テクノロジーで企業を動かす人です。技術と経営の境界に立ち、自らの判断で資本と実装を接続できる「実装者」を、ポジションを問わず歓迎します。</p>
-
-      <figure class="section-figure reveal reveal--delay-2">
-        <img src="assets/images/culture-hands.jpg" alt="ラップトップを操作する手元 — 静かな自然光の中で、ワインレッドのしおりリボンが添えられたノートブックと共に" loading="lazy" decoding="async" width="2528" height="1696">
-      </figure>
-
-      <div class="card-grid">
-        <article class="card reveal">
-          <p class="card__num">A</p>
-          <h3 class="card__title--en h3">Speed</h3>
-          <p class="card__title--jp">スピード感</p>
-          <p class="card__desc">意思決定から実装、そして検証までを最短距離で。技術も事業も、「出しながら直す」を前提に動きます。</p>
+      <div class="cards" style="margin-top:var(--block)">
+        <article class="card" data-rise>
+          <p class="card__n">A</p>
+          <h3 class="card__en">Speed</h3>
+          <p class="card__jp">スピード感</p>
+          <p class="card__txt">意思決定から実装、そして検証までを最短距離で。技術も事業も、「出しながら直す」を前提に動きます。</p>
         </article>
-        <article class="card reveal reveal--delay-1">
-          <p class="card__num">B</p>
-          <h3 class="card__title--en h3">Flat</h3>
-          <p class="card__title--jp">フラットな組織</p>
-          <p class="card__desc">代表から新メンバーまで、同じテーブルで技術と事業を議論する。役職ではなく、論理と実装で意思決定します。</p>
+        <article class="card" data-rise style="--d:90ms">
+          <p class="card__n">B</p>
+          <h3 class="card__en">Flat</h3>
+          <p class="card__jp">フラットな組織</p>
+          <p class="card__txt">代表から新メンバーまで、同じテーブルで技術と事業を議論する。役職ではなく、論理と実装で意思決定します。</p>
         </article>
-        <article class="card reveal reveal--delay-2">
-          <p class="card__num">C</p>
-          <h3 class="card__title--en h3">Depth</h3>
-          <p class="card__title--jp">技術探究</p>
-          <p class="card__desc">論文・実装・運用を行き来する。アカデミアと産業の橋渡しができる深度が、競争優位の源泉です。</p>
+        <article class="card" data-rise style="--d:180ms">
+          <p class="card__n">C</p>
+          <h3 class="card__en">Depth</h3>
+          <p class="card__jp">技術探究</p>
+          <p class="card__txt">論文・実装・運用を行き来する。アカデミアと産業の橋渡しができる深度が、競争優位の源泉です。</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Job Listing -->
-  <section class="section section--alt" aria-labelledby="recruit-jobs-title">
-    <div class="container">
-      <p class="section__eyebrow eyebrow reveal">Positions</p>
-      <h2 id="recruit-jobs-title" class="section__title h1 reveal">JOB LISTING</h2>
-
-      <p class="reveal">下記ポジションのカードをクリックすると、応募ポジションが入力された状態で問い合わせフォームへ遷移します。</p>
-
-      <div class="card-grid">
-
-        <a class="card card--apply reveal" href="contact.html?subject=recruit&amp;position=AI%20Engineer">
-          <h3 class="card__title--en h3">AI Engineer</h3>
-          <p class="card__title--jp">AIエンジニア（LLM / RAG）</p>
-          <dl class="small">
-            <dt>必須スキル</dt><dd>Python、LLM/RAG の実装経験、評価設計</dd>
-            <dt>歓迎スキル</dt><dd>大規模分散学習、ベクターDB運用、MLOps</dd>
-            <dt>雇用形態</dt><dd>正社員／業務委託</dd>
+  <section class="sec" data-world="deep" data-mark="Positions">
+    <div class="wrap">
+      <p class="label" data-rise>Positions</p>
+      <h2 class="hx" data-split>OPEN POSITIONS</h2>
+      <p class="body" data-rise style="--d:120ms;margin-top:1.2em">カードを選ぶと、応募ポジションが入力された状態でお問い合わせフォームへ遷移します。</p>
+      <div class="cards" style="margin-top:var(--block)">
+        <a class="card" href="contact.html?subject=recruit&amp;position=AI%20Engineer" data-rise style="--d:0ms">
+          <p class="card__n">01</p>
+          <h3 class="card__en">AI Engineer</h3>
+          <p class="card__jp">AIエンジニア（LLM / RAG）</p>
+          <dl>
+            <dt>必須</dt><dd>Python、LLM/RAG の実装経験、評価設計</dd>
+            <dt>歓迎</dt><dd>大規模分散学習、ベクターDB運用、MLOps</dd>
+            <dt>雇用</dt><dd>正社員／業務委託</dd>
             <dt>勤務地</dt><dd>東京・港（リモート併用可）</dd>
           </dl>
-          <span class="card__apply-cta">このポジションに応募する <span aria-hidden="true">&rarr;</span></span>
+          <span class="card__go">このポジションに応募する <i aria-hidden="true">→</i></span>
         </a>
-
-        <a class="card card--apply reveal reveal--delay-1" href="contact.html?subject=recruit&amp;position=Data%20Scientist">
-          <h3 class="card__title--en h3">Data Scientist</h3>
-          <p class="card__title--jp">データサイエンティスト</p>
-          <dl class="small">
-            <dt>必須スキル</dt><dd>統計・機械学習の実務経験、SQL、Python</dd>
-            <dt>歓迎スキル</dt><dd>因果推論、実験設計、ドメイン知識（金融/製造等）</dd>
-            <dt>雇用形態</dt><dd>正社員</dd>
+        <a class="card" href="contact.html?subject=recruit&amp;position=Data%20Scientist" data-rise style="--d:70ms">
+          <p class="card__n">02</p>
+          <h3 class="card__en">Data Scientist</h3>
+          <p class="card__jp">データサイエンティスト</p>
+          <dl>
+            <dt>必須</dt><dd>統計・機械学習の実務経験、SQL、Python</dd>
+            <dt>歓迎</dt><dd>因果推論、実験設計、ドメイン知識（金融/製造等）</dd>
+            <dt>雇用</dt><dd>正社員</dd>
             <dt>勤務地</dt><dd>東京・港（リモート併用可）</dd>
           </dl>
-          <span class="card__apply-cta">このポジションに応募する <span aria-hidden="true">&rarr;</span></span>
+          <span class="card__go">このポジションに応募する <i aria-hidden="true">→</i></span>
         </a>
-
-        <a class="card card--apply reveal reveal--delay-2" href="contact.html?subject=recruit&amp;position=Project%20Manager">
-          <h3 class="card__title--en h3">Project Manager</h3>
-          <p class="card__title--jp">プロジェクトマネージャー</p>
-          <dl class="small">
-            <dt>必須スキル</dt><dd>AI/SaaS系プロジェクトのPM経験、要件定義</dd>
-            <dt>歓迎スキル</dt><dd>コンサル経験、AI実装リード経験</dd>
-            <dt>雇用形態</dt><dd>正社員</dd>
+        <a class="card" href="contact.html?subject=recruit&amp;position=Project%20Manager" data-rise style="--d:140ms">
+          <p class="card__n">03</p>
+          <h3 class="card__en">Project Manager</h3>
+          <p class="card__jp">プロジェクトマネージャー</p>
+          <dl>
+            <dt>必須</dt><dd>AI/SaaS系プロジェクトのPM経験、要件定義</dd>
+            <dt>歓迎</dt><dd>コンサル経験、AI実装リード経験</dd>
+            <dt>雇用</dt><dd>正社員</dd>
             <dt>勤務地</dt><dd>東京・港（リモート併用可）</dd>
           </dl>
-          <span class="card__apply-cta">このポジションに応募する <span aria-hidden="true">&rarr;</span></span>
+          <span class="card__go">このポジションに応募する <i aria-hidden="true">→</i></span>
         </a>
-
-        <a class="card card--apply reveal" href="contact.html?subject=recruit&amp;position=Business%20Development">
-          <h3 class="card__title--en h3">Business Development</h3>
-          <p class="card__title--jp">ビジネスデベロップメント</p>
-          <dl class="small">
-            <dt>必須スキル</dt><dd>法人営業または事業開発経験3年以上</dd>
-            <dt>歓迎スキル</dt><dd>PEファンド/M&amp;A周辺業務、経営層との折衝経験</dd>
-            <dt>雇用形態</dt><dd>正社員</dd>
+        <a class="card" href="contact.html?subject=recruit&amp;position=Business%20Development" data-rise style="--d:210ms">
+          <p class="card__n">04</p>
+          <h3 class="card__en">Business Development</h3>
+          <p class="card__jp">ビジネスデベロップメント</p>
+          <dl>
+            <dt>必須</dt><dd>法人営業または事業開発経験3年以上</dd>
+            <dt>歓迎</dt><dd>PEファンド/M&amp;A周辺業務、経営層との折衝経験</dd>
+            <dt>雇用</dt><dd>正社員</dd>
             <dt>勤務地</dt><dd>東京・港（出張あり）</dd>
           </dl>
-          <span class="card__apply-cta">このポジションに応募する <span aria-hidden="true">&rarr;</span></span>
+          <span class="card__go">このポジションに応募する <i aria-hidden="true">→</i></span>
         </a>
-
-        <a class="card card--apply reveal reveal--delay-1" href="contact.html?subject=recruit&amp;position=Corporate">
-          <h3 class="card__title--en h3">Corporate</h3>
-          <p class="card__title--jp">コーポレート</p>
-          <dl class="small">
-            <dt>必須スキル</dt><dd>経理／人事／法務いずれかの実務経験</dd>
-            <dt>歓迎スキル</dt><dd>スタートアップでのコーポレート経験、英文契約対応</dd>
-            <dt>雇用形態</dt><dd>正社員</dd>
+        <a class="card" href="contact.html?subject=recruit&amp;position=Corporate" data-rise style="--d:280ms">
+          <p class="card__n">05</p>
+          <h3 class="card__en">Corporate</h3>
+          <p class="card__jp">コーポレート</p>
+          <dl>
+            <dt>必須</dt><dd>経理／人事／法務いずれかの実務経験</dd>
+            <dt>歓迎</dt><dd>スタートアップでのコーポレート経験、英文契約対応</dd>
+            <dt>雇用</dt><dd>正社員</dd>
             <dt>勤務地</dt><dd>東京・港（リモート併用可）</dd>
           </dl>
-          <span class="card__apply-cta">このポジションに応募する <span aria-hidden="true">&rarr;</span></span>
+          <span class="card__go">このポジションに応募する <i aria-hidden="true">→</i></span>
         </a>
-
       </div>
     </div>
   </section>
 
-  <!-- Benefits -->
-  <section class="section section--alt" aria-labelledby="recruit-benefits-title">
-    <div class="container">
-      <p class="section__eyebrow eyebrow reveal">Benefits</p>
-      <h2 id="recruit-benefits-title" class="section__title h1 reveal">BENEFITS</h2>
-      <p class="section__lead lead reveal">集中して、長く働ける環境を整えています</p>
-
-      <ul class="benefits-list reveal">
-        <li>ハイブリッドワーク：プロジェクトの状況に応じ、リモートワークと出社を柔軟に組み合わせた働き方が可能です。</li>
-        <li>フレックスタイム制</li>
-        <li>業務用PC支給</li>
-        <li>書籍・学習教材購入補助</li>
-        <li>各種社会保険完備</li>
-        <li>副業・兼業 相談可</li>
-      </ul>
+  <section class="sec" data-world="paper" data-mark="Benefits">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <p class="label" data-rise>Benefits</p>
+          <h2 class="hx" data-split>BENEFITS</h2>
+        </div>
+        <div>
+          <p class="say" data-rise>集中して、長く働ける環境を整えています。</p>
+          <ul class="list" data-rise style="--d:120ms;margin-top:var(--block)">
+            <li><strong>ハイブリッドワーク</strong><br>プロジェクトの状況に応じ、リモートワークと出社を柔軟に組み合わせた働き方が可能です。</li>
+            <li>フレックスタイム制</li>
+            <li>業務用PC支給</li>
+            <li>書籍・学習教材購入補助</li>
+            <li>各種社会保険完備</li>
+            <li>副業・兼業 相談可</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="section" aria-labelledby="recruit-cta-title">
-    <div class="container">
-      <h2 id="recruit-cta-title" class="section__title h1 reveal">READY TO IMPLEMENT?</h2>
-      <p class="section__lead lead reveal">カジュアル面談から、選考へ。まずは一度、話しましょう</p>
-      <p class="reveal reveal--delay-1">
-        <a class="btn btn--primary" href="contact.html?subject=recruit">Apply Now <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
+  <section class="sec" data-world="wine" data-mark="Apply">
+    <div class="wrap">
+      <p class="label" data-rise>Apply</p>
+      <h2 class="say say--lg" data-split style="max-width:18em">まずは一度、話しましょう。</h2>
+      <p class="body" data-rise style="--d:160ms">カジュアル面談から、選考へ。</p>
+      <p class="btns" data-rise style="--d:240ms">
+        <a class="btn btn--solid" href="contact.html?subject=recruit">Apply now <i aria-hidden="true">→</i></a>
       </p>
     </div>
   </section>
 
 </main>
 
-<footer class="footer">
-  <div class="footer__inner">
+<footer class="foot" data-world="ink">
+  <div class="wrap wrap--wide">
 
-    <div class="footer__brand-row">
-      <img class="footer__logo" src="assets/logos/EI_Engineering_logo_name_white.svg?v=20260430-119" alt="EI engineering & Co." height="32">
-      <address class="footer__address small">〒107-0061 東京都港区北青山一丁目3番6号 SIビル青山 5階</address>
+    <p class="foot__mark" data-split>EI&amp;CO.</p>
+
+    <div class="foot__cols">
+      <div class="foot__col">
+        <h4>Office</h4>
+        <address class="foot__addr">
+          EI&amp;Co. 株式会社<br>
+          〒107-0061 東京都港区北青山一丁目3番6号 SIビル青山 5階<br>
+          平日 10:00–18:00
+        </address>
+        <a class="foot__mail" href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a>
+      </div>
+      <div class="foot__col">
+        <h4>Company</h4>
+        <ul>
+        <li><a href="about.html">About <span class="dimtext">私たちについて</span></a></li>
+        <li><a href="business.html">Business <span class="dimtext">事業</span></a></li>
+        <li><a href="works.html">Works <span class="dimtext">実績</span></a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>More</h4>
+        <ul>
+        <li><a href="update.html">Update <span class="dimtext">お知らせ</span></a></li>
+        <li><a href="recruit.html">Recruit <span class="dimtext">採用</span></a></li>
+        <li><a href="contact.html">Contact <span class="dimtext">お問い合わせ</span></a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Works</h4>
+        <ul>
+        <li><a href="works-capital.html">Capital Investment</a></li>
+        <li><a href="works-education.html">Training</a></li>
+        <li><a href="works-advisory.html">Corporate Advisory</a></li>
+        <li><a href="works-system.html">System Development</a></li>
+        </ul>
+      </div>
     </div>
 
-    <nav class="footer__nav" aria-label="Footer primary">
-      <a href="about.html">About</a>
-      <a href="business.html">Business</a>
-      <a href="update.html">Update</a>
-      <a href="works.html">Works</a>
-      <a href="recruit.html">Recruit</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-
-    <nav class="footer__meta" aria-label="Footer secondary">
-      <a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a>
-      <span class="footer__sep" aria-hidden="true">·</span>
-      <a href="contact.html">Contact Form</a>
-      <span class="footer__sep" aria-hidden="true">·</span>
+    <div class="foot__end">
+      <span>&copy; <span id="year">2026</span> EI engineering &amp; Co.</span>
+      <span class="foot__clock">TOKYO</span>
+      <span class="lang-row">
+        <a href="ja/">日本語表記</a> &nbsp;/&nbsp; <a href="en/">English</a>
+      </span>
       <a href="privacy-policy.html">Privacy Policy</a>
-      <span class="footer__sep" aria-hidden="true">·</span>
-      <a href="contact.html#contact-access-title">Access Map</a>
-    </nav>
-
-    <div class="footer__bottom">
-      <p class="footer__bottom-center small">&copy; <span id="current-year">2026</span> EI engineering &amp; Co. All rights reserved.</p>
-      <a class="footer__top" href="#main" aria-label="Back to top">Back to top <span aria-hidden="true">&uarr;</span></a>
+      <a href="#main">Back to top ↑</a>
     </div>
+
   </div>
 </footer>
 
-<div id="cursor" aria-hidden="true"></div>
-<script src="assets/js/main.js" defer></script>
-<script src="assets/js/theme-panel.js" defer></script>
-
-<button class="lang-fab" type="button" aria-label="言語切替 / Language" aria-expanded="false" aria-controls="lang-menu">
-  <span class="lang-fab__circle" aria-hidden="true"></span>
-</button>
-<div id="lang-menu" class="lang-menu" role="menu" aria-label="Language selection">
-  <span class="lang-menu__label">Language</span>
-  <a class="lang-menu__item lang-menu__item--active" href="./" role="menuitem" aria-current="true">現状（日英混在）</a>
-  <a class="lang-menu__item" href="ja/" role="menuitem">全日本語</a>
-  <a class="lang-menu__item" href="en/" role="menuitem">All English</a>
-</div>
-<script>
-(function () {
-  document.addEventListener('click', function (e) {
-    var fab = document.querySelector('.lang-fab');
-    var menu = document.querySelector('.lang-menu');
-    if (!fab || !menu) return;
-    if (e.target.closest('.lang-fab')) {
-      var open = menu.classList.toggle('is-open');
-      fab.setAttribute('aria-expanded', open ? 'true' : 'false');
-    } else if (!e.target.closest('.lang-menu')) {
-      menu.classList.remove('is-open');
-      fab.setAttribute('aria-expanded', 'false');
-    }
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    var fab = document.querySelector('.lang-fab');
-    var menu = document.querySelector('.lang-menu');
-    if (menu && menu.classList.contains('is-open')) {
-      menu.classList.remove('is-open');
-      fab && fab.setAttribute('aria-expanded', 'false');
-    }
-  });
-})();
+<div class="cursor" aria-hidden="true"></div>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "EI engineering & Co.",
+  "alternateName": "EI&Co.株式会社",
+  "url": "https://ei-and.co.jp/",
+  "logo": "https://ei-and.co.jp/assets/logos/EI_Engineering_logo_name_white.svg",
+  "description": "先端AI技術とPEファンドの知見を融合し、企業の潜在価値を社会の新たな原動力へと転換する実装者集団。",
+  "foundingDate": "2019",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "北青山一丁目3番6号 SIビル青山 5階",
+    "addressLocality": "港区",
+    "addressRegion": "東京都",
+    "postalCode": "107-0061",
+    "addressCountry": "JP"
+  },
+  "email": "info@ei-and.co.jp"
+}
 </script>
+<script src="assets/js/ei.js?v=20260914-57" defer></script>
+<script src="assets/js/field.js?v=20260914-57" defer></script>
 </body>
 </html>

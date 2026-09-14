@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ei-and.co.jp/</loc>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ei-and.co.jp/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ei-and.co.jp/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ei-and.co.jp/"/>
   </url>
   <url>
     <loc>https://ei-and.co.jp/about.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-09-11</lastmod>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/business.html</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/works.html</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/works-capital.html</loc>
-    <lastmod>2026-06-22</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/works-education.html</loc>
-    <lastmod>2026-06-22</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/works-advisory.html</loc>
-    <lastmod>2026-06-22</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/works-system.html</loc>
-    <lastmod>2026-06-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ei-and.co.jp/update.html</loc>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ei-and.co.jp/recruit.html</loc>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ei-and.co.jp/contact.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://ei-and.co.jp/update.html</loc>
+    <lastmod>2026-09-11</lastmod>
+    <priority>0.6</priority>
   </url>
-<url>
+  <url>
+    <loc>https://ei-and.co.jp/contact.html</loc>
+    <lastmod>2026-09-11</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ei-and.co.jp/privacy-policy.html</loc>
-    <changefreq>yearly</changefreq>
+    <lastmod>2026-09-11</lastmod>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://ei-and.co.jp/en/</loc>
+    <lastmod>2026-09-11</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ei-and.co.jp/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ei-and.co.jp/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ei-and.co.jp/"/>
   </url>
 </urlset>
