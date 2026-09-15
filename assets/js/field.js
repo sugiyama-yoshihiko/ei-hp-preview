@@ -1,8 +1,6 @@
 /* =============================================================================
    field.js — the 縁 motif
    -----------------------------------------------------------------------------
-   A fixed, full-viewport canvas that does two jobs:
-
    A fixed, full-viewport canvas holding a chain of interlocked rings made of
    points — 縁 — that condenses into being on load and gains links as the page
    is read.
@@ -74,7 +72,6 @@
       .forEach(function (w) {
         var name = w[0];
         WORLDS[name] = {
-          ground: (cs.getPropertyValue('--' + name + '-ground') || '#F6F0F0').trim(),
           dot:    (cs.getPropertyValue('--' + name + '-dot') || '23,15,18').trim(),
           boost:  w[1],
           add:    w[2]
@@ -462,15 +459,10 @@
        the site arrives on top of it once it has. */
     started = performance.now();
 
-    /* Paint once, synchronously, BEFORE handing the grounds over.
-       html.no-field is what makes each section paint its own ground; the
-       moment it comes off, the sections are transparent and the canvas is
-       responsible. Removing it first and painting on the next animation
-       frame leaves exactly one frame where neither is painting, and the
-       page flashes its default background — which is what showed up as a
-       white frame on every navigation. */
+    /* Paint once before anything reads field-ready, so no frame can show a
+       half-started field. The grounds themselves are CSS and are never this
+       script's responsibility. */
     render(performance.now());
-    document.documentElement.classList.remove('no-field');
     document.documentElement.classList.add('field-ready');
 
     running = true;
@@ -481,7 +473,6 @@
     /* No condensation, no idle motion beyond what one frame shows: draw the
        finished chain and the grounds, and repaint only on scroll/resize. */
     readWorlds(); collectBands(); resize();
-    document.documentElement.classList.remove('no-field');
     document.documentElement.classList.add('field-ready');
     started = performance.now() - (FORM_DUR + FORM_LAG + 1);
     var paint = function () { render(performance.now()); };

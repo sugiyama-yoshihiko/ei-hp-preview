@@ -1,10 +1,13 @@
 /* =============================================================================
    ei.js — page runtime
    -----------------------------------------------------------------------------
-   Boot sequence, text reveals, the world-aware header and rail, the marquee,
-   the cursor, and the contact form. Everything degrades: if this file never
-   runs, html keeps .no-js / .no-field and the page is a plain, readable,
-   fully navigable site.
+   The opening, inertial scroll, text reveals, the world-aware header and
+   rail, the pinned horizontal run, the page transition, the marquee, the
+   cursor and the contact form.
+
+   Everything degrades: if this file never runs, html keeps .no-js, the
+   sections still paint their own grounds from CSS, and the page is a plain,
+   readable, fully navigable site.
    ============================================================================= */
 
 (function () {
@@ -627,19 +630,4 @@
     });
   }
 
-  /* ================================================ 11. language menu ===== */
-
-  var langBtn = $('.lang');
-  var langMenu = $('.lang__menu');
-  if (langBtn && langMenu) {
-    doc.addEventListener('click', function (e) {
-      if (e.target.closest('.lang')) {
-        var on = langMenu.classList.toggle('is-open');
-        langBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
-      } else if (!e.target.closest('.lang__menu')) {
-        langMenu.classList.remove('is-open');
-        langBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
 })();

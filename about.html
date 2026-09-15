@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja" class="no-js no-field">
+<html lang="ja" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About | EI engineering &amp; Co.</title>
+<!-- ベータ期間中のみ。本番公開時に、この行と robots.txt の Disallow を同時に外す。
+     外し忘れると検索結果に一切出ない／外すのが早すぎると未完成版が拾われる。 -->
+<meta name="robots" content="noindex,nofollow">
 <meta name="description" content="AIエンジニアと事業経営のスペシャリストによる「実装者」の集団。EI&Co.のミッション、理念、代表メッセージ、会社概要、アライアンス。">
 <link rel="icon" type="image/svg+xml" href="assets/logos/favicon.svg">
 <link rel="icon" type="image/png" sizes="96x96" href="assets/logos/favicon-96x96.png">
@@ -33,7 +36,7 @@
     h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
   })(document);
 </script>
-<link rel="stylesheet" href="assets/css/ei.css?v=20260914-57">
+<link rel="stylesheet" href="assets/css/ei.css?v=20260915-58">
 <script>
   /* Marks an arrival that came from an outgoing page transition, before the
      first paint, so the circle can open with a pure CSS animation. No JS is
@@ -157,7 +160,7 @@
             <p>資本と技術を両輪で回し、顧客企業の価値最大化に最後までコミットし続けます。</p>
           </div>
           <figure class="port" data-rise style="--d:160ms">
-            <img src="assets/images/ceo.jpg?v=20260914-57" alt="EI engineering &amp; Co. 代表取締役社長 井内 悠" width="720" height="480" loading="lazy" decoding="async">
+            <img src="assets/images/ceo.jpg?v=20260915-58" alt="EI engineering &amp; Co. 代表取締役社長 井内 悠" width="720" height="480" loading="lazy" decoding="async">
             <figcaption>
               <span class="port__role">代表取締役社長 / CEO</span>
               <span class="port__name">井内 悠</span>
@@ -325,7 +328,7 @@
   "email": "info@ei-and.co.jp"
 }
 </script>
-<script src="assets/js/ei.js?v=20260914-57" defer></script>
-<script src="assets/js/field.js?v=20260914-57" defer></script>
+<script src="assets/js/ei.js?v=20260915-58" defer></script>
+<script src="assets/js/field.js?v=20260915-58" defer></script>
 </body>
 </html>

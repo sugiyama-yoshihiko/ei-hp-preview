@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="ja" class="no-js no-field">
+<html lang="ja" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Page Not Found | EI engineering &amp; Co.</title>
+<!-- ベータ期間中のみ。本番公開時に、この行と robots.txt の Disallow を同時に外す。
+     外し忘れると検索結果に一切出ない／外すのが早すぎると未完成版が拾われる。 -->
+<meta name="robots" content="noindex,nofollow">
 <meta name="description" content="お探しのページは見つかりませんでした。">
-<link rel="icon" type="image/svg+xml" href="assets/logos/favicon.svg">
-<link rel="icon" type="image/png" sizes="96x96" href="assets/logos/favicon-96x96.png">
-<link rel="shortcut icon" href="assets/logos/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/logos/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/logos/favicon-96x96.png">
+<link rel="shortcut icon" href="/assets/logos/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/logos/apple-touch-icon.png">
 <link rel="canonical" href="https://ei-and.co.jp/404.html">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ei-and.co.jp/404.html">
@@ -33,7 +36,7 @@
     h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
   })(document);
 </script>
-<link rel="stylesheet" href="assets/css/ei.css?v=20260914-57">
+<link rel="stylesheet" href="/assets/css/ei.css?v=20260915-58">
 <script>
   /* Marks an arrival that came from an outgoing page transition, before the
      first paint, so the circle can open with a pure CSS animation. No JS is
@@ -57,17 +60,17 @@
 <a class="sr-only" href="#main">本文へスキップ</a>
 
 <header class="nav" data-world="paper" data-world-ui>
-  <a class="nav__logo" href="./" aria-label="EI&amp;Co. ホーム">
-    <img class="nav__logo--light" src="assets/logos/EI_Engineering_logo_name.svg" alt="EI engineering &amp; Co." width="160" height="30">
-    <img class="nav__logo--dark" src="assets/logos/EI_Engineering_logo_name_white.svg" alt="EI engineering &amp; Co." width="160" height="30">
+  <a class="nav__logo" href="/./" aria-label="EI&amp;Co. ホーム">
+    <img class="nav__logo--light" src="/assets/logos/EI_Engineering_logo_name.svg" alt="EI engineering &amp; Co." width="160" height="30">
+    <img class="nav__logo--dark" src="/assets/logos/EI_Engineering_logo_name_white.svg" alt="EI engineering &amp; Co." width="160" height="30">
   </a>
   <nav class="nav__links" aria-label="Primary">
-      <a href="about.html">About</a>
-      <a href="business.html">Business</a>
-      <a href="works.html">Works</a>
-      <a href="update.html">Update</a>
-      <a href="recruit.html">Recruit</a>
-      <a href="contact.html">Contact</a>
+      <a href="/about.html">About</a>
+      <a href="/business.html">Business</a>
+      <a href="/works.html">Works</a>
+      <a href="/update.html">Update</a>
+      <a href="/recruit.html">Recruit</a>
+      <a href="/contact.html">Contact</a>
   </nav>
   <svg class="dial" viewBox="0 0 26 26" aria-hidden="true">
     <circle class="dial__track" cx="13" cy="13" r="11"></circle>
@@ -80,17 +83,17 @@
 
 <div class="menu" id="menu" inert>
   <nav class="menu__list" aria-label="Mobile">
-      <a href="about.html"><i>01</i>About<em>私たちについて</em></a>
-      <a href="business.html"><i>02</i>Business<em>事業</em></a>
-      <a href="works.html"><i>03</i>Works<em>実績</em></a>
-      <a href="update.html"><i>04</i>Update<em>お知らせ</em></a>
-      <a href="recruit.html"><i>05</i>Recruit<em>採用</em></a>
-      <a href="contact.html"><i>06</i>Contact<em>お問い合わせ</em></a>
+      <a href="/about.html"><i>01</i>About<em>私たちについて</em></a>
+      <a href="/business.html"><i>02</i>Business<em>事業</em></a>
+      <a href="/works.html"><i>03</i>Works<em>実績</em></a>
+      <a href="/update.html"><i>04</i>Update<em>お知らせ</em></a>
+      <a href="/recruit.html"><i>05</i>Recruit<em>採用</em></a>
+      <a href="/contact.html"><i>06</i>Contact<em>お問い合わせ</em></a>
   </nav>
   <div class="menu__foot">
     <a href="mailto:info@ei-and.co.jp">info@ei-and.co.jp</a>
     <span>〒107-0061 東京都港区北青山一丁目3番6号 SIビル青山 5階</span>
-    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="/privacy-policy.html">Privacy Policy</a>
   </div>
 </div>
 
@@ -132,26 +135,26 @@
       <div class="foot__col">
         <h4>Company</h4>
         <ul>
-        <li><a href="about.html">About <span class="dimtext">私たちについて</span></a></li>
-        <li><a href="business.html">Business <span class="dimtext">事業</span></a></li>
-        <li><a href="works.html">Works <span class="dimtext">実績</span></a></li>
+        <li><a href="/about.html">About <span class="dimtext">私たちについて</span></a></li>
+        <li><a href="/business.html">Business <span class="dimtext">事業</span></a></li>
+        <li><a href="/works.html">Works <span class="dimtext">実績</span></a></li>
         </ul>
       </div>
       <div class="foot__col">
         <h4>More</h4>
         <ul>
-        <li><a href="update.html">Update <span class="dimtext">お知らせ</span></a></li>
-        <li><a href="recruit.html">Recruit <span class="dimtext">採用</span></a></li>
-        <li><a href="contact.html">Contact <span class="dimtext">お問い合わせ</span></a></li>
+        <li><a href="/update.html">Update <span class="dimtext">お知らせ</span></a></li>
+        <li><a href="/recruit.html">Recruit <span class="dimtext">採用</span></a></li>
+        <li><a href="/contact.html">Contact <span class="dimtext">お問い合わせ</span></a></li>
         </ul>
       </div>
       <div class="foot__col">
         <h4>Works</h4>
         <ul>
-        <li><a href="works-capital.html">Capital Investment</a></li>
-        <li><a href="works-education.html">Training</a></li>
-        <li><a href="works-advisory.html">Corporate Advisory</a></li>
-        <li><a href="works-system.html">System Development</a></li>
+        <li><a href="/works-capital.html">Capital Investment</a></li>
+        <li><a href="/works-education.html">Training</a></li>
+        <li><a href="/works-advisory.html">Corporate Advisory</a></li>
+        <li><a href="/works-system.html">System Development</a></li>
         </ul>
       </div>
     </div>
@@ -160,9 +163,9 @@
       <span>&copy; <span id="year">2026</span> EI engineering &amp; Co.</span>
       <span class="foot__clock">TOKYO</span>
       <span class="lang-row">
-        <a href="ja/">日本語表記</a> &nbsp;/&nbsp; <a href="en/">English</a>
+        <a href="/ja/">日本語表記</a> &nbsp;/&nbsp; <a href="/en/">English</a>
       </span>
-      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="/privacy-policy.html">Privacy Policy</a>
       <a href="#main">Back to top ↑</a>
     </div>
 
@@ -191,7 +194,7 @@
   "email": "info@ei-and.co.jp"
 }
 </script>
-<script src="assets/js/ei.js?v=20260914-57" defer></script>
-<script src="assets/js/field.js?v=20260914-57" defer></script>
+<script src="/assets/js/ei.js?v=20260915-58" defer></script>
+<script src="/assets/js/field.js?v=20260915-58" defer></script>
 </body>
 </html>

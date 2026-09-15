@@ -1,4 +1,6 @@
+# ベータ期間中。本番公開時に Disallow を Allow に戻し、
+# 各ページの <meta name="robots" content="noindex,nofollow"> も同時に外すこと。
 User-agent: *
-Allow: /
+Disallow: /
 
 Sitemap: https://ei-and.co.jp/sitemap.xml
