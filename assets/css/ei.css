@@ -510,6 +510,17 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
 .sec--quiet { padding-block: calc(var(--sec-y) * 1.45); }
 .sec--quiet .body { margin-top: clamp(28px, 4vw, 56px); }
 
+/* Sentence-level line breaking for the display-sized statements.
+
+   Japanese wraps at any character, which is right for running prose and
+   wrong for a two-line statement in 24-62px type: the break lands in the
+   middle of a word and the line looks broken rather than composed. Each
+   sentence becomes an inline-block, so the line can only break BETWEEN
+   sentences — and when a single sentence is still too long for the measure
+   it falls back to normal wrapping inside itself. No hard <br>, so it stays
+   correct at every width. */
+.cl { display: inline-block; }
+
 .body { max-width: 36em; color: var(--ink); line-height: 2.0; }
 .body p { opacity: .86; }
 .dimtext { color: var(--dim); }
