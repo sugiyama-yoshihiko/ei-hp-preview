@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ei-and.co.jp/</loc>
     <lastmod>2026-09-11</lastmod>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://ei-and.co.jp/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ei-and.co.jp/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ei-and.co.jp/"/>
   </url>
   <url>
     <loc>https://ei-and.co.jp/about.html</loc>
@@ -63,13 +59,5 @@
     <loc>https://ei-and.co.jp/privacy-policy.html</loc>
     <lastmod>2026-09-11</lastmod>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://ei-and.co.jp/en/</loc>
-    <lastmod>2026-09-11</lastmod>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://ei-and.co.jp/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://ei-and.co.jp/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://ei-and.co.jp/"/>
   </url>
 </urlset>
