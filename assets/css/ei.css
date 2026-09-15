@@ -742,6 +742,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
 }
 .row::before {
   content: ""; position: absolute; inset: 0 -24px; z-index: -1;
+  /* the -24px bleed is desktop-only; see the phone block below */
   background: var(--accent); opacity: 0;
   transform: scaleY(.4);
   transition: opacity 420ms var(--e-out), transform 520ms var(--e-out);
@@ -768,6 +769,11 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   transition: opacity 380ms var(--e-out), transform 460ms var(--e-out);
 }
 .row:hover .row__go { opacity: 1; transform: none; }
+@media (max-width: 899.98px) {
+  /* The hover bleed has no hover to justify it here, and it pushes the
+     document 24px wider than the viewport. */
+  .row::before { inset: 0; }
+}
 @media (max-width: 860px) {
   .row { grid-template-columns: 3.4em 1fr; row-gap: 6px; }
   .row__jp { grid-column: 2; }
@@ -1039,9 +1045,13 @@ a.card:hover .card__go { gap: 14px; }
 }
 .foot__mark b { font-weight: 400; color: var(--accent); }
 
+/* The first track used to be minmax(0, 1.3fr), whose zero minimum let the
+   browser keep two columns on a phone and squeeze both to ~150px — the
+   address then wrapped a few characters at a time. A real minimum, and one
+   column below 700px, is the whole fix. */
 .foot__cols {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: minmax(16em, 1.3fr) repeat(auto-fit, minmax(150px, 1fr));
   gap: clamp(26px, 3.4vw, 56px);
   padding-bottom: clamp(40px, 5vw, 70px);
   border-bottom: 1px solid var(--line);
@@ -1071,6 +1081,46 @@ a.card:hover .card__go { gap: 14px; }
 }
 .foot__end a:hover { color: var(--accent); }
 .foot__clock { font-variant-numeric: tabular-nums; }
+
+/* ---- phones ----------------------------------------------------------- */
+@media (max-width: 699.98px) {
+  /* One column, read top to bottom: who and where, then the main pages,
+     then everything else. */
+  .foot__cols { grid-template-columns: 1fr; gap: clamp(30px, 7vw, 44px); }
+  .foot__addr { line-height: 2.1; }
+
+  /* 44px is the smallest thing a finger reliably hits. The links keep their
+     size and colour; only the box around them grows. */
+  .foot__col ul { gap: 0; }
+  .foot__col li a,
+  .foot__end a,
+  .foot__mail {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .foot__mail { margin-top: 8px; }
+  .foot__end {
+    justify-content: flex-start;
+    gap: 0 20px;
+    padding-top: 8px;
+  }
+  .nav__logo { display: flex; align-items: center; min-height: 44px; }
+
+  /* The Works / <field> breadcrumb in a sub-page kicker. */
+  .hero__kicker a {
+    display: inline-flex; align-items: center;
+    min-height: 44px; padding-right: 4px;
+  }
+
+  /* The address block's email is a primary way to reach the company, not a
+     link inside a sentence. The one in the privacy policy is genuinely
+     mid-paragraph and is left alone — WCAG exempts inline text links, and
+     padding one would break the line rhythm around it. */
+  .facts dd a[href^="mailto:"] {
+    display: inline-flex; align-items: center; min-height: 44px;
+  }
+}
 
 
 /* -----------------------------------------------------------------------------
