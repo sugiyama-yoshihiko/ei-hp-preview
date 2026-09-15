@@ -1025,6 +1025,37 @@ a.card:hover .card__go { gap: 14px; }
 .f input:focus, .f select:focus, .f textarea:focus {
   outline: none; border-bottom-color: var(--accent);
 }
+/* Consent sits with the submit button, not only in the footer: this is the
+   moment the reader hands over their name and address. */
+.consent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: var(--fs-small);
+  line-height: 1.85;
+  color: var(--ink);
+  cursor: pointer;
+}
+.consent input {
+  width: 18px; height: 18px;
+  margin: 4px 0 0;
+  accent-color: var(--accent);
+  flex: none;
+  cursor: pointer;
+}
+.consent a {
+  color: var(--accent);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+.consent a:hover { color: var(--ink); }
+/* A comfortable target without moving the text off the checkbox's baseline. */
+@media (max-width: 699.98px) {
+  .consent { gap: 14px; padding: 4px 0; min-height: 44px; align-content: center; }
+  .consent input { width: 22px; height: 22px; margin-top: 3px; }
+}
+
 .thanks {
   border: 1px solid var(--accent);
   padding: clamp(22px, 3vw, 36px);
@@ -1067,7 +1098,7 @@ a.card:hover .card__go { gap: 14px; }
   padding-bottom: clamp(40px, 5vw, 70px);
   border-bottom: 1px solid var(--line);
 }
-.foot h4 {
+.foot h2 {
   font-family: var(--f-en); font-size: var(--fs-label);
   letter-spacing: .24em; text-transform: uppercase; color: var(--dim);
   margin: 0 0 18px;
