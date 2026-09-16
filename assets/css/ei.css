@@ -558,6 +558,10 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   font-family: var(--f-num); font-variant-numeric: tabular-nums;
   font-size: var(--fs-md); color: var(--accent); line-height: 1.35;
 }
+/* The heading and its description must be ONE grid item. Left as a <strong>
+   followed by a bare text node they become two, and the text lands in the
+   next row's 4.2em number column — six characters wide. */
+.steps li > span { display: block; min-width: 0; }
 .steps li strong { display: block; font-weight: 500; margin-bottom: .3em; }
 
 /* Definition table */
@@ -928,7 +932,15 @@ html.field-ready .cards { background: var(--line); }
   display: inline-flex; gap: 8px;
 }
 a.card:hover .card__go { gap: 14px; }
-.card dl { display: grid; grid-template-columns: 7em 1fr; gap: 6px 12px; margin-top: 10px; }
+/* auto, not a fixed 7em: the labels are three characters at 11px and were
+   taking 105px of a 351px card, which left the value column too narrow for
+   「東京・港（リモート併用可）」 and orphaned its last two characters. */
+.card dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 14px;
+  margin-top: 10px;
+}
 .card dt {
   font-family: var(--f-en); font-size: var(--fs-label);
   letter-spacing: .14em; color: var(--dim); text-transform: uppercase;
