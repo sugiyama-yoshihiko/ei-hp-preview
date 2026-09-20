@@ -71,6 +71,8 @@
   var PTR_TAU   = 190;    // ms the followed pointer lags the real one
   var GRIP_TAU  = 220;    // ms the hold fades in on enter and out on leave
   var CHARGE_MS = 620;    // stillness needed for a full charge
+  var TILT_X    = 0.38;   // rad across the full width  (≈22°, was 66°)
+  var TILT_Y    = 0.30;   // rad across the full height (≈17°, was 52°)
   var CHARGE_TIGHTEN = 0.46;   // how far the ring closes in
   var CHARGE_GLOW    = 1.70;   // how much brighter the caught points get
 
@@ -600,8 +602,12 @@
          it sweep in from the parked position off-canvas. */
       if (!hasPtr) { ptrX = ptrRX; ptrY = ptrRY; }
       hasPtr = true;
-      tiltTY = (e.clientX / W - 0.5) * 1.15;
-      tiltTX = (e.clientY / H - 0.5) * 0.9;
+      /* Amplitude, in radians across the whole viewport. These were 1.15 and
+         0.9 — 66° left to right and 52° top to bottom, which turned the chain
+         into something that lurched after the mouse. A third of that still
+         reads as the field answering you; more reads as motion sickness. */
+      tiltTY = (e.clientX / W - 0.5) * TILT_X;
+      tiltTX = (e.clientY / H - 0.5) * TILT_Y;
     }, { passive: true });
     document.addEventListener('pointerleave', function () {
       hasPtr = false; tiltTX = 0; tiltTY = 0;

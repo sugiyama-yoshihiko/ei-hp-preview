@@ -36,7 +36,7 @@
     h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
   })(document);
 </script>
-<link rel="stylesheet" href="assets/css/ei.css?v=20260920-72">
+<link rel="stylesheet" href="assets/css/ei.css?v=20260920-74">
 <script>
   /* Marks an arrival that came from an outgoing page transition, before the
      first paint, so the circle can open with a pure CSS animation. No JS is
@@ -104,28 +104,22 @@
 
 <main id="main">
 
-  <section class="sec hero" data-world="deep" data-mark="Index">
+  <section class="sec hero" data-world="ink" data-mark="Index">
     <div class="wrap">
-      <p class="hero__kicker" data-rise>EI engineering &amp; Co. &mdash; Est. 2019, Aoyama Tokyo</p>
       <h1 class="hero__head" data-split><em>技術力</em>を<br>投資する会社。</h1>
-      <p class="hero__sub" data-rise style="--d:700ms"><span class="cl">出資し、システムを書き、経営に並走する。</span><span class="cl">三つとも、自分たちでやる。</span></p>
-      <div class="hero__meta" data-rise style="--d:900ms">
-        <span><b>01</b> Capital</span>
-        <span><b>02</b> Technology</span>
-        <span><b>03</b> People</span>
-      </div>
+      <p class="hero__sub" data-rise style="--d:700ms">出資し、システムを書き、経営に並走する。</p>
     </div>
   </section>
 
-  <section class="strip" data-world="wine" aria-hidden="true">
+  <section class="strip" data-world="ink" aria-hidden="true">
     <div class="strip__track">
-      <span class="strip__grp">Capital Investment&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;Revenue Share&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;Private Equity&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;M&amp;A&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;Implement with Capital&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;</span>
+      <span class="strip__grp">Capital Investment&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;Revenue Share&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;Private Equity&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;M&amp;A&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;Implementation with Capital&nbsp;&nbsp;<b>&#9675;</b>&nbsp;&nbsp;</span>
     </div>
   </section>
 
   <section class="sec sec--quiet" data-world="paper" data-mark="Philosophy">
     <div class="wrap">
-      <p class="label" data-rise>Philosophy, Proven in Substance</p>
+      <p class="label" data-rise>Philosophy</p>
       <p class="say say--xl" data-split>真摯に技術と向き合い、<br>社会に実装する。</p>
       <div class="body" data-rise style="--d:200ms">
         <p>言葉だけでは足りません。だから設備を持っています。ORENDA WORLD との連携。葛尾村データセンターの計算資源。</p>
@@ -137,7 +131,7 @@
     </div>
   </section>
 
-  <section class="sec" data-world="deep" data-mark="Business">
+  <section class="sec" data-world="paper" data-mark="Business">
     <div class="wrap">
       <div class="grid">
         <div>
@@ -145,7 +139,9 @@
           <h2 class="hx" data-split>Capital Investment, With Our Own Balance Sheet</h2>
         </div>
         <div>
-          <p class="say" data-rise>レベニューシェア・PEファンド・M&amp;Aの三本を統合した、資本参加型の事業実装。</p>
+          <!-- 20em, not the 17em default: the second line is 19 characters and
+               at 17em it broke two characters onto a third line. -->
+          <p class="say say--lg" data-split style="max-width:20em">レベニューシェア・PEファンド・M&amp;A<br class="br-wide">三本を統合した、資本参加型の事業実装。</p>
           <div class="body" data-rise style="--d:120ms">
             <p>自ら資本を入れ、システムを開発し、経営に並走する。事業はこの一つの形に集約されています。資本・技術・人材を、同時に投下します。この三つを一社で出す。それが私たちの立ち位置です。</p>
           </div>
@@ -155,7 +151,7 @@
       <div class="cards" style="margin-top:var(--block)">
         <article class="card" data-rise>
           <p class="card__n">01</p>
-          <h3 class="card__en">Capital<br>Implementation</h3>
+          <h3 class="card__en">Equity-Backed<br>Implementation</h3>
           <p class="card__jp">資本参加型 事業実装</p>
           <p class="card__txt">レベニューシェア・PEファンド・M&amp;A。株式取得を通じて経営の当事者となり、AI駆動の事業再生とバリューアップを主導します。</p>
         </article>
@@ -167,7 +163,7 @@
         </article>
         <article class="card" data-rise style="--d:180ms">
           <p class="card__n">03</p>
-          <h3 class="card__en">Advanced<br>AI Talent</h3>
+          <h3 class="card__en">Advanced AI<br>Talent Development</h3>
           <p class="card__jp">先端AI人材育成</p>
           <p class="card__txt">国立大学・高等専門学校・上場企業へ。研究と実装の両方を主戦場とするメンバーが、直接カリキュラムを設計し登壇します。</p>
         </article>
@@ -179,7 +175,7 @@
     </div>
   </section>
 
-  <section class="sec sec--quiet" data-world="ink" data-mark="Figures">
+  <section class="sec sec--quiet" data-world="paper" data-mark="Figures">
     <div class="wrap">
       <p class="label" data-rise>By the Numbers</p>
       <div class="figures">
@@ -208,7 +204,7 @@
   </section>
 
 
-  <section class="sec" data-world="wine" data-mark="Works">
+  <section class="sec" data-world="ink" data-mark="Works">
     <div class="wrap">
       <p class="label" data-rise>Works</p>
       <h2 class="hx" data-split>Projects, Where the Asset Is the Proposal</h2>
@@ -267,7 +263,7 @@
       <div class="grid">
         <div>
           <p class="label" data-rise>Update</p>
-          <h2 class="hx" data-split>News, Most Recent First</h2>
+          <h2 class="hx" data-split>Updates, Most Recent First</h2>
         </div>
         <div>
           <ul class="news">
@@ -295,7 +291,7 @@
       <div class="grid">
         <div>
           <p class="label" data-rise>Recruit</p>
-          <h2 class="hx" data-split>Join the Implementers, Whatever the Means</h2>
+          <h2 class="hx" data-split>Join the Implementers, First Flag in Uncharted Territory</h2>
         </div>
         <div>
           <p class="say say--lg" data-split>未踏の領域に、最初の旗を立てる。</p>
@@ -310,13 +306,13 @@
     </div>
   </section>
 
-  <section class="sec" data-world="wine" data-mark="Contact">
+  <section class="sec" data-world="ink" data-mark="Contact">
     <div class="wrap">
       <p class="label" data-rise>Contact</p>
       <h2 class="say say--lg" data-split style="max-width:18em">資本と技術で、<br>事業の潜在価値を解き放つ。</h2>
       <p class="body" data-rise style="--d:160ms">プロジェクトのご相談・協業についてのお問い合わせ。</p>
       <p class="btns" data-rise style="--d:240ms">
-        <a class="btn btn--solid" href="contact.html">Contact Us <i aria-hidden="true">→</i></a>
+        <a class="btn btn--solid" href="contact.html">Contact us <i aria-hidden="true">→</i></a>
       </p>
     </div>
   </section>
@@ -396,7 +392,7 @@
   "email": "info@ei-and.co.jp"
 }
 </script>
-<script src="assets/js/ei.js?v=20260920-72" defer></script>
-<script src="assets/js/field.js?v=20260920-72" defer></script>
+<script src="assets/js/ei.js?v=20260920-74" defer></script>
+<script src="assets/js/field.js?v=20260920-74" defer></script>
 </body>
 </html>

@@ -70,7 +70,11 @@
   --f-mincho: "a-otf-ryumin-pr6n", "Hiragino Mincho ProN", "Yu Mincho",
               "YuMincho", serif;
 
-  --fs-mega:  clamp(44px, 8.2vw, 124px);
+  /* 8.2vw gave 118px at 1440 — the longest line ran to 80% of the text column
+     and, once the three-word row under it was removed, left the headline
+     filling the frame on its own. 7.0vw brings it to 101px and 69%. The 44px
+     floor is untouched: phones were already on it, so nothing changes there. */
+  --fs-mega:  clamp(44px, 7.0vw, 106px);
   --fs-xl:    clamp(30px, 4.6vw, 68px);
   --fs-lg:    clamp(24px, 3.0vw, 42px);
   --fs-md:    clamp(18px, 1.8vw, 24px);
@@ -488,6 +492,11 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   margin: 0 0 1.1em;
   max-width: 24em;
 }
+/* A break chosen for the wide layout. On a phone the line is already wrapping
+   two or three times, and forcing it as well left a single character stranded
+   on a line of its own. */
+@media (max-width: 899.98px) { br.br-wide { display: none; } }
+
 .say--lg {
   font-size: var(--fs-lg);
   font-weight: 300;
@@ -600,9 +609,14 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   /* Sized so the longest figure still fits its column at every width. A
      numeral that overflows here collides with the next column, so this
      ceiling is not decorative — see the measurement in the audit. */
-  font-size: clamp(34px, 4.4vw, 68px);
-  line-height: .94;
-  letter-spacing: -.045em;
+  /* Was clamp(34px, 4.4vw, 68px). A founding year and a capital figure set
+     at 68px were the largest things in their section and bigger than any
+     explanation on the page, which states them loudly without their proving
+     anything. At this size they are still the figures, and the sentence
+     beside them is allowed to be read. */
+  font-size: clamp(26px, 2.6vw, 40px);
+  line-height: .98;
+  letter-spacing: -.035em;
   color: var(--ink);
   display: flex; align-items: baseline; gap: .08em;
   white-space: nowrap;
@@ -620,7 +634,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   text-transform: uppercase;
   color: var(--dim);
 }
-.fig__t { font-size: var(--fs-small); line-height: 1.8; color: var(--ink); opacity: .8; }
+.fig__t { font-size: var(--fs-body); line-height: 1.9; color: var(--ink); opacity: .86; }
 
 /* -----------------------------------------------------------------------------
    9. Buttons
@@ -694,13 +708,23 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   max-width: 24em;          /* 24 Japanese characters per line, so the two
                                lines break where the sentence does */
 }
+/* Was "01 Capital  02 Technology  03 People" in the Latin face. The numbers
+   claimed a sequence that does not exist — the three are simultaneous, not
+   steps — and the same 01–04 marks are used on the Works cards for something
+   else entirely, which emptied both of meaning. Japanese nouns, no numerals,
+   separated by a rule instead. */
 .hero__meta {
   margin-top: clamp(34px, 5vw, 64px);
-  display: flex; flex-wrap: wrap; gap: 10px 34px;
-  font-family: var(--f-en); font-size: var(--fs-label);
-  letter-spacing: .18em; text-transform: uppercase; color: var(--dim);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px;
+  font-family: var(--f-jp); font-size: var(--fs-md);
+  font-weight: 400; letter-spacing: .18em; color: var(--dim);
 }
-.hero__meta b { font-weight: 400; color: var(--accent); }
+.hero__meta span + span { position: relative; padding-left: 22px; }
+.hero__meta span + span::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: 1px; height: 1em; margin-top: -.5em;
+  background: currentColor; opacity: .45;
+}
 
 /* Sub-page hero: shorter, and the Latin name takes the display role. */
 .hero--sub { min-height: 74svh; }
@@ -836,20 +860,35 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   align-content: space-between;
   gap: 18px;
   color: var(--ink);
+  /* Not transparent: the field ran straight through the cards and the
+     description had particles crossing it. Mostly opaque keeps the card a
+     surface you read off, while the last sixth still shows the field moving
+     behind it, which is the part worth keeping. */
+  background-color: color-mix(in srgb, var(--ground) 84%, transparent);
   transition: background-color 460ms var(--e-out), border-color 460ms var(--e-out);
 }
 .wcard:hover { background-color: color-mix(in srgb, var(--accent) 12%, transparent); border-color: var(--accent); }
+/* The card used to lead with a 63px serial number and a 25px uppercase Latin
+   name, and put what the project actually was in 13px grey underneath. The
+   largest thing on it was "01". Reversed: the Japanese carries the card, the
+   number is an index mark, and the Latin name is the label it always was. */
 .wcard__n {
   font-family: var(--f-num); font-variant-numeric: tabular-nums;
-  font-size: clamp(40px, 4.4vw, 68px); line-height: 1; letter-spacing: -.04em;
+  font-size: var(--fs-label); line-height: 1; letter-spacing: .12em;
   color: var(--accent);
 }
 .wcard__en {
   font-family: var(--f-en); font-weight: 400;
-  font-size: clamp(19px, 1.9vw, 25px); letter-spacing: .08em;
-  text-transform: uppercase; line-height: 1.25;
+  font-size: clamp(12px, 1.05vw, 14px); letter-spacing: .2em;
+  text-transform: uppercase; line-height: 1.4; color: var(--dim);
 }
-.wcard__jp { display: block; margin-top: 10px; font-size: var(--fs-small); line-height: 1.85; color: var(--dim); }
+.wcard__jp {
+  display: block; margin-top: 12px;
+  font-family: var(--f-jp); font-weight: 400;
+  font-size: clamp(18px, 1.7vw, 23px);
+  line-height: 1.7; letter-spacing: .02em;
+  color: var(--ink);
+}
 .wcard__go {
   font-family: var(--f-en); font-size: var(--fs-label); letter-spacing: .2em;
   color: var(--accent); display: inline-flex; gap: 8px;
@@ -893,15 +932,33 @@ html.navin .veil { animation: veil-open 720ms var(--e-out) both; }
    13. Cards
    -------------------------------------------------------------------------- */
 
+/* The hairlines belong to the cards, not to the grid behind them.
+
+   They used to be drawn by giving the grid a line-coloured background and
+   letting each card cover it again, so only the 1px gaps showed through. That
+   works only while the last row is full: four cards in three columns left one
+   track empty, and the "gap" there was a third of the grid — a solid block of
+   line colour with nothing in it. Every count that does not divide the column
+   count hit this, and the column count changes with the viewport, so it could
+   not be avoided by choosing the content.
+
+   Each card now carries its own 1px outline. Neighbours' outlines meet in the
+   gap and read as a single rule, the outer edge closes the frame, and an
+   empty track simply stays empty. */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+}
+/* Four items: auto-fit lands on three columns at desktop widths and leaves
+   two thirds of the second row empty. Two columns is the one count that
+   divides four, so the block closes. */
+@media (min-width: 860px) {
+  .cards--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .card {
   background-color: var(--ground);
+  box-shadow: 0 0 0 1px var(--line);
   padding: clamp(24px, 2.8vw, 40px);
   display: grid;
   align-content: start;
@@ -909,10 +966,6 @@ html.navin .veil { animation: veil-open 720ms var(--e-out) both; }
   position: relative;
   transition: background-color 420ms var(--e-out);
 }
-/* When the canvas is painting, the cards let the field show through and only
-   the hairline grid separates them. */
-html.field-ready .card { background-color: transparent; }
-html.field-ready .cards { background: var(--line); }
 .card:hover { background-color: color-mix(in srgb, var(--accent) 10%, transparent); }
 .card__n {
   font-family: var(--f-en); font-size: var(--fs-label);
@@ -1088,7 +1141,14 @@ a.card:hover .card__go { gap: 14px; }
 .foot__mark {
   font-family: var(--f-en);
   font-weight: 500;
-  font-size: clamp(54px, 15.5vw, 230px);
+  /* Was clamp(54px, 15.5vw, 230px) — 223px at 1440, half the width of the
+     viewport, and 1.9× the hero headline. That made the largest type on the
+     site the one carrying the least information. It still reads as a closing
+     mark at this size, but it no longer outranks what the company says. */
+  /* Held below --fs-mega (7.0vw / 106px) at every width, so the closing mark
+     is never larger than the sentence the company leads with. Re-derived when
+     the hero came down from 8.2vw: 7.4vw had quietly overtaken it again. */
+  font-size: clamp(38px, 6.2vw, 94px);
   line-height: .86;
   letter-spacing: -.01em;
   text-transform: uppercase;
@@ -1146,6 +1206,9 @@ a.card:hover .card__go { gap: 14px; }
   /* 44px is the smallest thing a finger reliably hits. The links keep their
      size and colour; only the box around them grows. */
   .foot__col ul { gap: 0; }
+  /* .menu__foot was missed when this rule was written: on a phone the overlay
+     menu is the navigation, and its two links sat at 25px. */
+  .menu__foot a,
   .foot__col li a,
   .foot__end a,
   .foot__mail {
@@ -1273,6 +1336,9 @@ html.anim .ch > span  { animation: ch-failsafe 1ms 9s forwards; }
   html.no-js .nav__burger { display: none; }
 }
 @media (max-width: 600px) {
-  .foot__mark { font-size: clamp(38px, 15vw, 70px); letter-spacing: -.02em; }
+  /* 15vw put the wordmark at 59px against a 44px headline — the same
+     inversion the desktop size had, hidden in its own breakpoint. Held below
+     the hero's 44px floor here too. */
+  .foot__mark { font-size: clamp(32px, 10vw, 42px); letter-spacing: -.02em; }
   .hero { min-height: 92svh; }
 }

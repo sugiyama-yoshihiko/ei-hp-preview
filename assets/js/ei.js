@@ -67,6 +67,69 @@
 
   /* ============================================== 1.5 inertial scroll ===== */
 
+  /* Scroll positions the wheel will not carry you through in one gesture.
+     The pinned section's two edges go in here (see the pin controller): the
+     turn from reading down the page to reading across it is a change of
+     direction, and arriving in it with the momentum of a hard flick meant the
+     cards were already sliding before the reader knew the axis had changed.
+     Parking on the edge and waiting for a fresh gesture makes entering the
+     run something the reader does rather than something that happens to them.
+
+     Only the wheel is held. Keyboard, scrollbar and in-page links pass
+     straight through — being unable to scroll is never the better failure.
+
+     Telling "the tail of the flick I just made" from "a push I am making now"
+     cannot be done on silence alone. A trackpad keeps sending events for a
+     second or more after the fingers have left, so waiting for a gap meant
+     the next real push landed inside that tail, counted as the same gesture,
+     and was swallowed — the section stopped responding at all. Three things
+     release it instead, and any one of them is enough:
+
+       · silence, for a mouse wheel, whose clicks really do stop;
+       · a delta that jumps back up. Momentum only decays, so measuring
+         against the *smallest* delta seen since parking — not the previous
+         one — separates a hand pushing again from a tail that happens to
+         jitter, and from a flick still accelerating under the finger;
+       · a stream that refuses to decay. Momentum always fades; input that
+         is still the same size after a dozen-odd events is a wheel being
+         spun or a finger still on the trackpad, so it is let through;
+       · time, as a last backstop.
+
+     Absorbed distance is deliberately not one of them: the tail of a hard
+     flick carries more than a thousand pixels, which is exactly the case
+     this exists to stop.
+
+     The edges are measured at the moment they are needed, never cached. They
+     were cached once, at layout time, and the page grows after that — the
+     opening finishes, fonts swap, images land — so the stored numbers ended
+     up more than a thousand pixels above the section they belonged to. The
+     wheel then stopped dead at a position with nothing at it, which reads as
+     the page having simply stopped responding. */
+  var detentPins = [];     // [{ el, scrolled }] — positions are read live
+  var DETENT_GAP  = 90;    // ms of silence that counts as a new gesture
+  var DETENT_RISE = 1.6;   // jump over the quietest delta that counts as a push
+  var DETENT_HOLD = 14;    // events to watch before judging a stream un-decayed
+  var DETENT_KEEP = 0.80;  // still this fraction of its first size = not momentum
+  var DETENT_MS   = 1100;  // ms held before it lets go regardless
+
+  /* The nearest detent strictly between two positions, or null. The 0.5px
+     margin keeps a detent you are already parked on from catching you again
+     and making the section impossible to enter. */
+  function detentBetween(from, to) {
+    var best = null, sy = window.pageYOffset;
+    for (var i = 0; i < detentPins.length; i++) {
+      var p = detentPins[i];
+      var top = p.el.getBoundingClientRect().top + sy;
+      for (var j = 0; j < 2; j++) {
+        var d = j ? top + p.scrolled : top;
+        if (to > from ? (from < d - 0.5 && to > d) : (from > d + 0.5 && to < d)) {
+          if (best === null || Math.abs(d - from) < Math.abs(best - from)) best = d;
+        }
+      }
+    }
+    return best;
+  }
+
   /* The page keeps its real scroll position and its real scrollbar; the wheel
      only moves a target, and each frame the actual position eases toward it.
      Everything downstream — the world switch, the ring's growth, the reveal
@@ -85,6 +148,12 @@
       var lastFrame = 0;
       var watchdog = null;
       var LERP = 0.11;           // 90% of the distance in ~0.33s; lower is heavier
+      var lastWheel = 0;         // timestamp, for telling one gesture from the next
+      var held = null;           // the detent the page is parked on, if any
+      var heldSince = 0;         // when it was parked
+      var heldMin = Infinity;    // quietest delta since; see the note on detents
+      var heldN = 0;             // events absorbed since parking
+      var heldFirst = 0;         // size of the first of them
 
       function limit() {
         return Math.max(0, doc.documentElement.scrollHeight - window.innerHeight);
@@ -134,7 +203,34 @@
         var d = e.deltaY;
         if (e.deltaMode === 1) d *= 18;                     // lines
         else if (e.deltaMode === 2) d *= window.innerHeight; // pages
-        target = clamp(target + d, 0, limit());
+
+        var now = performance.now();
+        var ad = Math.abs(d);
+
+        if (held !== null) {
+          if (ad < heldMin) heldMin = ad;
+          heldN++;
+          if (heldFirst === 0) heldFirst = ad;
+          /* See the note on `detents`: any one of these is a release. */
+          var release = (now - lastWheel) > DETENT_GAP           // silence
+                     || ad > heldMin * DETENT_RISE + 2           // pushed again
+                     || (heldN >= DETENT_HOLD &&
+                         ad > heldFirst * DETENT_KEEP)           // never decayed
+                     || (now - heldSince) > DETENT_MS;           // held long enough
+          lastWheel = now;
+          if (!release) { start(); return; }
+          held = null;
+        } else {
+          lastWheel = now;
+        }
+
+        var next = clamp(target + d, 0, limit());
+        var stop = detentBetween(target, next);
+        if (stop !== null) {
+          next = stop; held = stop; heldSince = now;
+          heldMin = Infinity; heldN = 0; heldFirst = 0;
+        }
+        target = next;
         start();
       }, { passive: false });
 
@@ -143,6 +239,8 @@
          rather than yanking it back. */
       window.addEventListener('scroll', function () {
         if (running) return;
+        /* Moved by something other than the wheel — never stay parked. */
+        held = null;
         target = current = window.pageYOffset;
       }, { passive: true });
 
@@ -475,11 +573,38 @@
      inertial easing rather than competing with it. */
 
   /* How much vertical scroll it costs to move the track one pixel sideways.
-     1.0 pins the section for its full sideways length, which is a long time
-     to spend with vertical input producing only horizontal motion — the
-     reliable way to make a reader queasy. Half that: the run is over in
-     about a screen and a half. */
-  var PIN_SPEED = 0.5;
+     1.0 is one-to-one: the track moves exactly as far sideways as the reader
+     scrolled down, which is the only ratio that feels like dragging rather
+     than being thrown.
+
+     This was 0.5, chosen to halve how long the section stays pinned — but
+     halving the pin doubles the speed, which was never the trade that was
+     meant. At 0.5 one wheel notch (~100px) threw the cards 200px sideways.
+     The run now takes about one screen of scroll instead of half of one.
+
+     PIN_EASE is the share of the run spent getting up to that rate, and the
+     same share spent coming off it. Without it the track went from still to
+     full rate at the exact pixel the section pinned, and the turn from
+     vertical to horizontal arrived as a jolt. Sideways speed now ramps in
+     over the first sixth and out over the last.
+
+     PIN_SPEED is derived, not chosen: easing both ends costs distance, so the
+     pin is lengthened by exactly what the ramps give up. That keeps the fastest
+     the track ever moves at one-to-one — easing in without this would make the
+     middle of the run *faster* than before, which is the opposite of the point. */
+  var PIN_EASE  = 0.17;
+  var PIN_SPEED = 1 / (1 - PIN_EASE);
+
+  /* Distance covered at `t` through the run, as a fraction of the whole:
+     speed ramps 0 → peak over [0, k], holds, then ramps back to 0 over
+     [1-k, 1]. Area under that speed curve is 1 by construction. */
+  function pinEase(t, k) {
+    if (k <= 0) return t;
+    var peak = 1 / (1 - k);
+    if (t < k)     return peak * t * t / (2 * k);
+    if (t > 1 - k) return 1 - peak * (1 - t) * (1 - t) / (2 * k);
+    return peak * (k / 2 + (t - k));
+  }
 
   var pins = reduced ? [] : $$('.pin');
   if (pins.length) {
@@ -488,6 +613,7 @@
 
     var layoutPins = function () {
       pinState.length = 0;
+      detentPins.length = 0;
       pins.forEach(function (pin) {
         var track = $('.pin__track', pin);
         if (!track) return;
@@ -500,6 +626,9 @@
         var scrolled = travel * PIN_SPEED;
         pin.style.height = (window.innerHeight + scrolled) + 'px';
         pinState.push({ pin: pin, track: track, travel: travel, scrolled: scrolled });
+        /* Both edges of the run, so it is entered deliberately from either
+           direction. The element, not its position: see detentPins above. */
+        if (travel > 0) detentPins.push({ el: pin, scrolled: scrolled });
       });
     };
 
@@ -508,7 +637,8 @@
         var st = pinState[i];
         if (!st.travel || !st.scrolled) continue;
         var t = clamp(-st.pin.getBoundingClientRect().top / st.scrolled, 0, 1);
-        st.track.style.transform = 'translate3d(' + (-t * st.travel).toFixed(1) + 'px,0,0)';
+        var e = pinEase(t, PIN_EASE);
+        st.track.style.transform = 'translate3d(' + (-e * st.travel).toFixed(1) + 'px,0,0)';
       }
     };
 
