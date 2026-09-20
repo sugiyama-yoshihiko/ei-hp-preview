@@ -533,6 +533,16 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
 .body { max-width: 36em; color: var(--ink); line-height: 2.0; }
 .body p { opacity: .86; }
 .dimtext { color: var(--dim); }
+
+/* A qualifier that belongs to the section, not to any one item in it — the
+   sort of line that has to be there for the section to be read honestly, and
+   has no business competing with the heading above it. */
+.note {
+  margin: 1.2em 0 0;
+  font-size: var(--fs-small);
+  line-height: 1.9;
+  color: var(--dim);
+}
 .small { font-size: var(--fs-small); line-height: 1.85; }
 .mono { font-family: var(--f-en); letter-spacing: .08em; }
 .num { font-family: var(--f-num); font-variant-numeric: tabular-nums; }
