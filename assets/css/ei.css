@@ -750,7 +750,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
      reads as part of the page rather than as something pinned to the glass.
      100% here is .wrap's width, so the last term is the gap between the
      column and the viewport: computed, not guessed, correct at every width. */
-  right: calc(var(--rail) + var(--gutter) - (100vw - 100%) / 2);
+  right: calc(var(--rail) + var(--gutter) * 2 - (100vw - 100%) / 2);
   margin: 0;
   writing-mode: vertical-rl;
   font-family: var(--f-mincho);
