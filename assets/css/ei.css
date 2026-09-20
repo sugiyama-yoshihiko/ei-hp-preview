@@ -709,6 +709,17 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   max-width: 24em;          /* 24 Japanese characters per line, so the two
                                lines break where the sentence does */
 }
+/* The first screen said what the company is and gave the reader nowhere to
+   go with it: the next entry point was a screen and a half further down.
+   Two, in the buttons the rest of the page already uses — the evidence and
+   the conversation, in that order. */
+.hero__acts {
+  margin-top: clamp(30px, 4vw, 52px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+}
+
 /* Was "01 Capital  02 Technology  03 People" in the Latin face. The numbers
    claimed a sequence that does not exist — the three are simultaneous, not
    steps — and the same 01–04 marks are used on the Works cards for something
@@ -963,6 +974,14 @@ html.navin .veil { animation: veil-open 720ms var(--e-out) both; }
    divides four, so the block closes. */
 @media (min-width: 860px) {
   .cards--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* The page says one of these three is the business and the other two sit
+     beside it, and then set all three the same size — so the layout said
+     they were equals and the sentence above it said they were not. The first
+     card takes the full width; the other two share the row under it. Area is
+     the only part of this the copy cannot carry on its own. */
+  .cards--lead { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cards--lead > :first-child { grid-column: 1 / -1; }
 }
 .card {
   background-color: var(--ground);

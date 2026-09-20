@@ -120,7 +120,10 @@
       if (r.bottom < -40 || r.top > H + 40) continue;
       var name = bandEls[i].getAttribute('data-world');
       var w = WORLDS[name] || WORLDS.paper;
-      bands.push({ top: r.top, bottom: r.bottom, w: w });
+      /* Sections that exist to be read say so, and the field goes quiet over
+         them. See QUIET. */
+      var q = bandEls[i].getAttribute('data-field') === 'quiet';
+      bands.push({ top: r.top, bottom: r.bottom, w: w, quiet: q });
     }
   }
 
@@ -286,6 +289,16 @@
   var FOG_BACK  = 0.45;   // extra fade on the far side of the chain
   var FADE_BASE = 0.80;   // light at the top of the page
   var FADE_DROP = 0.62;   // how much of it is given up to the copy on scroll
+
+  /* What is left of a point's light over a section marked data-field="quiet".
+     Fading on scroll alone was not enough: the chain gains links as the page
+     is read, so by the time the reader reaches the prose there are more
+     points on screen at a lower alpha than there were behind the headline,
+     and measured coverage over the body copy came out three times what it
+     was over the hero. The scroll fade sets the overall level; this is what
+     makes the difference between a section that is the field's subject and
+     one that merely has the field behind it. */
+  var QUIET = 0.34;
   var DUST_FOCUS = 0.40;  // the ambient haze is diffuse already; defocusing it
                           // as hard as the ring just empties the frame
 
@@ -513,6 +526,7 @@
       if (!band) continue;
 
       var a = fade * born * (0.35 + 0.65 * f * 0.55) * band.w.boost;
+      if (band.quiet) a *= QUIET;
       var sz = pr[i2] * f * (dpr > 1 ? 1.0 : 1.35) * ROUND_K;
       if (caught && charge > 0.01) a *= 1 + caught * charge * CHARGE_GLOW;
 

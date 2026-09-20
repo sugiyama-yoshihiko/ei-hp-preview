@@ -36,7 +36,7 @@
     h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
   })(document);
 </script>
-<link rel="stylesheet" href="assets/css/ei.css?v=20260920-76">
+<link rel="stylesheet" href="assets/css/ei.css?v=20260920-77">
 <script>
   /* Marks an arrival that came from an outgoing page transition, before the
      first paint, so the circle can open with a pure CSS animation. No JS is
@@ -111,7 +111,7 @@
       <p class="hero__sub" data-rise style="--d:120ms"><span class="cl">AI導入、DX相談、事業承継。</span><span class="cl">実装のプロフェッショナルが、直接お答えします。</span></p>
     </div>
   </section>
-  <section class="sec" data-world="paper" data-mark="Inquiry">
+  <section class="sec" data-world="paper" data-field="quiet" data-mark="Inquiry">
     <div class="wrap">
       <div class="grid">
         <div>
@@ -154,9 +154,15 @@
               <label for="subject">件名 <span aria-hidden="true">*</span></label>
               <select id="subject" name="subject" required>
                 <option value="">選択してください</option>
-                <option value="ai">AI導入</option>
-                <option value="dx">DX相談</option>
-                <option value="ma">事業承継</option>
+                <!-- サイトが掲げている事業と一対一で並べる。主力の資本参加と
+                     ファンド連携の受け皿が無く、「その他」に流れていた。
+                     value は recruit を含め既存のものを維持（?subject= の
+                     ディープリンクが値で一致を見ているため）。 -->
+                <option value="capital">資本参加・事業承継</option>
+                <option value="fund">協業・ファンド連携</option>
+                <option value="ai">AI導入・システム開発</option>
+                <option value="training">人材育成・研修</option>
+                <option value="advisory">技術顧問</option>
                 <option value="recruit">採用</option>
                 <option value="other">その他</option>
               </select>
@@ -181,7 +187,7 @@
     </div>
   </section>
 
-  <section class="sec" data-world="ink" data-mark="Access" id="access">
+  <section class="sec" data-world="ink" data-field="quiet" data-mark="Access" id="access">
     <div class="wrap">
       <div class="grid">
         <div>
@@ -278,7 +284,7 @@
   "email": "info@ei-and.co.jp"
 }
 </script>
-<script src="assets/js/ei.js?v=20260920-76" defer></script>
-<script src="assets/js/field.js?v=20260920-76" defer></script>
+<script src="assets/js/ei.js?v=20260920-77" defer></script>
+<script src="assets/js/field.js?v=20260920-77" defer></script>
 </body>
 </html>
