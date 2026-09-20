@@ -719,6 +719,42 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   max-width: 24em;          /* 24 Japanese characters per line, so the two
                                lines break where the sentence does */
 }
+/* A line of vertical mincho down the right of the opening.
+
+   Ten separate corrections had each taken something out of this page — an
+   English kicker, a row of three words, a second sentence, sixty per cent off
+   the wordmark, eighty off the Works numerals — and every one of them was
+   right on its own. Together they left the page thin. This puts the weight
+   back somewhere none of it was taken from: the one setting the site had not
+   used, in the face it keeps for reasoning rather than for claims.
+
+   It is positioned against .wrap, never against the section. A position,
+   transform or translate on a [data-world] section lifts its whole subtree
+   over the fixed canvas and the ring disappears — see the note at the top of
+   this file. .wrap is already relative and already above the canvas. */
+.hero__vert {
+  position: absolute;
+  top: 0;
+  /* Out to the same inset the rail keeps on the other side, so the opening is
+     framed by two vertical lines: the Latin marker left, the Japanese right.
+     100% here is .wrap's width, so the term is the gap between the column and
+     the viewport — computed, not guessed, and correct at every width. */
+  right: calc(var(--rail) - (100vw - 100%) / 2);
+  margin: 0;
+  writing-mode: vertical-rl;
+  font-family: var(--f-mincho);
+  font-weight: 300;
+  font-size: clamp(15px, 1.4vw, 20px);
+  letter-spacing: .38em;
+  line-height: 1;
+  color: var(--dim);
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* Below the pinned-column width the right margin is gone and it would sit on
+   the copy. The opening carries itself on a phone. */
+@media (max-width: 899.98px) { .hero__vert { display: none; } }
+
 /* The first screen said what the company is and gave the reader nowhere to
    go with it: the next entry point was a screen and a half further down.
    Two, in the buttons the rest of the page already uses — the evidence and
