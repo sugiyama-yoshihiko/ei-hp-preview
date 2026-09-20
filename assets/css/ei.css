@@ -480,6 +480,17 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   color: var(--ink);
   margin: 0 0 .9em;
 }
+/* The same slot, holding Japanese. The Latin face has no kana or kanji, so
+   the text fell back to whatever the browser had and kept .22em of tracking
+   and an uppercase transform meant for capitals — a setting chosen for a
+   script it was not being used for. */
+.hx--jp {
+  font-family: var(--f-jp);
+  font-weight: 500;
+  font-size: clamp(17px, 1.6vw, 22px);
+  letter-spacing: .1em;
+  text-transform: none;
+}
 .hx--xl { font-size: var(--fs-lg); letter-spacing: .1em; }
 
 /* The Japanese statement is the headline of every block. */
@@ -911,7 +922,12 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
 
 .wcard {
   flex: 0 0 clamp(258px, 31vw, 400px);
-  min-height: clamp(300px, 44vh, 430px);
+  /* Was clamp(300px, 44vh, 430px). Each card holds a mark, a label and one
+     line of Japanese — between 31 and 53 characters — and at that height the
+     card was measured 50 to 63 per cent empty. The height was set to make the
+     run feel substantial; what it actually did was make every card look like
+     something had failed to load. */
+  min-height: clamp(232px, 32vh, 320px);
   border: 1px solid var(--line);
   padding: clamp(22px, 2.4vw, 36px);
   display: grid;
