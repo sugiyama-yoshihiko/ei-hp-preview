@@ -858,7 +858,13 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   border: 1px solid var(--line);
   padding: clamp(22px, 2.4vw, 36px);
   display: grid;
-  align-content: space-between;
+  /* Number, description, link — the middle row takes the slack.
+     align-content: space-between shared the slack between *both* gaps
+     instead, so a card whose description ran to one line pushed that
+     description down by half the difference and it no longer lined up with
+     its neighbours'. Pinning the outer rows and letting only the middle one
+     stretch keeps every card's text starting on the same line. */
+  grid-template-rows: auto 1fr auto;
   gap: 18px;
   color: var(--ink);
   /* Not transparent: the field ran straight through the cards and the
