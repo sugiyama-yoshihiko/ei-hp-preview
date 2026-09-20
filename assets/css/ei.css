@@ -746,11 +746,11 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
 .hero__vert {
   position: absolute;
   top: 0;
-  /* Out to the same inset the rail keeps on the other side, so the opening is
-     framed by two vertical lines: the Latin marker left, the Japanese right.
-     100% here is .wrap's width, so the term is the gap between the column and
-     the viewport — computed, not guessed, and correct at every width. */
-  right: calc(var(--rail) - (100vw - 100%) / 2);
+  /* Set in from the right edge — past the rail's own inset by a gutter, so it
+     reads as part of the page rather than as something pinned to the glass.
+     100% here is .wrap's width, so the last term is the gap between the
+     column and the viewport: computed, not guessed, correct at every width. */
+  right: calc(var(--rail) + var(--gutter) - (100vw - 100%) / 2);
   margin: 0;
   writing-mode: vertical-rl;
   font-family: var(--f-mincho);
