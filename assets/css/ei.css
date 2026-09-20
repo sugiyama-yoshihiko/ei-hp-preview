@@ -679,6 +679,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
    -------------------------------------------------------------------------- */
 
 .hero {
+  min-height: 100vh;
   min-height: 100svh;
   display: grid;
   align-content: center;
@@ -727,7 +728,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
 }
 
 /* Sub-page hero: shorter, and the Latin name takes the display role. */
-.hero--sub { min-height: 74svh; }
+.hero--sub { min-height: 74vh; min-height: 74svh; }
 .hero--sub .hero__head {
   font-family: var(--f-en); font-weight: 400;
   font-size: var(--fs-xl); letter-spacing: .06em; text-transform: uppercase;
@@ -841,7 +842,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
   will-change: transform;
 }
 @media (min-width: 900px) {
-  .pin__stage { position: sticky; top: 0; height: 100svh; }
+  .pin__stage { position: sticky; top: 0; height: 100vh; height: 100svh; }
 }
 /* Below that, it is a plain swipe strip — touch already does this well. */
 @media (max-width: 899.98px) {
@@ -864,6 +865,7 @@ html.intro .railbar { animation: intro-failsafe-rail 1ms 7s forwards; }
      description had particles crossing it. Mostly opaque keeps the card a
      surface you read off, while the last sixth still shows the field moving
      behind it, which is the part worth keeping. */
+  background-color: var(--ground);
   background-color: color-mix(in srgb, var(--ground) 84%, transparent);
   transition: background-color 460ms var(--e-out), border-color 460ms var(--e-out);
 }
@@ -975,6 +977,14 @@ html.navin .veil { animation: veil-open 720ms var(--e-out) both; }
   font-family: var(--f-en); font-size: clamp(17px, 1.6vw, 21px);
   font-weight: 500;
   text-transform: uppercase; letter-spacing: .1em; line-height: 1.35; margin: 0;
+}
+/* A card title that is a Japanese proper noun. The Latin face has no kana or
+   kanji, so it would fall back silently and set the name in whatever the
+   browser picked; uppercase and wide tracking are meaningless there too. */
+.card__en--jp {
+  font-family: var(--f-jp);
+  text-transform: none;
+  letter-spacing: .04em;
 }
 .card__jp { font-size: var(--fs-small); color: var(--dim); margin: 0; line-height: 1.8; }
 .card__txt { font-size: var(--fs-small); line-height: 1.95; margin: 6px 0 0; opacity: .88; }
@@ -1340,5 +1350,5 @@ html.anim .ch > span  { animation: ch-failsafe 1ms 9s forwards; }
      inversion the desktop size had, hidden in its own breakpoint. Held below
      the hero's 44px floor here too. */
   .foot__mark { font-size: clamp(32px, 10vw, 42px); letter-spacing: -.02em; }
-  .hero { min-height: 92svh; }
+  .hero { min-height: 92vh; min-height: 92svh; }
 }
