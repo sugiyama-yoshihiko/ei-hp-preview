@@ -195,3 +195,7 @@ main :is(.text-link,.profile-list dt,.profile-list dd){ border-color: var(--rule
 .contact__form button[type=submit]{
   background: #fff;
 }
+
+/* [6] ヘッダーは不透明にする。rgba(255,255,255,.96) だと4%透けて、
+   糸がヘッダー帯を横切って見えていた。スティッキーバーなので完全に隠す。 */
+.nav{ background:#fff; }
