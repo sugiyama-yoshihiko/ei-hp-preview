@@ -188,12 +188,39 @@
     return out;
   }
 
+  /* 面で塗るUI部品（ボタン・入力欄）は糸を完全に切る。糸を前面に置くため
+     CSSの背景では隠せないので、canvas 側で不透明に消す。 */
+  var _ucache=null,_uat=0,_uy=-1;
+  function uiRects(){
+    var now=(window.performance&&performance.now())?performance.now():Date.now();
+    var sy=window.scrollY||window.pageYOffset||0;
+    if(_ucache&&now-_uat<100&&Math.abs(sy-_uy)<2) return _ucache;
+    var out=[],vw=innerWidth,vh=innerHeight;
+    var els=document.querySelectorAll('.btn, .form__field input, .form__field textarea, .form__field select, .menu, iframe');
+    for(var i=0;i<els.length;i++){
+      var e=els[i];
+      if(e.type==='checkbox') continue;
+      var cs=getComputedStyle(e);
+      if(cs.visibility==='hidden'||cs.display==='none') continue;
+      var b=e.getBoundingClientRect();
+      if(b.width<4||b.height<4) continue;
+      if(b.bottom<-4||b.top>vh+4||b.right<-4||b.left>vw+4) continue;
+      out.push([b.left,b.top,b.width,b.height]);
+    }
+    _ucache=out;_uat=now;_uy=sy;
+    return out;
+  }
+
   function clearOverText(){
     try{
       var r=textRects(); if(!r.length) return;
-      var a=fadeAmount(); if(a<=0) return;
+      var a=fadeAmount();
       var op=ctx.globalCompositeOperation, ga=ctx.globalAlpha;
       ctx.globalCompositeOperation='destination-out';
+      ctx.globalAlpha=1; ctx.fillStyle='#000';
+      var U=uiRects();
+      for(var k=0;k<U.length;k++) ctx.fillRect(U[k][0],U[k][1],U[k][2],U[k][3]);
+      if(a<=0){ ctx.globalAlpha=ga; ctx.globalCompositeOperation=op; return; }
       ctx.globalAlpha=a;
       ctx.fillStyle='#000';
       for(var i=0;i<r.length;i++) ctx.fillRect(r[i][0],r[i][1],r[i][2],r[i][3]);
