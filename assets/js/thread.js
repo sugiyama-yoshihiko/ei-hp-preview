@@ -261,6 +261,10 @@
   function paint(){
     var path=partialPath();ctx.clearRect(0,0,w,h);
     var width=w<600?.85:1.05;
+    /* 糸が交差する箇所の白い縁取り。太いと「途切れ」に見えるので控えめにする。
+       --thread-halo で調整可（px）。 */
+    var halo=(function(){var v=parseFloat(getComputedStyle(document.documentElement)
+      .getPropertyValue('--thread-halo')); return isNaN(v)?1.4:Math.max(0,v);})();
     ctx.lineCap='round';ctx.lineJoin='round';
     if(entering()&&!paused){paintEntrance(path);clearOverText();return;}
     function stroke(points,color,size){
@@ -275,9 +279,9 @@
     }
     stroke(path,'#AF3E47',width);
     var blue=partialPath(blueRoute);
-    stroke(blue,'#fff',width+2.4);stroke(blue,'#536F91',width);
+    stroke(blue,'#fff',width+halo);stroke(blue,'#536F91',width);
     var key=(reduced.matches&&paused)?d-h:phase;
-    crossings.forEach(function(c,i){if(i%2||key<c.key)return;var bridge=[{x:c.x-c.dx*3.5,y:c.y-c.dy*3.5},{x:c.x+c.dx*3.5,y:c.y+c.dy*3.5}];stroke(bridge,'#fff',width+2.4);stroke(bridge,'#AF3E47',width);});
+    crossings.forEach(function(c,i){if(i%2||key<c.key)return;var bridge=[{x:c.x-c.dx*3.5,y:c.y-c.dy*3.5},{x:c.x+c.dx*3.5,y:c.y+c.dy*3.5}];stroke(bridge,'#fff',width+halo);stroke(bridge,'#AF3E47',width);});
     clearOverText();
   }
   function schedule(){if(frameId===null&&!document.hidden)frameId=requestAnimationFrame(frame);}
