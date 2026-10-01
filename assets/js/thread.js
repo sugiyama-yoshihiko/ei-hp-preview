@@ -264,7 +264,7 @@
     /* 糸が交差する箇所の白い縁取り。太いと「途切れ」に見えるので控えめにする。
        --thread-halo で調整可（px）。 */
     var halo=(function(){var v=parseFloat(getComputedStyle(document.documentElement)
-      .getPropertyValue('--thread-halo')); return isNaN(v)?1.4:Math.max(0,v);})();
+      .getPropertyValue('--thread-halo')); return isNaN(v)?0.9:Math.max(0,v);})();
     ctx.lineCap='round';ctx.lineJoin='round';
     if(entering()&&!paused){paintEntrance(path);clearOverText();return;}
     function stroke(points,color,size){
