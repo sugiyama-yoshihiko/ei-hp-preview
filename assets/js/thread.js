@@ -124,7 +124,7 @@
   function textRects(){
     var now=(window.performance&&performance.now())?performance.now():Date.now();
     var sy=window.scrollY||window.pageYOffset||0;
-    if(_tcache&&now-_tat<100&&Math.abs(sy-_ty)<2) return _tcache;
+    if(_tcache&&now-_tat<60&&Math.abs(sy-_ty)<2) return _tcache;
     var out=[],vw=innerWidth,vh=innerHeight;
     var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),n;
     while((n=tw.nextNode())){
@@ -160,7 +160,7 @@
   function lineShapes(){
     var now=(window.performance&&performance.now())?performance.now():Date.now();
     var sy=window.scrollY||window.pageYOffset||0;
-    if(_lcache&&now-_lat<100&&Math.abs(sy-_ly)<2) return _lcache;
+    if(_lcache&&now-_lat<60&&Math.abs(sy-_ly)<2) return _lcache;
     var out=[],vw=innerWidth,vh=innerHeight;
     var all=document.querySelectorAll('main *, footer *');
     for(var i=0;i<all.length;i++){
@@ -196,7 +196,7 @@
   function uiRects(){
     var now=(window.performance&&performance.now())?performance.now():Date.now();
     var sy=window.scrollY||window.pageYOffset||0;
-    if(_ucache&&now-_uat<100&&Math.abs(sy-_uy)<2) return _ucache;
+    if(_ucache&&now-_uat<60&&Math.abs(sy-_uy)<2) return _ucache;
     var out=[],vw=innerWidth,vh=innerHeight;
     var els=document.querySelectorAll('.btn, .form__field input, .form__field textarea, .form__field select, .menu, iframe');
     for(var i=0;i<els.length;i++){
@@ -285,6 +285,44 @@
     clearOverText();
   }
   function schedule(){if(frameId===null&&!document.hidden)frameId=requestAnimationFrame(frame);}
+  /* .reveal などスクロール後に現れる文字は、マスクのキャッシュを取った時点では
+     まだ非表示で対象から漏れる。その後 paint も止まるため、糸が文字の上に
+     濃いまま残っていた。表示が変わる契機でキャッシュを捨てて描き直す。 */
+  var maskUntil=0;
+  function invalidateMasks(){ _tcache=null; _lcache=null; _ucache=null; }
+  function nudge(ms){
+    invalidateMasks();
+    var now=(window.performance&&performance.now())?performance.now():Date.now();
+    maskUntil=Math.max(maskUntil, now+(ms||0));
+    schedule();
+  }
+  document.addEventListener('transitionend', function(){ nudge(180); }, true);
+  document.addEventListener('animationend',  function(){ nudge(180); }, true);
+  window.addEventListener('scroll',  function(){ nudge(1600); }, {passive:true});
+  window.addEventListener('resize',  function(){ nudge(800); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) nudge(400); });
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ nudge(400); });
+  /* 地図の iframe や画像が後から読み込まれると、ページ高が変わって文字が移動する。
+     スクロールもアニメーションも起きないため上の契機に当たらず、マスクだけが
+     古い位置のまま残って糸が文字に重なっていた。レイアウト変化を直接監視する。 */
+  if(window.ResizeObserver){
+    var ro=new ResizeObserver(function(){ nudge(400); });
+    try{ ro.observe(document.body); }catch(e){}
+    var mainEl=document.querySelector('main'); if(mainEl){ try{ ro.observe(mainEl); }catch(e){} }
+  }
+  window.addEventListener('load', function(){ nudge(1200); });
+  document.addEventListener('load', function(ev){
+    if(ev.target&&/^(IMG|IFRAME|VIDEO)$/.test(ev.target.tagName)) nudge(600);
+  }, true);
+  /* 念のための保険: 読み込み直後の数秒は、ページ高の変化を定期的に見張る */
+  (function(){
+    var lastH=document.documentElement.scrollHeight, n=0;
+    var iv=setInterval(function(){
+      var hh=document.documentElement.scrollHeight;
+      if(hh!==lastH){ lastH=hh; nudge(400); }
+      if(++n>20) clearInterval(iv);
+    },400);
+  })();
   function frame(now){
     frameId=null;var dt=lastTime?Math.min(40,now-lastTime):16;lastTime=now;
     if(entering()&&!paused){
@@ -299,7 +337,7 @@
       if(Math.abs(target-phase)<.15)phase=target;
     }
     paint();
-    if(!paused&&(entering()||Math.abs(target-phase)>.15))schedule();else lastTime=0;
+    if(!paused&&(entering()||Math.abs(target-phase)>.15||now<maskUntil))schedule();else lastTime=0;
   }
   function scroll(){camera=window.scrollY;target=clamp(camera,0,d-h);if(camera>8)finishEntrance();schedule();}
   function state(){
