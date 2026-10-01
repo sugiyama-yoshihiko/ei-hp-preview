@@ -156,7 +156,8 @@ body[data-page=index] .hero-bottom{padding-right:150px}
    濃さは --ink-a（文字）と --rule-* （線）で調整する。 */
 
 :root{
-  --thread-fade: .88;                  /* 文字の上で糸をどれだけ薄くするか 1=消す 0=そのまま */
+  --thread-fade: .88;                  /* 文字の上で糸を薄くする量 */
+  --thread-fade-line: .45;             /* 罫線・円の輪郭の上で薄くする量（細い線に強い減衰は切断に見える） */                  /* 文字の上で糸をどれだけ薄くするか 1=消す 0=そのまま */
   --ink-a: .88;                        /* 文字の不透明度。下げるほど糸が濃く透ける */
   --ink:   rgba(32,33,32,var(--ink-a));
   --muted: rgba(75,33,57,var(--ink-a));

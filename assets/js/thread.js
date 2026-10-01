@@ -140,7 +140,7 @@
         if(b.width<1||b.height<1) continue;
         if(b.bottom<-4||b.top>vh+4||b.right<-4||b.left>vw+4) continue;
         var inset=b.height*0.10;
-        out.push([b.left-1.5,b.top+inset-1,b.width+3,b.height-inset*2+2]);
+        out.push([b.left-1.5,b.top+inset-1,b.width+3,b.height-inset*2+2, !!pe.closest('.nav,.menu')]);
       }
     }
     _tcache=out;_tat=now;_ty=sy;
@@ -149,10 +149,12 @@
   /* 文字の行ボックス位置で糸を薄くする（消しきらない）。
      濃さは CSS の --thread-fade で調整: 1 = 完全に消す / 0 = 何もしない。
      ブロック要素の背景ではなく行ボックス単位なので、文字のない余白には及ばない。 */
-  function fadeAmount(){
-    var v=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--thread-fade'));
-    return isNaN(v)?0.88:Math.max(0,Math.min(1,v));
+  function cssNum(name,def){
+    var v=parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name));
+    return isNaN(v)?def:Math.max(0,Math.min(1,v));
   }
+  function fadeAmount(){ return cssNum('--thread-fade',0.88); }      /* 文字 */
+  function lineFadeAmount(){ return cssNum('--thread-fade-line',0.45); } /* 罫線・円の輪郭 */
   /* 罫線・円の輪郭も同じ半透明にする。円は矩形では沿えないので円弧として扱う。 */
   var _lcache=null,_lat=0,_ly=-1;
   function lineShapes(){
@@ -176,13 +178,13 @@
       var isCircle = (cs.borderTopLeftRadius.indexOf('%')>=0 || radius>=Math.min(b.width,b.height)/2-2)
                      && tw2>0 && !trans(cs.borderTopColor);
       if(isCircle){
-        out.push(['e', b.left+b.width/2, b.top+b.height/2, b.width/2-tw2/2, b.height/2-tw2/2, tw2+3]);
+        out.push(['e', b.left+b.width/2, b.top+b.height/2, b.width/2-tw2/2, b.height/2-tw2/2, tw2+1.5, !!e.closest('.nav,.menu')]);
         continue;
       }
-      if(tw2>0&&!trans(cs.borderTopColor))    out.push(['r', b.left, b.top-1.5, b.width, tw2+3]);
-      if(bw>0&&!trans(cs.borderBottomColor))  out.push(['r', b.left, b.bottom-bw-1.5, b.width, bw+3]);
-      if(lw>0&&!trans(cs.borderLeftColor))    out.push(['r', b.left-1.5, b.top, lw+3, b.height]);
-      if(rw>0&&!trans(cs.borderRightColor))   out.push(['r', b.right-rw-1.5, b.top, rw+3, b.height]);
+      if(tw2>0&&!trans(cs.borderTopColor))    out.push(['r', b.left, b.top-0.75, b.width, tw2+1.5, !!e.closest('.nav,.menu')]);
+      if(bw>0&&!trans(cs.borderBottomColor))  out.push(['r', b.left, b.bottom-bw-0.75, b.width, bw+1.5, !!e.closest('.nav,.menu')]);
+      if(lw>0&&!trans(cs.borderLeftColor))    out.push(['r', b.left-0.75, b.top, lw+1.5, b.height, !!e.closest('.nav,.menu')]);
+      if(rw>0&&!trans(cs.borderRightColor))   out.push(['r', b.right-rw-0.75, b.top, rw+1.5, b.height, !!e.closest('.nav,.menu')]);
     }
     _lcache=out;_lat=now;_ly=sy;
     return out;
@@ -205,7 +207,7 @@
       var b=e.getBoundingClientRect();
       if(b.width<4||b.height<4) continue;
       if(b.bottom<-4||b.top>vh+4||b.right<-4||b.left>vw+4) continue;
-      out.push([b.left,b.top,b.width,b.height]);
+      out.push([b.left,b.top,b.width,b.height, !!e.closest('.nav,.menu')]);
     }
     _ucache=out;_uat=now;_uy=sy;
     return out;
@@ -214,26 +216,44 @@
   function clearOverText(){
     try{
       var r=textRects(); if(!r.length) return;
-      var a=fadeAmount();
+      var a=fadeAmount(), la=lineFadeAmount();
       var op=ctx.globalCompositeOperation, ga=ctx.globalAlpha;
-      ctx.globalCompositeOperation='destination-out';
-      ctx.globalAlpha=1; ctx.fillStyle='#000';
-      var U=uiRects();
-      for(var k=0;k<U.length;k++) ctx.fillRect(U[k][0],U[k][1],U[k][2],U[k][3]);
-      if(a<=0){ ctx.globalAlpha=ga; ctx.globalCompositeOperation=op; return; }
-      ctx.globalAlpha=a;
-      ctx.fillStyle='#000';
-      for(var i=0;i<r.length;i++) ctx.fillRect(r[i][0],r[i][1],r[i][2],r[i][3]);
-      var L=lineShapes();
-      for(var j=0;j<L.length;j++){
-        var q=L[j];
-        if(q[0]==='r'){ ctx.fillRect(q[1],q[2],q[3],q[4]); }
-        else{
-          ctx.beginPath();
-          ctx.ellipse(q[1],q[2],Math.max(0,q[3]),Math.max(0,q[4]),0,0,Math.PI*2);
-          ctx.lineWidth=q[5]; ctx.strokeStyle='#000'; ctx.stroke();
+      var L=lineShapes(), U=uiRects();
+
+      /* ヘッダーの裏へスクロールした文字は見えていないので、そこで糸を薄くすると
+         薄さだけがヘッダー帯に取り残される。コンテンツ側の処理はヘッダー下端から
+         下だけに限定する。ヘッダー自身のナビ文字は見えているので対象のまま。
+         navBottom は毎フレーム取り直すので、戻したときも自動で復帰する。 */
+      var navEl=document.querySelector('.nav'), navBottom=0;
+      if(navEl){
+        var nb=navEl.getBoundingClientRect(), np=getComputedStyle(navEl).position;
+        if((np==='sticky'||np==='fixed')&&nb.bottom>0) navBottom=Math.min(nb.bottom,h);
+      }
+
+      function drawSet(header){
+        ctx.globalAlpha=1; ctx.fillStyle='#000';
+        for(var k=0;k<U.length;k++) if(!!U[k][4]===header) ctx.fillRect(U[k][0],U[k][1],U[k][2],U[k][3]);
+        if(a<=0&&la<=0) return;
+        ctx.globalAlpha=a; ctx.fillStyle='#000';
+        for(var i2=0;i2<r.length;i2++) if(!!r[i2][4]===header) ctx.fillRect(r[i2][0],r[i2][1],r[i2][2],r[i2][3]);
+        ctx.globalAlpha=la;
+        for(var j2=0;j2<L.length;j2++){
+          var q=L[j2]; if(!!q[q.length-1]!==header) continue;
+          if(q[0]==='r'){ ctx.fillRect(q[1],q[2],q[3],q[4]); }
+          else{
+            ctx.beginPath();
+            ctx.ellipse(q[1],q[2],Math.max(0,q[3]),Math.max(0,q[4]),0,0,Math.PI*2);
+            ctx.lineWidth=q[5]; ctx.strokeStyle='#000'; ctx.stroke();
+          }
         }
       }
+
+      ctx.globalCompositeOperation='destination-out';
+      drawSet(true);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0,navBottom,w,Math.max(0,h-navBottom)); ctx.clip();
+      drawSet(false);
+      ctx.restore();
       ctx.globalAlpha=ga;
       ctx.globalCompositeOperation=op;
     }catch(e){}
