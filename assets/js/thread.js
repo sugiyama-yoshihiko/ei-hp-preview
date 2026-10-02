@@ -11,6 +11,7 @@
   var w = 0, h = 0, d = 0, ratio = 1, route = [], phase = 0, target = 0, camera = 0;
   var paused = reduced.matches, ready = false, frameId = null, lastTime = 0;
   var heroHeight = 0, blueRoute=[], crossings=[], knotStart=0, knotEnd=0;
+  var tipHold=0;   /* 初期表示で先端を保持する位置（キー） */
   var entrance=window.eiEntrance,entranceStart=null,entranceProgress=0;
   function easing(x){x=clamp(x,0,1);return x*x*x*(x*(x*6-15)+10);}
   function entering(){return isHome&&entrance&&entrance.active;}
@@ -38,8 +39,16 @@
       // Only the final stretch leaves the centre; cubic onset keeps curvature continuous.
       var exit=Math.max(0,(t-.88)/.12);
       if(ending)x+=(.5-x)*easing(exit);else x+=.64*exit*exit*exit;
+      /* 最初の区間だけロゴの位置へ寄せる。以降は従来の曲線に戻る。 */
+
       route.push({x:x*w,y:y,z:0,key:ending?firstKey+(knotStart-firstKey)*t:(y-lead)/(lastY-lead)*maxKey});
     }
+    /* 開いた直後だけ、糸の先端を画面下より先の位置で保持する。
+       キーは一切変えないので進む速さは元のまま。本来の進行がこの位置に
+       追いついた時点で保持は外れ、以降は完全に従来どおりの挙動に戻る。
+       スクロールを始めると先端が画面下から上がって現れる。 */
+    tipHold=0;
+    for(var si=0;si<route.length;si++){ if(route[si].y>=h*1.12){ tipHold=Math.max(0,route[si].key); break; } }
     if(!ending)return;
     var cx=w*.5,s=Math.min(58,w*.12),redTail=[{x:cx,y:lastY}],blueTail=[];
     // Each cubic shares a tangent with its neighbour. Only the leading ends advance.
@@ -87,7 +96,7 @@
   }
   function partialPath(source){
     source=source||route;
-    var key=(reduced.matches&&paused)?d-h:phase, list=[];
+    var key=(reduced.matches&&paused)?d-h:Math.max(phase,tipHold), list=[];
     for(var i=0;i<source.length;i++){
       var p=source[i];
       if(p.key<=key){list.push(p);continue;}
@@ -98,7 +107,13 @@
   }
   function paintEntrance(path){
     if(path.length<2)return;
-    var p=entranceProgress,q=easing((p-.46)/.49),middle=.55;
+    /* 糸はパスの先頭（ヘッダーより上）から現れ、上から下へ伸びる。
+       middle=.55 だとパスの中央に点が出て上下へ広がるため、
+       「上から下へ進む」という原則から外れていた。 */
+    /* middle=0: 糸はパスの先頭（ヘッダーより上）から現れ、上から下へ伸びる。
+       成長の開始も早める。元は p>.46（約1.1秒後）からで、それまで起点の点は
+       画面外にあり何も見えず、「上から下へ進む」動きの前に空白があった。 */
+    var p=entranceProgress,q=easing((p-.28)/.70),middle=0;
     function at(t){var n=clamp(t,0,1)*(path.length-1),i=Math.floor(n),a=path[i],b=path[Math.min(i+1,path.length-1)],f=n-i;return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f-camera};}
     var centre=at(middle),inhale=easing((p-.07)/.16),exhale=easing((p-.23)/.13);
     var radius=1.8+2.4*inhale-2.7*exhale;
@@ -143,6 +158,14 @@
         out.push([b.left-1.5,b.top+inset-1,b.width+3,b.height-inset*2+2, !!pe.closest('.nav,.menu')]);
       }
     }
+    /* ロゴは画像なので文字走査に乗らない。糸がロゴの文字の後ろから出てくるよう
+       ここで明示的に対象へ加える（ヘッダー扱いなのでクリップしない）。 */
+    var lg=document.querySelector('.nav__logo img')||document.querySelector('.nav__logo');
+    if(lg){ var lb=lg.getBoundingClientRect();
+      /* ロゴ全体を対象にすると、糸がロゴの下端から出ているように見えてしまう。
+         糸が通る「nee」の範囲だけ薄くして、字形の後ろから出るように見せる。 */
+      if(lb.width>0&&lb.bottom>-4&&lb.top<vh+4)
+        out.push([lb.left+lb.width*.455,lb.top+lb.height*.10,lb.width*.155,lb.height*.80, true]); }
     _tcache=out;_tat=now;_ty=sy;
     return out;
   }
@@ -264,7 +287,7 @@
     /* 糸が交差する箇所の白い縁取り。太いと「途切れ」に見えるので控えめにする。
        --thread-halo で調整可（px）。 */
     var halo=(function(){var v=parseFloat(getComputedStyle(document.documentElement)
-      .getPropertyValue('--thread-halo')); return isNaN(v)?0.9:Math.max(0,v);})();
+      .getPropertyValue('--thread-halo')); return isNaN(v)?0.6:Math.max(0,v);})();
     ctx.lineCap='round';ctx.lineJoin='round';
     if(entering()&&!paused){paintEntrance(path);clearOverText();return;}
     function stroke(points,color,size){
@@ -280,7 +303,7 @@
     stroke(path,'#AF3E47',width);
     var blue=partialPath(blueRoute);
     stroke(blue,'#fff',width+halo);stroke(blue,'#536F91',width);
-    var key=(reduced.matches&&paused)?d-h:phase;
+    var key=(reduced.matches&&paused)?d-h:Math.max(phase,tipHold);
     crossings.forEach(function(c,i){if(i%2||key<c.key)return;var bridge=[{x:c.x-c.dx*3.5,y:c.y-c.dy*3.5},{x:c.x+c.dx*3.5,y:c.y+c.dy*3.5}];stroke(bridge,'#fff',width+halo);stroke(bridge,'#AF3E47',width);});
     clearOverText();
   }
@@ -330,7 +353,9 @@
       var elapsed=now-entranceStart;
       entranceProgress=clamp(elapsed/2400,0,1);
       phase=target;
-      document.documentElement.style.setProperty('--entrance-veil',String(1-easing((entranceProgress-.62)/.34)));
+      /* ベールを先に晴らしてから糸を伸ばす。元は p=.62〜.96（1.5〜2.3秒）で晴れるため、
+         糸の成長がベールの裏で終わってしまい「上から下へ伸びる」動きが見えなかった。 */
+      document.documentElement.style.setProperty('--entrance-veil',String(1-easing((entranceProgress-.06)/.24)));
       if(elapsed>=2400)finishEntrance();
     }else if(!paused){
       var tau=(knotEnd>knotStart&&phase>=knotStart)?300:95;/* 結びの区間だけ追従を遅くする */phase+=(target-phase)*(1-Math.exp(-dt/tau));

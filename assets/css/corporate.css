@@ -158,7 +158,7 @@ body[data-page=index] .hero-bottom{padding-right:150px}
 :root{
   --thread-fade: .88;                  /* 文字の上で糸を薄くする量 */
   --thread-fade-line: .45;             /* 罫線・円の輪郭の上で薄くする量 */
-  --thread-halo: .9px;                 /* 糸の交差部の白い縁取り。太いと切断、細すぎると上下の重なりが消える */             /* 罫線・円の輪郭の上で薄くする量（細い線に強い減衰は切断に見える） */                  /* 文字の上で糸をどれだけ薄くするか 1=消す 0=そのまま */
+  --thread-halo: .6px;                 /* 糸の交差部の白い縁取り */
   --ink-a: .88;                        /* 文字の不透明度。下げるほど糸が濃く透ける */
   --ink:   rgba(32,33,32,var(--ink-a));
   --muted: rgba(75,33,57,var(--ink-a));
@@ -207,3 +207,28 @@ main :is(.text-link,.profile-list dt,.profile-list dd){ border-color: var(--rule
    canvas 側（thread.js の clearOverText）で処理するため、
    前面に出しても文字を潰さない。 */
 .site-thread{ z-index:61; }
+
+/* [8] 入場中だけ糸の重なり順が下がり、ヘッダーの裏に隠れていた。
+   入場が終わる瞬間に z-index が 0→61 へ上がるため、ヘッダー部分の線が
+   後から足されたように見えていた（「ヘッダー下に線 → ヘッダーにも線が増える」）。
+   入場中も重なり順を揃え、白いベールだけを糸より上に置く。 */
+html[data-entrance=active] .site-thread{ z-index:61; }
+html[data-entrance=active]::after{ z-index:62; }
+
+/* [9] 出典のあるお知らせはリンクにする。出典のない項目はテキストのままなので、
+   リンクであることが分かるよう矢印を添える（サイト内の .text-link と同じ記号）。 */
+.update-item__link{
+  color:inherit; text-decoration:none;
+  transition:color .25s var(--ease);
+}
+.update-item__link:hover{ color:var(--red); }
+.update-item__link:focus-visible{ outline:2px solid var(--red); outline-offset:4px; }
+.update-item__ext{
+  display:inline-block; margin-left:.5em; color:var(--red);
+  transition:transform .3s var(--ease);
+}
+.update-item__link:hover .update-item__ext{ transform:translate(3px,-3px); }
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
