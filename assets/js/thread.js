@@ -20,8 +20,9 @@
   /* 糸の「引きずり」を既定にする。スクロール速度に応じて糸だけが少し遅れて
      追いかけ、手を止めると戻る。本文と完全に同じ速さで動くより自然に見える、
      という判断（2026-10-06 確認）。?thread=plain で従来の等速に戻せる。 */
-  var threadMode=(location.search.match(/[?&]thread=([a-z]+)/)||[])[1]||'';
-  var dragOn=threadMode!=='plain';
+  var threadTokens=((location.search.match(/[?&]thread=([a-z,]+)/)||[])[1]||'').split(',');
+  function threadHas(t){ return threadTokens.indexOf(t)>=0; }
+  var dragOn=!threadHas('plain');
   /* ?thread=lock : キャンバスを position:fixed から文書内配置に変える。
      fixed のまま毎フレーム描き直す方式だと、スクロールがコンポジタ側で
      進むモバイルでは、描いた絵が合成される頃にスクロールが先へ進んでおり、
@@ -29,10 +30,14 @@
      文書内に置けば文字と同じ経路でブラウザがスクロールさせるため、
      JS が何フレーム遅れても文字との位置関係は崩れない。
      画面外ぶんの余白(slack)を持たせ、毎フレーム top を更新する。 */
-  var lockMode=threadMode==='lock';
+  var lockMode=!threadHas('fixed');
   var origin=0,slack=0,canvasH=0,headOff=0;
   var drag=0,prevCam=0;
-  var DRAG_MAX=56;   /* 最大のずれ幅(px) */
+  /* 引きずりは【横方向】。縦にずらすと、マスク（文字の行ボックス）は動かないのに
+     糸だけが縦にずれるため、行と行の隙間に残る濃い線分（実測 9.6px しかない）が
+     丸ごと何個ぶんも滑って見える。マスクは横長の帯なので、横にずらしても
+     「縦のどこが隠れるか」は変わらない＝線分は滑らない。 */
+  var DRAG_MAX=26;   /* 最大のずれ幅(px) */
   var DRAG_GAIN=1;   /* 1フレームのスクロール量に対する比 */
   /* 開いた直後は先端を画面外に置きたいが、Math.max で止めると追いつくまで
      糸がまったく伸びず「止まっている」ように見える。
@@ -266,7 +271,7 @@
        成長の開始も早める。元は p>.46（約1.1秒後）からで、それまで起点の点は
        画面外にあり何も見えず、「上から下へ進む」動きの前に空白があった。 */
     var p=entranceProgress,q=easing((p-.28)/.70),middle=0;
-    function at(t){var n=clamp(t,0,1)*(path.length-1),i=Math.floor(n),a=path[i],b=path[Math.min(i+1,path.length-1)],f=n-i;return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f-origin+drag};}
+    function at(t){var n=clamp(t,0,1)*(path.length-1),i=Math.floor(n),a=path[i],b=path[Math.min(i+1,path.length-1)],f=n-i;return {x:a.x+(b.x-a.x)*f+drag,y:a.y+(b.y-a.y)*f-origin};}
     var centre=at(middle),inhale=easing((p-.07)/.16),exhale=easing((p-.23)/.13);
     var radius=1.8+2.4*inhale-2.7*exhale;
     ctx.fillStyle='#AF3E47';ctx.strokeStyle='#AF3E47';
@@ -277,7 +282,7 @@
     if(q>0){
       var lo=middle*(1-q),hi=middle+(1-middle)*q,a=at(lo);
       ctx.globalAlpha=1;ctx.lineWidth=w<600?.85:1.05;ctx.beginPath();ctx.moveTo(a.x,a.y);
-      for(var i=Math.floor(lo*(path.length-1))+1;i<=Math.floor(hi*(path.length-1));i++)ctx.lineTo(path[i].x,path[i].y-origin+drag);
+      for(var i=Math.floor(lo*(path.length-1))+1;i<=Math.floor(hi*(path.length-1));i++)ctx.lineTo(path[i].x+drag,path[i].y-origin);
       var b=at(hi);ctx.lineTo(b.x,b.y);ctx.stroke();
     }
     ctx.globalAlpha=1;
@@ -433,8 +438,8 @@
         ctx.globalAlpha=a*.5;
         for(var i3=0;i3<r.length;i3++){
           var q3=r[i3]; if(!!q3[4]!==header) continue;
-          ctx.fillRect(q3[0],q3[1]+dy-1.5,q3[2],1.5);
-          ctx.fillRect(q3[0],q3[1]+dy+q3[3],q3[2],1.5);
+          ctx.fillRect(q3[0],q3[1]+dy-.75,q3[2],.75);
+          ctx.fillRect(q3[0],q3[1]+dy+q3[3],q3[2],.75);
         }
         ctx.globalAlpha=la;
         for(var j2=0;j2<L.length;j2++){
@@ -472,8 +477,8 @@
       for(var i=1;i<points.length;i++){
         var a=points[i-1],b=points[i];
         if(Math.max(a.y,b.y)<origin-60||Math.min(a.y,b.y)>origin+canvasH+60){started=false;continue;}
-        if(!started){ctx.moveTo(a.x,a.y-origin+drag);started=true;}
-        ctx.lineTo(b.x,b.y-origin+drag);
+        if(!started){ctx.moveTo(a.x+drag,a.y-origin);started=true;}
+        ctx.lineTo(b.x+drag,b.y-origin);
       }
       ctx.stroke();
     }
