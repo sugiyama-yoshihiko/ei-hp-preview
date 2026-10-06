@@ -84,6 +84,43 @@
       var len=Math.hypot(rx,ry),x=a.x+u*rx,y=a.y+u*ry;
       crossings.push({x:x,y:y,dx:rx/len,dy:ry/len,key:Math.max(a.key+u*(z.key-a.key),c.key+t*(v.key-c.key))+5});
     }
+  
+    /* 本文との距離を保つ。糸の x は幅に比例していたため、画面が狭くなると
+       見出しとリード文の“通り道”に対して位置がずれ、900px 以下では
+       リード文の左端を越えて本文に入り込んでいた。
+       通り道の中での位置（1440px での見え方）を保つよう、経路全体を水平に平行移動する。
+       形は変えない（オフセットのみ）ので、1440px での見た目は変わらない。 */
+    (function(){
+      var lines=document.querySelectorAll('.home-hero h1 .hero-line');
+      var aside=document.querySelector('.hero-aside');
+      if(!lines.length||!aside) return;
+      var hr=0, top=1e9, bot=-1e9;
+      for(var i=0;i<lines.length;i++){
+        var r=lines[i].getBoundingClientRect();
+        if(r.width<=0) continue;
+        if(r.right>hr) hr=r.right;
+        if(r.top<top) top=r.top;
+        if(r.bottom>bot) bot=r.bottom;
+      }
+      var ab=aside.getBoundingClientRect();
+      if(!(hr>0)||!(ab.left>hr)) return;
+      var RATIO=.744;                       /* 1440px のときの通り道内の位置 */
+      var target=hr+(ab.left-hr)*RATIO;
+      var hy=(top+bot)/2+camera;            /* 見出しの縦中心（ページ座標） */
+      var cur=null, best=1e9;
+      for(var j=0;j<route.length;j++){
+        var dd=Math.abs(route[j].y-hy);
+        if(dd<best){ best=dd; cur=route[j]; }
+      }
+      if(!cur) return;
+      var off=target-cur.x;
+      /* 見出しにもリード文にも寄りすぎないよう制限する */
+      off=Math.max(hr+24-cur.x, Math.min(ab.left-24-cur.x, off));
+      if(!isFinite(off)||Math.abs(off)<0.5) return;
+      for(var k=0;k<route.length;k++) route[k].x+=off;
+      for(var m=0;m<blueRoute.length;m++) blueRoute[m].x+=off;
+      for(var n=0;n<crossings.length;n++) crossings[n].x+=off;
+    })();
   }
   function setDimensions(){
     w=window.innerWidth;h=window.innerHeight;d=Math.max(document.documentElement.scrollHeight,h*2);camera=window.scrollY;

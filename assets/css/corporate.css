@@ -232,3 +232,23 @@ html[data-entrance=active]::after{ z-index:62; }
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
 }
+
+/* ============================================================
+   [試行] 細かい補足テキストの非表示
+   マークアップは残しているので、このブロックを削除すれば元に戻る。
+   ============================================================ */
+
+/* ヒーローの小さな見出し「EI&Co.」「Capital & Engineering」 */
+.home-hero .hero-caption{ display:none; }
+
+/* ヒーロー下端の行ごと非表示にする。
+   「EI engineering & Co.」「Scroll to explore」と下向き矢印を含む。 */
+.home-hero .hero-bottom{ display:none; }
+
+/* 糸の停止ボタン「線の動きを止める」 */
+.thread-toggle{ display:none; }
+
+/* トップページのセクション番号「01 / About」〜「05 / Recruit」と「Contact」。
+   番号は内容が順序を持つ場合にだけ意味を持つ。ここは並列の紹介なので外す。 */
+body[data-page=index] .home-section .eyebrow,
+body[data-page=index] .contact-banner .eyebrow{ display:none; }
