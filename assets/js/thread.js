@@ -30,12 +30,18 @@
       knotStart=Math.min(lastY-lead,knotEnd-Math.min(200,h*.25));
     }
     var firstKey=Math.min(firstY-lead,knotStart-100);
+    /* 振れ幅は幅に比例するため、狭い画面では絶対量が小さく、縦に長いページでは
+       ほぼ直線に見える（390px で 115px、1440px で 426px）。
+       ヒーローが縦積みになる 640px 以下でのみ振れ幅を広げる。
+       それ以上の幅では見出しとリード文の通り道が狭く（900px で 124px）、
+       広げると本文に食い込むため変更しない。640px で係数 1.0 となり段差も出ない。 */
+    var AMP = w>=640 ? 1 : 1+(640-w)/640*2.9;
     var count=Math.ceil(span/3);
     // Selected study 5: the same two gentle, unequal waves about the centre.
     // One analytic curve: no independent handles, corners or moving body segments.
     for(var i=0;i<=count;i++){
       var t=i/count,y=firstY+span*t;
-      var x=.5+.115*Math.sin(2*Math.PI*t+.3)+.038*Math.sin(5*Math.PI*t-.3);
+      var x=.5+AMP*(.115*Math.sin(2*Math.PI*t+.3)+.038*Math.sin(5*Math.PI*t-.3));
       // Only the final stretch leaves the centre; cubic onset keeps curvature continuous.
       var exit=Math.max(0,(t-.88)/.12);
       if(ending)x+=(.5-x)*easing(exit);else x+=.64*exit*exit*exit;
