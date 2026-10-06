@@ -5,7 +5,12 @@
   function allowed(){return !reduce.matches&&document.body.dataset.motion!=='paused';}
   function reveal(el,index){
     if(!allowed()||!el.animate)return;
-    var animation=el.animate([{transform:'translateY(12px)',opacity:.45},{transform:'translateY(0)',opacity:1}],{duration:820,delay:Math.min(index||0,2)*90,easing:'cubic-bezier(.19,1,.22,1)',fill:'none'});
+    /* 以前は translateY(12px) → 0 で見出しを持ち上げていたが、
+       画面に入るたびに文字が 12px 動く＝糸（ページ座標に固定）に対して
+       文字とマスクだけがずれる。行間に残る濃い線分は 9.6px しかないため、
+       スクロール中に糸が動いて見える原因になっていた。
+       動かさず、濃度の変化だけで現れるようにする。 */
+    var animation=el.animate([{opacity:.45},{opacity:1}],{duration:820,delay:Math.min(index||0,2)*90,easing:'cubic-bezier(.19,1,.22,1)',fill:'none'});
     animations.push(animation);
     animation.onfinish=function(){animations=animations.filter(function(a){return a!==animation;});};
   }
