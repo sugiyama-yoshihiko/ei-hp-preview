@@ -22,7 +22,11 @@
      という判断（2026-10-06 確認）。?thread=plain で従来の等速に戻せる。 */
   var threadTokens=((location.search.match(/[?&]thread=([a-z,]+)/)||[])[1]||'').split(',');
   function threadHas(t){ return threadTokens.indexOf(t)>=0; }
-  var dragOn=!threadHas('plain');
+  /* 既定は「引きずりなし」＝糸は文字に対して一切動かない。
+     引きずりは向きを縦から横へ変えても、文字に対して動くこと自体は変わらず
+     （実測 14.5px）、行間の短い線分の前後で揺れとして見えてしまう。
+     ?thread=drag で有効にできる。 */
+  var dragOn=threadHas('drag');
   /* ?thread=lock : キャンバスを position:fixed から文書内配置に変える。
      fixed のまま毎フレーム描き直す方式だと、スクロールがコンポジタ側で
      進むモバイルでは、描いた絵が合成される頃にスクロールが先へ進んでおり、
@@ -32,7 +36,7 @@
      画面外ぶんの余白(slack)を持たせ、毎フレーム top を更新する。 */
   var lockMode=!threadHas('fixed');
   var origin=0,slack=0,canvasH=0,headOff=0;
-  var drag=0,prevCam=0;
+  var drag=0,prevCam=0,vel=0;
   /* 引きずりは【横方向】。縦にずらすと、マスク（文字の行ボックス）は動かないのに
      糸だけが縦にずれるため、行と行の隙間に残る濃い線分（実測 9.6px しかない）が
      丸ごと何個ぶんも滑って見える。マスクは横長の帯なので、横にずらしても
@@ -566,11 +570,15 @@
     }
     /* 引きずり: スクロール速度に追いつくのは速く、戻るのはゆっくり。 */
     if(dragOn&&!paused){
-      var v=(camera-prevCam)/Math.max(1,dt)*16; prevCam=camera;
-      var want=clamp(v*DRAG_GAIN,-DRAG_MAX,DRAG_MAX);
+      /* 1フレームのスクロール量をそのまま使うと、慣性スクロール中の速度の
+         ばらつきとフレーム間隔のゆらぎを拾って小刻みに揺れる。
+         速度を平滑化してから使う。 */
+      var raw=(camera-prevCam)/Math.max(1,dt)*16; prevCam=camera;
+      vel+=(raw-vel)*(1-Math.exp(-dt/120));
+      var want=clamp(vel*DRAG_GAIN,-DRAG_MAX,DRAG_MAX);
       drag+=(want-drag)*(1-Math.exp(-dt/(Math.abs(want)>Math.abs(drag)?70:220)));
       if(Math.abs(drag)<.05)drag=0;
-    }else{ drag=0; prevCam=camera; }
+    }else{ drag=0; vel=0; prevCam=camera; }
     paint();
     if(!paused&&(entering()||Math.abs(target-phase)>.15||Math.abs(drag)>.05||now<maskUntil))schedule();else lastTime=0;
   }
