@@ -12,6 +12,41 @@
   var paused = reduced.matches, ready = false, frameId = null, lastTime = 0;
   var heroHeight = 0, blueRoute=[], crossings=[], knotStart=0, knotEnd=0;
   var tipHold=0;   /* 初期表示で先端を保持する位置（キー） */
+  /* 比較用: ?thread=drag で糸の「引きずり」を有効にする。
+     既定（パラメータなし）は従来どおり、糸は本文と完全に同じ速さで動く。
+     drag では、スクロール速度に応じて糸だけが少し遅れて追いかけ、
+     手を止めると元の位置へ戻る。ずれ幅は上限を設けてあるので、
+     見出しの通り道や結び目の位置がずれることはない。 */
+  /* 糸の「引きずり」を既定にする。スクロール速度に応じて糸だけが少し遅れて
+     追いかけ、手を止めると戻る。本文と完全に同じ速さで動くより自然に見える、
+     という判断（2026-10-06 確認）。?thread=plain で従来の等速に戻せる。 */
+  var threadMode=(location.search.match(/[?&]thread=([a-z]+)/)||[])[1]||'';
+  var dragOn=threadMode!=='plain';
+  /* ?thread=lock : キャンバスを position:fixed から文書内配置に変える。
+     fixed のまま毎フレーム描き直す方式だと、スクロールがコンポジタ側で
+     進むモバイルでは、描いた絵が合成される頃にスクロールが先へ進んでおり、
+     糸もマスクもそろって文字に対して動く＝「スクロールに連動して動く」。
+     文書内に置けば文字と同じ経路でブラウザがスクロールさせるため、
+     JS が何フレーム遅れても文字との位置関係は崩れない。
+     画面外ぶんの余白(slack)を持たせ、毎フレーム top を更新する。 */
+  var lockMode=threadMode==='lock';
+  var origin=0,slack=0,canvasH=0,headOff=0;
+  var drag=0,prevCam=0;
+  var DRAG_MAX=56;   /* 最大のずれ幅(px) */
+  var DRAG_GAIN=1;   /* 1フレームのスクロール量に対する比 */
+  /* 開いた直後は先端を画面外に置きたいが、Math.max で止めると追いつくまで
+     糸がまったく伸びず「止まっている」ように見える。
+     保持量をスクロールに応じて減らすことで、最初から常に伸び続ける。
+     減り方は (1-t)^2。これだと伸びの速さ d(key)/d(phase) = 1-2(1-t)/K が
+     t=0 で最小 1-2/K、t=1 で 1 となり、K=4 なら最低でもスクロールの 0.5 倍は
+     必ず進む。smoothstep だと中間で 0.06 倍まで落ちて再び止まって見えた。
+     保持が解けたあとは key=phase となり従来どおりの挙動に戻る。 */
+  function drawKey(){
+    if(reduced.matches&&paused) return d-h;
+    if(tipHold<=0) return phase;
+    var t=clamp(phase/(tipHold*4),0,1), u=1-t;
+    return phase+tipHold*u*u;
+  }
   var entrance=window.eiEntrance,entranceStart=null,entranceProgress=0;
   function easing(x){x=clamp(x,0,1);return x*x*x*(x*(x*6-15)+10);}
   function entering(){return isHome&&entrance&&entrance.active;}
@@ -24,9 +59,32 @@
     var ending=document.querySelector('.thread-ending');
     var knotY=ending?ending.getBoundingClientRect().top+camera+ending.getBoundingClientRect().height*.5:0;
     if(ending){
+      /* 最下部まで送りきった時点で、結び目がなるべく画面の中央で止まるようにする。
+         .thread-ending の位置のままだと、その下にあるフッターのぶんだけ
+         結び目が上へ流れ、PC で 36%・スマホで 11% の高さまで上がっていた。
+         ただし中央（ページ下端から半画面ぶん上）に置くとフッターの文字に
+         重なり、糸が文字の上に貼り付いて見える。フッター上端より上の余白に
+         収まる位置を上限として、その範囲で最も中央寄りに置く。 */
+      var pageBtm=Math.max(document.documentElement.scrollHeight,h);
+      var knotR=Math.min(58,w*.12)*1.3+18;   /* 結び目の縦の広がり＋余白 */
+      var footEl=document.querySelector('.foot');
+      var footTop=footEl?footEl.getBoundingClientRect().top+camera:pageBtm;
+      knotY=Math.max(knotY,Math.min(pageBtm-h*.5,footTop-knotR));
       lastY=knotY-160;span=lastY-firstY;
       // Short interior pages must also finish tying before their real scroll limit.
-      knotEnd=Math.max(0,Math.min(document.documentElement.scrollHeight-h,knotY-h*.38));
+      /* 結び終えたあと、青い紐が下端へ伸びるぶんのスクロールを必ず残す。
+         .thread-ending はフッターの直前にあるため、結びを本来の
+         「画面の38%の高さ」で終えると残りが 10px ほどしかなく、
+         紐が一瞬で出きってしまう（しかも phase が少し遅れるだけで末尾が欠ける）。
+         結びを少し手前で終わらせ、最後の .45 画面ぶんを垂れ下がりに充てる。
+         ただし結び終えた瞬間に結び目が画面外へ出ないよう下限も置く。 */
+      var maxScroll=Math.max(0,document.documentElement.scrollHeight-h);
+      /* 結び終える時点で、結び目が画面のどの高さにいるか。
+         .38 だと画面上部で結び終えてしまい、.92 まで下げると今度は
+         画面の下端すれすれで結ばれる。指定は画面の中ほど。 */
+      var finishAt=h*.56;
+      /* 結び終えたあと、青い紐が下端へ伸びるぶんのスクロールは最低限残す。 */
+      knotEnd=Math.max(0,Math.min(knotY-finishAt,maxScroll-h*.22));
       knotStart=Math.min(lastY-lead,knotEnd-Math.min(200,h*.25));
     }
     var firstKey=Math.min(firstY-lead,knotStart-100);
@@ -55,6 +113,10 @@
        スクロールを始めると先端が画面下から上がって現れる。 */
     tipHold=0;
     for(var si=0;si<route.length;si++){ if(route[si].y>=h*1.12){ tipHold=Math.max(0,route[si].key); break; } }
+    /* 短いページには 4*tipHold ぶんのスクロールが無く、解放しきる前に下端へ着く。
+       そのぶん先端が最後まで先走り、下端に着く前に糸が出きってしまうので、
+       ページ長に合わせて保持量を抑える（解放は .88 画面ぶん手前で完了）。 */
+    tipHold=Math.min(tipHold,Math.max(0,(document.documentElement.scrollHeight-h)*.22));
     if(!ending)return;
     var cx=w*.5,s=Math.min(58,w*.12),redTail=[{x:cx,y:lastY}],blueTail=[];
     // Each cubic shares a tangent with its neighbour. Only the leading ends advance.
@@ -67,19 +129,35 @@
     curve(redTail,point(.31,.30),point(-.75,.65),point(-.5,.9));
     curve(redTail,point(-.25,1.15),point(.85,.5),point(.5,.05));
     curve(redTail,point(.15,-.4),point(-.5,-.75),point(-.9,-.2));
-    var blueStart=knotStart-h*.08;
-    blueTail.push({x:cx+.12*s,y:knotY+h*.7});
-    curve(blueTail,[cx+.12*s,blueTail[0].y-h*.24],point(-.95,1.2),point(-.5,.55));
-    curve(blueTail,point(-.05,-.10),point(1,-.7),point(.5,-.9));
-    curve(blueTail,point(0,-1.1),point(-.9,-.45),point(-.5,0));
-    curve(blueTail,point(-.1,.45),point(.7,.95),point(1.25,.5));
+    /* 青い紐は、結び目を結び終えてから下端へ垂れる。
+       以前は下端（knotY+h*.7）を起点に結び目へ向かって描いていたため、
+       結びが終わる前に下の紐が現れ、しかも宙の位置で切れて見えていた。
+       向きを結び目側→下向きに反転し、区間も
+       結び目（knotStart〜knotEnd）／垂れ下がり（knotEnd〜最終スクロール位置）
+       の二段に分ける。垂れ下がりの終点はページ下端。 */
+    function pt(x,y){var a=point(x,y);return {x:a[0],y:a[1]};}
+    /* 終点はページの一番下。d は短いページで h*2 に膨らむため実寸を使う。 */
+    var pageBottom=Math.max(document.documentElement.scrollHeight,h);
+    var tailEnd=Math.max(knotY+s*2.2,pageBottom-1),dropX=cx+.12*s;
+    var blueKnot=[pt(1.25,.5)];
+    curve(blueKnot,point(.7,.95),point(-.1,.45),point(-.5,0));
+    curve(blueKnot,point(-.9,-.45),point(0,-1.1),point(.5,-.9));
+    curve(blueKnot,point(1,-.7),point(-.05,-.10),point(-.5,.55));
+    var blueDrop=[pt(-.5,.55)];
+    curve(blueDrop,point(-.95,1.2),[dropX,tailEnd-h*.24],[dropX,tailEnd]);
     function keys(list,start,end){
       var lengths=[0],length=0;
       for(var j=1;j<list.length;j++){length+=Math.hypot(list[j].x-list[j-1].x,list[j].y-list[j-1].y);lengths.push(length);}
       list.forEach(function(p,j){p.z=0;p.key=start+(end-start)*lengths[j]/length;});
     }
-    keys(redTail,knotStart,knotEnd);keys(blueTail,blueStart,knotEnd);
-    route=route.concat(redTail.slice(1));blueRoute=blueTail;
+    keys(redTail,knotStart,knotEnd);
+    keys(blueKnot,knotStart,knotEnd);
+    /* 終端キーは d-h ではなく実際に到達できるスクロール量。
+       1画面半しかないページでは d が h*2 に膨らみ、d-h が実スクロール量を
+       超えるため、最後まで送っても紐が数十px 手前で止まっていた。 */
+    keys(blueDrop,knotEnd,Math.max(knotEnd+1,maxScroll));
+    route=route.concat(redTail.slice(1));
+    blueTail=blueKnot.concat(blueDrop.slice(1));blueRoute=blueTail;
     // Preserve over/under order at real crossings without a thick outline.
     for(var r=1;r<redTail.length;r++)for(var b=1;b<blueTail.length;b++){
       var a=redTail[r-1],z=redTail[r],c=blueTail[b-1],v=blueTail[b];
@@ -123,23 +201,54 @@
       /* 見出しにもリード文にも寄りすぎないよう制限する */
       off=Math.max(hr+24-cur.x, Math.min(ab.left-24-cur.x, off));
       if(!isFinite(off)||Math.abs(off)<0.5) return;
-      for(var k=0;k<route.length;k++) route[k].x+=off;
-      for(var m=0;m<blueRoute.length;m++) blueRoute[m].x+=off;
-      for(var n=0;n<crossings.length;n++) crossings[n].x+=off;
+      /* 結び目は画面の中央で止める。経路全体を一律にずらすと結び目まで
+         右へ寄るため、終端に向けてオフセットを 0 に戻す。戻し方は本線の
+         中央復帰（exit）と同じカーブなので、形も接線も崩れない。
+         結び目（redTail）と青い紐はずらさない＝常に中央。 */
+      for(var k=0;k<=count&&k<route.length;k++){
+        var tk=k/count, ek=Math.max(0,(tk-.88)/.12);
+        route[k].x+=off*(1-easing(ek));
+      }
     })();
   }
+  var routeW=0,routeH=0,routeSH=0;
   function setDimensions(){
     w=window.innerWidth;h=window.innerHeight;d=Math.max(document.documentElement.scrollHeight,h*2);camera=window.scrollY;
-    ratio=Math.min(window.devicePixelRatio||1,2);
-    canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);
+    /* スマホは DPR=3 の端末が多い。2 で丸めると 2倍で描いた絵を 3倍へ
+       引き伸ばすことになり、糸も半透明の帯の端も 1.5倍ぼける。
+       スクロールのたびに端がにじんで動くため、揺れ・ちらつきに見える。
+       狭い画面だけ等倍（最大3）で描く。1170×2532 ＝ 約12MB で収まる。 */
+    ratio=Math.min(window.devicePixelRatio||1,w<768?3:2);
+    slack=lockMode?Math.round(h*(w<768?.55:.3)):0;
+    /* 文書内配置では、キャンバスがページ末尾より下へはみ出すとページ自体が
+       伸びてしまい、経路の作り直しを呼んで無限に伸びる。
+       キャンバス高がページ高を超えないよう余白を抑える。 */
+    slack=Math.min(slack,Math.max(0,Math.floor((document.documentElement.scrollHeight-h)/2)));
+    canvasH=h+slack*2;PAD=140+slack;
+    canvas.width=Math.round(w*ratio);canvas.height=Math.round(canvasH*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);
+    if(lockMode){
+      canvas.style.position='absolute';
+      canvas.style.left='0';canvas.style.width='100%';
+      canvas.style.bottom='auto';canvas.style.right='auto';  /* CSS の inset:0 を打ち消す */
+      canvas.style.height=canvasH+'px';
+    }
     var hero=document.querySelector(isHome?'.home-hero':'.page-hero');
     heroHeight=hero?hero.getBoundingClientRect().bottom+camera:Math.min(h,600);
-    createRoute();target=clamp(camera,0,d-h);
+    /* スマホはスクロール中に URL バーが伸縮し、そのたびに resize が飛んで
+       innerHeight が数十px 変わる。経路は innerHeight から組み立てているため、
+       作り直すと糸の形そのものが変わり、スクロールのたびに揺れて見えていた。
+       幅が変わったとき・ページの高さが変わったとき・画面の高さが大きく
+       変わったときだけ作り直す。URL バーぶん（〜140px）では作り直さない。 */
+    var sh=document.documentElement.scrollHeight;
+    if(!route.length||w!==routeW||sh!==routeSH||Math.abs(h-routeH)>140){
+      routeW=w;routeH=h;routeSH=sh;createRoute();
+    }
+    target=clamp(camera,0,d-h);
     if(!ready){phase=target;ready=true;}schedule();
   }
   function partialPath(source){
     source=source||route;
-    var key=(reduced.matches&&paused)?d-h:Math.max(phase,tipHold), list=[];
+    var key=drawKey(), list=[];
     for(var i=0;i<source.length;i++){
       var p=source[i];
       if(p.key<=key){list.push(p);continue;}
@@ -157,7 +266,7 @@
        成長の開始も早める。元は p>.46（約1.1秒後）からで、それまで起点の点は
        画面外にあり何も見えず、「上から下へ進む」動きの前に空白があった。 */
     var p=entranceProgress,q=easing((p-.28)/.70),middle=0;
-    function at(t){var n=clamp(t,0,1)*(path.length-1),i=Math.floor(n),a=path[i],b=path[Math.min(i+1,path.length-1)],f=n-i;return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f-camera};}
+    function at(t){var n=clamp(t,0,1)*(path.length-1),i=Math.floor(n),a=path[i],b=path[Math.min(i+1,path.length-1)],f=n-i;return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f-origin+drag};}
     var centre=at(middle),inhale=easing((p-.07)/.16),exhale=easing((p-.23)/.13);
     var radius=1.8+2.4*inhale-2.7*exhale;
     ctx.fillStyle='#AF3E47';ctx.strokeStyle='#AF3E47';
@@ -168,7 +277,7 @@
     if(q>0){
       var lo=middle*(1-q),hi=middle+(1-middle)*q,a=at(lo);
       ctx.globalAlpha=1;ctx.lineWidth=w<600?.85:1.05;ctx.beginPath();ctx.moveTo(a.x,a.y);
-      for(var i=Math.floor(lo*(path.length-1))+1;i<=Math.floor(hi*(path.length-1));i++)ctx.lineTo(path[i].x,path[i].y-camera);
+      for(var i=Math.floor(lo*(path.length-1))+1;i<=Math.floor(hi*(path.length-1));i++)ctx.lineTo(path[i].x,path[i].y-origin+drag);
       var b=at(hi);ctx.lineTo(b.x,b.y);ctx.stroke();
     }
     ctx.globalAlpha=1;
@@ -178,11 +287,20 @@
      destination-out で「消す」ので白い矩形を置かない＝背景を汚さない。
      行ボックスは文字幅にぴったり沿うため、ブロック要素の背景のように
      余白まで巻き込むことがない。縦は行送りぶんを少し内側に詰める。 */
+  /* マスクはページ座標で持ち、描くときに現在のスクロール量を引く。
+     ビューポート座標でキャッシュしていたときは、スクロール 2px 以内なら
+     使い回していたため半透明の帯が文字から最大 2px ずれ、キャッシュ更新の
+     たびに戻る＝小刻みにスクロールすると揺れて見えていた。
+     ヘッダー（sticky）だけは画面に固定なのでビューポート座標のまま。
+     画面外の判定も、キャッシュ中に下から入ってくる文字を取りこぼさないよう
+     上下に余裕を持たせる。 */
+  function scrollNow(){ return window.scrollY||window.pageYOffset||0; }
+  var PAD=140;
   var _tcache=null,_tat=0,_ty=-1;
   function textRects(){
     var now=(window.performance&&performance.now())?performance.now():Date.now();
-    var sy=window.scrollY||window.pageYOffset||0;
-    if(_tcache&&now-_tat<60&&Math.abs(sy-_ty)<2) return _tcache;
+    var sy=camera;   /* 基準は camera に統一。frame で毎回読み直している */
+    if(_tcache&&now-_tat<60) return _tcache;
     var out=[],vw=innerWidth,vh=innerHeight;
     var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),n;
     while((n=tw.nextNode())){
@@ -196,9 +314,9 @@
       for(var i=0;i<list.length;i++){
         var b=list[i];
         if(b.width<1||b.height<1) continue;
-        if(b.bottom<-4||b.top>vh+4||b.right<-4||b.left>vw+4) continue;
-        var inset=b.height*0.10;
-        out.push([b.left-1.5,b.top+inset-1,b.width+3,b.height-inset*2+2, !!pe.closest('.nav,.menu')]);
+        if(b.bottom<-PAD||b.top>vh+PAD||b.right<-4||b.left>vw+4) continue;
+        var inset=b.height*0.10, hd=!!pe.closest('.nav,.menu');
+        out.push([b.left-1.5,b.top+inset-1+(hd?0:sy),b.width+3,b.height-inset*2+2, hd]);
       }
     }
     /* ロゴは画像なので文字走査に乗らない。糸がロゴの文字の後ろから出てくるよう
@@ -225,8 +343,8 @@
   var _lcache=null,_lat=0,_ly=-1;
   function lineShapes(){
     var now=(window.performance&&performance.now())?performance.now():Date.now();
-    var sy=window.scrollY||window.pageYOffset||0;
-    if(_lcache&&now-_lat<60&&Math.abs(sy-_ly)<2) return _lcache;
+    var sy=camera;   /* 基準は camera に統一。frame で毎回読み直している */
+    if(_lcache&&now-_lat<60) return _lcache;
     var out=[],vw=innerWidth,vh=innerHeight;
     var all=document.querySelectorAll('main *, footer *');
     for(var i=0;i<all.length;i++){
@@ -236,7 +354,8 @@
       if(cs.visibility==='hidden'||cs.display==='none') continue;
       var b=e.getBoundingClientRect();
       if(b.width<4||b.height<4) continue;
-      if(b.bottom<-8||b.top>vh+8||b.right<-8||b.left>vw+8) continue;
+      if(b.bottom<-PAD||b.top>vh+PAD||b.right<-8||b.left>vw+8) continue;
+      var hd=!!e.closest('.nav,.menu'), oy=hd?0:sy;
       var tw2=parseFloat(cs.borderTopWidth)||0, bw=parseFloat(cs.borderBottomWidth)||0;
       var lw=parseFloat(cs.borderLeftWidth)||0, rw=parseFloat(cs.borderRightWidth)||0;
       var trans=function(c){var m=String(c).match(/[\d.]+/g);return !m||(m.length>3&&+m[3]<0.02);};
@@ -244,13 +363,13 @@
       var isCircle = (cs.borderTopLeftRadius.indexOf('%')>=0 || radius>=Math.min(b.width,b.height)/2-2)
                      && tw2>0 && !trans(cs.borderTopColor);
       if(isCircle){
-        out.push(['e', b.left+b.width/2, b.top+b.height/2, b.width/2-tw2/2, b.height/2-tw2/2, tw2+1.5, !!e.closest('.nav,.menu')]);
+        out.push(['e', b.left+b.width/2, b.top+b.height/2+oy, b.width/2-tw2/2, b.height/2-tw2/2, tw2+1.5, hd]);
         continue;
       }
-      if(tw2>0&&!trans(cs.borderTopColor))    out.push(['r', b.left, b.top-0.75, b.width, tw2+1.5, !!e.closest('.nav,.menu')]);
-      if(bw>0&&!trans(cs.borderBottomColor))  out.push(['r', b.left, b.bottom-bw-0.75, b.width, bw+1.5, !!e.closest('.nav,.menu')]);
-      if(lw>0&&!trans(cs.borderLeftColor))    out.push(['r', b.left-0.75, b.top, lw+1.5, b.height, !!e.closest('.nav,.menu')]);
-      if(rw>0&&!trans(cs.borderRightColor))   out.push(['r', b.right-rw-0.75, b.top, rw+1.5, b.height, !!e.closest('.nav,.menu')]);
+      if(tw2>0&&!trans(cs.borderTopColor))    out.push(['r', b.left, b.top-0.75+oy, b.width, tw2+1.5, hd]);
+      if(bw>0&&!trans(cs.borderBottomColor))  out.push(['r', b.left, b.bottom-bw-0.75+oy, b.width, bw+1.5, hd]);
+      if(lw>0&&!trans(cs.borderLeftColor))    out.push(['r', b.left-0.75, b.top+oy, lw+1.5, b.height, hd]);
+      if(rw>0&&!trans(cs.borderRightColor))   out.push(['r', b.right-rw-0.75, b.top+oy, rw+1.5, b.height, hd]);
     }
     _lcache=out;_lat=now;_ly=sy;
     return out;
@@ -261,8 +380,8 @@
   var _ucache=null,_uat=0,_uy=-1;
   function uiRects(){
     var now=(window.performance&&performance.now())?performance.now():Date.now();
-    var sy=window.scrollY||window.pageYOffset||0;
-    if(_ucache&&now-_uat<60&&Math.abs(sy-_uy)<2) return _ucache;
+    var sy=camera;   /* 基準は camera に統一。frame で毎回読み直している */
+    if(_ucache&&now-_uat<60) return _ucache;
     var out=[],vw=innerWidth,vh=innerHeight;
     var els=document.querySelectorAll('.btn, .form__field input, .form__field textarea, .form__field select, .menu, iframe');
     for(var i=0;i<els.length;i++){
@@ -272,8 +391,9 @@
       if(cs.visibility==='hidden'||cs.display==='none') continue;
       var b=e.getBoundingClientRect();
       if(b.width<4||b.height<4) continue;
-      if(b.bottom<-4||b.top>vh+4||b.right<-4||b.left>vw+4) continue;
-      out.push([b.left,b.top,b.width,b.height, !!e.closest('.nav,.menu')]);
+      if(b.bottom<-PAD||b.top>vh+PAD||b.right<-4||b.left>vw+4) continue;
+      var uh=!!e.closest('.nav,.menu');
+      out.push([b.left,b.top+(uh?0:sy),b.width,b.height, uh]);
     }
     _ucache=out;_uat=now;_uy=sy;
     return out;
@@ -296,19 +416,33 @@
         if((np==='sticky'||np==='fixed')&&nb.bottom>0) navBottom=Math.min(nb.bottom,h);
       }
 
+      /* ページ座標で持っている本文側のマスクは、描く瞬間のスクロール量を引く。
+         こうするとキャッシュが何フレーム前のものでも文字と正確に重なるため、
+         半透明の帯が揺れない。ヘッダー側は画面固定なので引かない。 */
       function drawSet(header){
+        /* 本文はページ座標なので原点を引く。ヘッダーは画面固定なので
+           画面座標のまま、キャンバス原点ぶんだけずらす。 */
+        var dy=header?headOff:-origin;
         ctx.globalAlpha=1; ctx.fillStyle='#000';
-        for(var k=0;k<U.length;k++) if(!!U[k][4]===header) ctx.fillRect(U[k][0],U[k][1],U[k][2],U[k][3]);
+        for(var k=0;k<U.length;k++) if(!!U[k][4]===header) ctx.fillRect(U[k][0],U[k][1]+dy,U[k][2],U[k][3]);
         if(a<=0&&la<=0) return;
         ctx.globalAlpha=a; ctx.fillStyle='#000';
-        for(var i2=0;i2<r.length;i2++) if(!!r[i2][4]===header) ctx.fillRect(r[i2][0],r[i2][1],r[i2][2],r[i2][3]);
+        for(var i2=0;i2<r.length;i2++) if(!!r[i2][4]===header) ctx.fillRect(r[i2][0],r[i2][1]+dy,r[i2][2],r[i2][3]);
+        /* 帯の上下端を半分の濃さでなじませる。端が硬い矩形のままだと、
+           サブピクセルで動いたときに境界線が這うように見える。 */
+        ctx.globalAlpha=a*.5;
+        for(var i3=0;i3<r.length;i3++){
+          var q3=r[i3]; if(!!q3[4]!==header) continue;
+          ctx.fillRect(q3[0],q3[1]+dy-1.5,q3[2],1.5);
+          ctx.fillRect(q3[0],q3[1]+dy+q3[3],q3[2],1.5);
+        }
         ctx.globalAlpha=la;
         for(var j2=0;j2<L.length;j2++){
           var q=L[j2]; if(!!q[q.length-1]!==header) continue;
-          if(q[0]==='r'){ ctx.fillRect(q[1],q[2],q[3],q[4]); }
+          if(q[0]==='r'){ ctx.fillRect(q[1],q[2]+dy,q[3],q[4]); }
           else{
             ctx.beginPath();
-            ctx.ellipse(q[1],q[2],Math.max(0,q[3]),Math.max(0,q[4]),0,0,Math.PI*2);
+            ctx.ellipse(q[1],q[2]+dy,Math.max(0,q[3]),Math.max(0,q[4]),0,0,Math.PI*2);
             ctx.lineWidth=q[5]; ctx.strokeStyle='#000'; ctx.stroke();
           }
         }
@@ -317,7 +451,7 @@
       ctx.globalCompositeOperation='destination-out';
       drawSet(true);
       ctx.save();
-      ctx.beginPath(); ctx.rect(0,navBottom,w,Math.max(0,h-navBottom)); ctx.clip();
+      ctx.beginPath(); ctx.rect(0,navBottom+headOff,w,Math.max(0,canvasH-navBottom-headOff)); ctx.clip();
       drawSet(false);
       ctx.restore();
       ctx.globalAlpha=ga;
@@ -325,7 +459,7 @@
     }catch(e){}
   }
   function paint(){
-    var path=partialPath();ctx.clearRect(0,0,w,h);
+    var path=partialPath();ctx.clearRect(0,0,w,canvasH);
     var width=w<600?.85:1.05;
     /* 糸が交差する箇所の白い縁取り。太いと「途切れ」に見えるので控えめにする。
        --thread-halo で調整可（px）。 */
@@ -337,16 +471,16 @@
       ctx.lineWidth=size;ctx.strokeStyle=color;ctx.beginPath();var started=false;
       for(var i=1;i<points.length;i++){
         var a=points[i-1],b=points[i];
-        if(Math.max(a.y,b.y)<camera-20||Math.min(a.y,b.y)>camera+h+20){started=false;continue;}
-        if(!started){ctx.moveTo(a.x,a.y-camera);started=true;}
-        ctx.lineTo(b.x,b.y-camera);
+        if(Math.max(a.y,b.y)<origin-60||Math.min(a.y,b.y)>origin+canvasH+60){started=false;continue;}
+        if(!started){ctx.moveTo(a.x,a.y-origin+drag);started=true;}
+        ctx.lineTo(b.x,b.y-origin+drag);
       }
       ctx.stroke();
     }
     stroke(path,'#AF3E47',width);
     var blue=partialPath(blueRoute);
     stroke(blue,'#fff',width+halo);stroke(blue,'#536F91',width);
-    var key=(reduced.matches&&paused)?d-h:Math.max(phase,tipHold);
+    var key=drawKey();
     crossings.forEach(function(c,i){if(i%2||key<c.key)return;var bridge=[{x:c.x-c.dx*3.5,y:c.y-c.dy*3.5},{x:c.x+c.dx*3.5,y:c.y+c.dy*3.5}];stroke(bridge,'#fff',width+halo);stroke(bridge,'#AF3E47',width);});
     clearOverText();
   }
@@ -362,6 +496,14 @@
     maskUntil=Math.max(maskUntil, now+(ms||0));
     schedule();
   }
+  /* ページ高が後から変わると、経路の終端（＝青い紐が垂れる先のページ下端）が
+     古いままになり、紐がページ下端まで届かず途中で切れる。
+     マスクを捨てるだけでなく、高さが変わったときは経路ごと作り直す。 */
+  function relayout(ms){
+    var nd=Math.max(document.documentElement.scrollHeight,h*2);
+    if(h&&Math.abs(nd-d)>=1) setDimensions();
+    nudge(ms||400);
+  }
   document.addEventListener('transitionend', function(){ nudge(180); }, true);
   document.addEventListener('animationend',  function(){ nudge(180); }, true);
   window.addEventListener('scroll',  function(){ nudge(1600); }, {passive:true});
@@ -372,25 +514,38 @@
      スクロールもアニメーションも起きないため上の契機に当たらず、マスクだけが
      古い位置のまま残って糸が文字に重なっていた。レイアウト変化を直接監視する。 */
   if(window.ResizeObserver){
-    var ro=new ResizeObserver(function(){ nudge(400); });
+    var ro=new ResizeObserver(function(){ relayout(400); });
     try{ ro.observe(document.body); }catch(e){}
     var mainEl=document.querySelector('main'); if(mainEl){ try{ ro.observe(mainEl); }catch(e){} }
   }
-  window.addEventListener('load', function(){ nudge(1200); });
+  window.addEventListener('load', function(){ relayout(1200); });
   document.addEventListener('load', function(ev){
-    if(ev.target&&/^(IMG|IFRAME|VIDEO)$/.test(ev.target.tagName)) nudge(600);
+    if(ev.target&&/^(IMG|IFRAME|VIDEO)$/.test(ev.target.tagName)) relayout(600);
   }, true);
   /* 念のための保険: 読み込み直後の数秒は、ページ高の変化を定期的に見張る */
   (function(){
     var lastH=document.documentElement.scrollHeight, n=0;
     var iv=setInterval(function(){
       var hh=document.documentElement.scrollHeight;
-      if(hh!==lastH){ lastH=hh; nudge(400); }
+      if(hh!==lastH){ lastH=hh; relayout(400); }
       if(++n>20) clearInterval(iv);
     },400);
   })();
   function frame(now){
     frameId=null;var dt=lastTime?Math.min(40,now-lastTime):16;lastTime=now;
+    /* スクロール位置は描画する瞬間に読み直す。scroll イベント任せだと、
+       イベントが rAF より遅れるモバイルで、糸（camera 基準）とマスク
+       （文字基準）が食い違い、半透明の帯だけが糸の上を滑って揺れて見えた。
+       以降 camera は paint と clearOverText の両方が使う唯一の基準になる。 */
+    if(!entering()){ camera=scrollNow(); target=clamp(camera,0,d-h); }
+    /* 描画の原点。lock では文書内のキャンバス位置、既定では camera。
+       top の更新と描画は同じタスク内なので必ず同じフレームで反映される。 */
+    if(lockMode){
+      var topMax=Math.max(0,document.documentElement.scrollHeight-canvasH);
+      origin=Math.max(0,Math.min(camera-slack,topMax));
+      canvas.style.top=origin+'px';
+    }else origin=camera;
+    headOff=camera-origin;   /* ヘッダー（画面固定）側の描画オフセット */
     if(entering()&&!paused){
       if(entranceStart===null)entranceStart=now;
       var elapsed=now-entranceStart;
@@ -404,8 +559,15 @@
       var tau=(knotEnd>knotStart&&phase>=knotStart)?300:95;/* 結びの区間だけ追従を遅くする */phase+=(target-phase)*(1-Math.exp(-dt/tau));
       if(Math.abs(target-phase)<.15)phase=target;
     }
+    /* 引きずり: スクロール速度に追いつくのは速く、戻るのはゆっくり。 */
+    if(dragOn&&!paused){
+      var v=(camera-prevCam)/Math.max(1,dt)*16; prevCam=camera;
+      var want=clamp(v*DRAG_GAIN,-DRAG_MAX,DRAG_MAX);
+      drag+=(want-drag)*(1-Math.exp(-dt/(Math.abs(want)>Math.abs(drag)?70:220)));
+      if(Math.abs(drag)<.05)drag=0;
+    }else{ drag=0; prevCam=camera; }
     paint();
-    if(!paused&&(entering()||Math.abs(target-phase)>.15||now<maskUntil))schedule();else lastTime=0;
+    if(!paused&&(entering()||Math.abs(target-phase)>.15||Math.abs(drag)>.05||now<maskUntil))schedule();else lastTime=0;
   }
   function scroll(){camera=window.scrollY;target=clamp(camera,0,d-h);if(camera>8)finishEntrance();schedule();}
   function state(){
