@@ -252,3 +252,8 @@ html[data-entrance=active]::after{ z-index:62; }
    番号は内容が順序を持つ場合にだけ意味を持つ。ここは並列の紹介なので外す。 */
 body[data-page=index] .home-section .eyebrow,
 body[data-page=index] .contact-banner .eyebrow{ display:none; }
+
+/* フッターのロゴリンクは高さ 20px しかなく、タップ領域の基準
+   （WCAG 24px / iOS 44px）を下回っていた。インライン要素のため
+   画像の高さぶんしか当たり判定が無い。見た目を変えずに判定だけ広げる。 */
+.footer-main a:has(> img){ display:inline-block; padding:12px 0; margin:-12px 0; }
