@@ -68,17 +68,17 @@
     var ending=document.querySelector('.thread-ending');
     var knotY=ending?ending.getBoundingClientRect().top+camera+ending.getBoundingClientRect().height*.5:0;
     if(ending){
-      /* 最下部まで送りきった時点で、結び目がなるべく画面の中央で止まるようにする。
-         .thread-ending の位置のままだと、その下にあるフッターのぶんだけ
-         結び目が上へ流れ、PC で 36%・スマホで 11% の高さまで上がっていた。
-         ただし中央（ページ下端から半画面ぶん上）に置くとフッターの文字に
-         重なり、糸が文字の上に貼り付いて見える。フッター上端より上の余白に
-         収まる位置を上限として、その範囲で最も中央寄りに置く。 */
+      /* 結び目は、本文の下端とフッター上端のちょうど中間に置く
+         ＝結び目の上下の余白が等しくなる（定例 2026-10-07 の指示）。
+         .thread-ending はその2つの間を占める余白なので、その中心が中間点。
+         以前は画面中央に寄せようとして下へ押し下げており、
+         上の余白 132px に対して下が 38px（スマホは 108px/35px）と偏っていた。
+         念のため、フッターへ食い込まない上限だけ残す。 */
       var pageBtm=Math.max(document.documentElement.scrollHeight,h);
       var knotR=Math.min(58,w*.12)*1.3+18;   /* 結び目の縦の広がり＋余白 */
       var footEl=document.querySelector('.foot');
       var footTop=footEl?footEl.getBoundingClientRect().top+camera:pageBtm;
-      knotY=Math.max(knotY,Math.min(pageBtm-h*.5,footTop-knotR));
+      knotY=Math.min(knotY,footTop-knotR);
       lastY=knotY-160;span=lastY-firstY;
       // Short interior pages must also finish tying before their real scroll limit.
       /* 結び終えたあと、青い紐が下端へ伸びるぶんのスクロールを必ず残す。
@@ -274,7 +274,11 @@
     /* middle=0: 糸はパスの先頭（ヘッダーより上）から現れ、上から下へ伸びる。
        成長の開始も早める。元は p>.46（約1.1秒後）からで、それまで起点の点は
        画面外にあり何も見えず、「上から下へ進む」動きの前に空白があった。 */
-    var p=entranceProgress,q=easing((p-.28)/.70),middle=0;
+    /* 糸の伸び始め。元は p>.28（約670ms）からで、ベールが晴れきる 750ms より
+       後れていたため、画面が見えているのに糸が一本も無い時間が約400ms でき、
+       そこから急に現れていた（狭い画面ほど目立つ）。
+       ベールが晴れる時点で既に伸び始めているよう前倒しする。 */
+    var p=entranceProgress,q=easing((p-.12)/.80),middle=0;
     function at(t){var n=clamp(t,0,1)*(path.length-1),i=Math.floor(n),a=path[i],b=path[Math.min(i+1,path.length-1)],f=n-i;return {x:a.x+(b.x-a.x)*f+drag,y:a.y+(b.y-a.y)*f-origin};}
     var centre=at(middle),inhale=easing((p-.07)/.16),exhale=easing((p-.23)/.13);
     var radius=1.8+2.4*inhale-2.7*exhale;
@@ -328,14 +332,13 @@
         out.push([b.left-1.5,b.top+inset-1+(hd?0:sy),b.width+3,b.height-inset*2+2, hd]);
       }
     }
-    /* ロゴは画像なので文字走査に乗らない。糸がロゴの文字の後ろから出てくるよう
-       ここで明示的に対象へ加える（ヘッダー扱いなのでクリップしない）。 */
-    var lg=document.querySelector('.nav__logo img')||document.querySelector('.nav__logo');
-    if(lg){ var lb=lg.getBoundingClientRect();
-      /* ロゴ全体を対象にすると、糸がロゴの下端から出ているように見えてしまう。
-         糸が通る「nee」の範囲だけ薄くして、字形の後ろから出るように見せる。 */
-      if(lb.width>0&&lb.bottom>-4&&lb.top<vh+4)
-        out.push([lb.left+lb.width*.455,lb.top+lb.height*.10,lb.width*.155,lb.height*.80, true]); }
+    /* ロゴは画像なので文字走査に乗らない。マスクは clearOverText 側で
+       ロゴ画像そのものを destination-out で描いて字形どおりに抜く。
+       以前は「nee」の範囲だけを矩形で抜いていたが、これは糸をロゴから
+       出す旧案のためのもの。案が廃止された今は、それ以外の場所を糸が
+       通るときにロゴの上へ全面で出てしまう（実測 320px で全スクロール位置の
+       58%、最大 44px）。矩形でロゴ全体を抜くと字間の余白まで巻き込むため、
+       画像のアルファをそのままマスクに使う。 */
     _tcache=out;_tat=now;_ty=sy;
     return out;
   }
@@ -408,8 +411,10 @@
     return out;
   }
 
+  var logoImg=null;
   function clearOverText(){
     try{
+      if(!logoImg) logoImg=document.querySelector('.nav__logo img');
       var r=textRects(); if(!r.length) return;
       var a=fadeAmount(), la=lineFadeAmount();
       var op=ctx.globalCompositeOperation, ga=ctx.globalAlpha;
@@ -444,6 +449,20 @@
           var q3=r[i3]; if(!!q3[4]!==header) continue;
           ctx.fillRect(q3[0],q3[1]+dy-.75,q3[2],.75);
           ctx.fillRect(q3[0],q3[1]+dy+q3[3],q3[2],.75);
+        }
+        /* ロゴは字形どおりに、少し太らせて完全に抜く。
+           社名ロゴなので本文より強く（不透明に）抜き、字形から 1.5px の
+           余白をとることで、糸が字画に触れず意図した処理に見える。 */
+        if(header&&logoImg&&logoImg.complete&&logoImg.naturalWidth){
+          var lb2=logoImg.getBoundingClientRect();
+          if(lb2.width>0&&lb2.bottom>-4&&lb2.top<h+4){
+            ctx.globalAlpha=1;
+            var o=1.5,d2=o*0.72;
+            var off=[[0,0],[o,0],[-o,0],[0,o],[0,-o],[d2,d2],[d2,-d2],[-d2,d2],[-d2,-d2]];
+            try{ for(var q=0;q<off.length;q++)
+                   ctx.drawImage(logoImg,lb2.left+off[q][0],lb2.top+dy+off[q][1],lb2.width,lb2.height); }
+            catch(e){ ctx.fillStyle='#000'; ctx.fillRect(lb2.left,lb2.top+dy,lb2.width,lb2.height); }
+          }
         }
         ctx.globalAlpha=la;
         for(var j2=0;j2<L.length;j2++){
