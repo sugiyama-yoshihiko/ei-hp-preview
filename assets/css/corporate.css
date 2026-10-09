@@ -265,3 +265,17 @@ body[data-page=index] .contact-banner .eyebrow{ display:none; }
    詰めたあとの上下の余白はおよそ 60px。 */
 .thread-ending{ height:170px }
 @media(max-width:600px){ .thread-ending{ height:150px } }
+
+/* フッター上端の罫線を外す（2026-10-10 の指摘）。
+   線を1本減らすぶん、結び目の下側の基準はフッターで最初に見える要素
+   （ロゴ）へ移している。あわせて .thread-ending を詰め、
+   結び目の上下の余白がおよそ 70px で揃うようにする。 */
+.foot{ border-top:0 }
+.thread-ending{ height:125px }
+@media(max-width:600px){ .thread-ending{ height:110px } }
+
+/* 結び目の下側の基準となる「見えないガイド」。
+   フッターの内容が始まる位置（＝目に入る最初の要素の上端）に置く。
+   高さ 0 でレイアウトには影響しない。結び目の位置を微調整したい場合は
+   このガイドに margin-top を与えるだけでよい（JS を触らなくてよい）。 */
+.thread-guide{ height:0; margin:0; padding:0; border:0; pointer-events:none; visibility:hidden }

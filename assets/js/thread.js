@@ -93,6 +93,29 @@
     }catch(e){}
     return m<-1e8?null:m+camera;
   }
+  /* フッター側で最初に「見えている」ものの上端（ページ座標）。
+     以前はフッター上端の罫線を下側の基準にしていたが、罫線を外したため、
+     目に入る最初の要素（ロゴ）を基準にする。罫線はロゴより
+     PC で 54px・スマホで 35px 上にあり、そのまま使うと下側が広く見える。 */
+  function footInkTop(){
+    var f=document.querySelector('.foot'); if(!f) return null;
+    /* マークアップ上の見えないガイドがあれば、それを基準にする。
+       位置が明示されるので、あとからガイドを動かすだけで調整できる。 */
+    var guide=f.querySelector('.thread-guide');
+    if(guide) return guide.getBoundingClientRect().top+camera;
+    var m=1e9;
+    try{
+      f.querySelectorAll('*').forEach(function(e){
+        var st=getComputedStyle(e);
+        if(st.display==='none'||st.visibility==='hidden'||parseFloat(st.opacity)<0.05)return;
+        var r=e.getBoundingClientRect();
+        if(r.width<4||r.height<4)return;
+        if(r.top<m) m=r.top;
+      });
+    }catch(e){}
+    if(m>1e8) m=f.getBoundingClientRect().top;
+    return m+camera;
+  }
   function createRoute() {
     route=[];blueRoute=[];crossings=[];
     var firstY=-h*.10,lastY=d-h*.30,span=lastY-firstY;
@@ -113,7 +136,8 @@
          上限が対称位置より 19px 上へ押し上げてしまっていた。 */
       var knotR=Math.min(58,w*.12)*1.0+10;
       var footEl=document.querySelector('.foot');
-      var footTop=footEl?footEl.getBoundingClientRect().top+camera:pageBtm;
+      var footTop=footInkTop();
+      if(footTop===null) footTop=footEl?footEl.getBoundingClientRect().top+camera:pageBtm;
       /* 基準は「実際に見えている最後のもの（本文の下線や地図）」と
          「フッター上端の罫線」。この2本の中間に置くと、結び目の上下の
          余白が目で見て等しくなる。.thread-ending の中心ではセクションの
