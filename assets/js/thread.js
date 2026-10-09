@@ -119,18 +119,27 @@
          余白が目で見て等しくなる。.thread-ending の中心ではセクションの
          余白まで含んでしまい、PC で 35〜48px 下に寄っていた。 */
       var lastInk=lastInkBottom();
-      /* 上側の基準。最下部まで送った時点で本文の下線が画面の外に出る
-         （スマホではフッターが画面の大半を占めるため）場合、その線との
-         対称性は目で判断できない。見えている帯の中で対称にするため、
-         ヘッダー下端を上側の基準の下限として入れる。
-         PC では本文の下線の方が下にあるので影響しない。 */
+      /* 上側の基準は「本文で最後に見えているものの下端」。
+         これとフッター上端の罫線の中間に置くと、結び目の上下の余白が
+         目で見て等しくなる。
+         ただし、最下部まで送った時点で結び目がヘッダーの裏に入って
+         しまう場合（スマホのようにフッターが画面の大半を占める場合）は、
+         見えている帯＝ヘッダー下端〜フッター罫線の中間へ切り替える。
+         以前は「下線が画面外に出たら」という条件で切り替えていたため、
+         結び目はヘッダーに届いていないのに切り替わり、ウィンドウの高さが
+         900px 未満のとき上の余白が下の 2 倍以上になっていた。 */
       var navEl2=document.querySelector('.nav');
       var navH=navEl2?navEl2.getBoundingClientRect().height:0;
       var maxScr=Math.max(0,document.documentElement.scrollHeight-h);
-      var topRef=(lastInk===null)?(maxScr+navH):Math.max(lastInk,maxScr+navH);
-      knotY=(topRef+footTop)/2;
-      knotY=Math.min(knotY,footTop-knotR);
-      knotY=Math.max(knotY,topRef+knotR*.5);
+      var headFloor=maxScr+navH;
+      /* 結び目の中心として許される範囲（ヘッダーにもフッターにも食い込まない） */
+      var lo=headFloor+knotR, hi=footTop-knotR;
+      var symY=(lastInk===null)?null:((lastInk+footTop)/2);  /* 下線との対称位置 */
+      var bandY=(headFloor+footTop)/2;                        /* 見えている帯の中央 */
+      if(lo<=hi)
+        knotY=(symY!==null&&symY>=lo&&symY<=hi)?symY:Math.max(lo,Math.min(hi,bandY));
+      else
+        knotY=bandY;   /* フッターが画面の大半を占めて入りきらない場合 */
       lastY=knotY-160;span=lastY-firstY;
       // Short interior pages must also finish tying before their real scroll limit.
       /* 結び終えたあと、青い紐が下端へ伸びるぶんのスクロールを必ず残す。
