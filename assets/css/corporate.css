@@ -257,3 +257,11 @@ body[data-page=index] .contact-banner .eyebrow{ display:none; }
    （WCAG 24px / iOS 44px）を下回っていた。インライン要素のため
    画像の高さぶんしか当たり判定が無い。見た目を変えずに判定だけ広げる。 */
 .footer-main a:has(> img){ display:inline-block; padding:12px 0; margin:-12px 0; }
+
+/* 「事業について相談する」の下の余白が多すぎるという指摘（2026-10-09）。
+   下線からフッター罫線までは .contact-banner の下 60px ＋ .thread-ending
+   280px ＝ 約340px あり、結び目(110px)を挟んで上下に約120px ずつ残っていた。
+   結び目が収まる範囲を保ったまま詰める。
+   詰めたあとの上下の余白はおよそ 60px。 */
+.thread-ending{ height:170px }
+@media(max-width:600px){ .thread-ending{ height:150px } }
