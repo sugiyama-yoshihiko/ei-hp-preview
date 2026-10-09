@@ -61,6 +61,38 @@
   function entering(){return isHome&&entrance&&entrance.active;}
   function finishEntrance(){if(entering()){entrance.finish();phase=target;}}
   function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  /* 本文側で最後に「見えている」ものの下端（ページ座標）。
+     セクションの余白まで含めた箱の下端ではなく、実際に目に入る
+     文字・画像・下線の位置。結び目の上下の余白はこれを基準に揃える。 */
+  function lastInkBottom(){
+    var main=document.querySelector('main'); if(!main) return null;
+    var m=-1e9;
+    try{
+      var tw=document.createTreeWalker(main,NodeFilter.SHOW_TEXT),n;
+      while((n=tw.nextNode())){
+        if(!n.nodeValue||!n.nodeValue.trim())continue;
+        var pe=n.parentElement; if(!pe)continue;
+        var st=getComputedStyle(pe);
+        if(st.display==='none'||st.visibility==='hidden'||parseFloat(st.opacity)<0.05)continue;
+        var rg=document.createRange(); rg.selectNodeContents(n);
+        var l=rg.getClientRects();
+        for(var i=0;i<l.length;i++) if(l[i].height>0&&l[i].bottom>m) m=l[i].bottom;
+      }
+      main.querySelectorAll('img,iframe,video,svg').forEach(function(e){
+        var st=getComputedStyle(e); if(st.display==='none'||st.visibility==='hidden')return;
+        var r=e.getBoundingClientRect(); if(r.width>4&&r.height>4&&r.bottom>m) m=r.bottom;
+      });
+      main.querySelectorAll('.text-link,.btn,a,hr').forEach(function(e){
+        var st=getComputedStyle(e); if(st.display==='none'||st.visibility==='hidden')return;
+        var bw=parseFloat(st.borderBottomWidth)||0;
+        if(bw<=0&&e.tagName!=='HR')return;
+        var col=String(st.borderBottomColor).match(/[\d.]+/g);
+        if(col&&col.length>3&&+col[3]<0.05)return;
+        var r=e.getBoundingClientRect(); if(r.width>20&&r.bottom>m) m=r.bottom;
+      });
+    }catch(e){}
+    return m<-1e8?null:m+camera;
+  }
   function createRoute() {
     route=[];blueRoute=[];crossings=[];
     var firstY=-h*.10,lastY=d-h*.30,span=lastY-firstY;
@@ -75,10 +107,30 @@
          上の余白 132px に対して下が 38px（スマホは 108px/35px）と偏っていた。
          念のため、フッターへ食い込まない上限だけ残す。 */
       var pageBtm=Math.max(document.documentElement.scrollHeight,h);
-      var knotR=Math.min(58,w*.12)*1.3+18;   /* 結び目の縦の広がり＋余白 */
+      /* 結び目の縦の半分の広がり＋余白。実測では結び目の高さは
+         PC 110px(s=58) / スマホ 91px(s=46.8) で、半分はおよそ s*0.96。
+         以前の s*1.3+18 は実態より大きく、「フッターに食い込まない」
+         上限が対称位置より 19px 上へ押し上げてしまっていた。 */
+      var knotR=Math.min(58,w*.12)*1.0+10;
       var footEl=document.querySelector('.foot');
       var footTop=footEl?footEl.getBoundingClientRect().top+camera:pageBtm;
+      /* 基準は「実際に見えている最後のもの（本文の下線や地図）」と
+         「フッター上端の罫線」。この2本の中間に置くと、結び目の上下の
+         余白が目で見て等しくなる。.thread-ending の中心ではセクションの
+         余白まで含んでしまい、PC で 35〜48px 下に寄っていた。 */
+      var lastInk=lastInkBottom();
+      /* 上側の基準。最下部まで送った時点で本文の下線が画面の外に出る
+         （スマホではフッターが画面の大半を占めるため）場合、その線との
+         対称性は目で判断できない。見えている帯の中で対称にするため、
+         ヘッダー下端を上側の基準の下限として入れる。
+         PC では本文の下線の方が下にあるので影響しない。 */
+      var navEl2=document.querySelector('.nav');
+      var navH=navEl2?navEl2.getBoundingClientRect().height:0;
+      var maxScr=Math.max(0,document.documentElement.scrollHeight-h);
+      var topRef=(lastInk===null)?(maxScr+navH):Math.max(lastInk,maxScr+navH);
+      knotY=(topRef+footTop)/2;
       knotY=Math.min(knotY,footTop-knotR);
+      knotY=Math.max(knotY,topRef+knotR*.5);
       lastY=knotY-160;span=lastY-firstY;
       // Short interior pages must also finish tying before their real scroll limit.
       /* 結び終えたあと、青い紐が下端へ伸びるぶんのスクロールを必ず残す。
