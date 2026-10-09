@@ -178,7 +178,9 @@
          画面の下端すれすれで結ばれる。指定は画面の中ほど。 */
       var finishAt=h*.56;
       /* 結び終えたあと、青い紐が下端へ伸びるぶんのスクロールは最低限残す。 */
-      knotEnd=Math.max(0,Math.min(knotY-finishAt,maxScroll-h*.22));
+      /* 青い紐が降りるスクロール量。.22 では最後の 5% に詰め込まれ、
+         最下部に着いてから降りきるまで約2秒かかっていた。 */
+      knotEnd=Math.max(0,Math.min(knotY-finishAt,maxScroll-h*.55));
       knotStart=Math.min(lastY-lead,knotEnd-Math.min(200,h*.25));
     }
     var firstKey=Math.min(firstY-lead,knotStart-100);
@@ -669,7 +671,7 @@
       document.documentElement.style.setProperty('--entrance-veil',String(1-easing((entranceProgress-.06)/.24)));
       if(elapsed>=2400)finishEntrance();
     }else if(!paused){
-      var tau=(knotEnd>knotStart&&phase>=knotStart)?300:95;/* 結びの区間だけ追従を遅くする */phase+=(target-phase)*(1-Math.exp(-dt/tau));
+      var tau=(knotEnd>knotStart&&phase>=knotStart&&phase<knotEnd)?300:95;/* 結びの区間だけ追従を遅くする。降下は通常の速さ */phase+=(target-phase)*(1-Math.exp(-dt/tau));
       if(Math.abs(target-phase)<.15)phase=target;
     }
     /* 引きずり: スクロール速度に追いつくのは速く、戻るのはゆっくり。 */
